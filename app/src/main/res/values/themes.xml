@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
 
-    <style name="Theme.AnApp" parent="Theme.AppCompat.DayNight.DarkActionBar">
+    <style name="Theme.AnApp" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="android:actionBarStyle">@style/Widget.ActionBar</item>
 
     </style>
