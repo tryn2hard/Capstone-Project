@@ -3,4 +3,15 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="buttonGreen1">#FF2A6304</color>
+    <color name="buttonGreen2">#FF0DBA19</color>
+
+    <color name="buttonYellow1">#FBC02D</color>
+    <color name="buttonYellow2">#FFEB3B</color>
+
+    <color name="buttonRed1">#F44336</color>
+    <color name="buttonRed2">#D32F2F</color>
+
+    <color name="buttonStroke">#FFFFFF</color>
 </resources>
