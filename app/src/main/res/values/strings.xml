@@ -4,4 +4,10 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="start_button">Start Game</string>
+    <string name="how_to_button">How to Play</string>
+    <string name="settings_button">Settings</string>
+
+    <string name="instructions">Cricket Numbers
+Cricket uses the numbers 15 to 20 (or sometimes 10 to 20, and less frequently a predetermined selection of numbers) and the bull\'s-eye. To open or close a number, it must have been scored 3 times in any fashion, on one or more turns. Hitting the triple will open or close a number in one throw; a single and the double will open or close it in two throws or three singles will open or close it in three throws. Except in strict variants which count down from 20 to 15, numbers do not have to be opened or closed in any particular order and several numbers can be hit in the same turn. A scoreboard is used to keep track of the hits on all the numbers. Hitting a number once is shown by placing a slash (/) beside the number, second hit by turning the slash to an X, and the third by a circle (O) around the X.</string>
+    <string name="icon_text_size">Text Size</string>
 </resources>

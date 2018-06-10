@@ -1,20 +1,18 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
-
-    <style name="Widget.ActionBar" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:windowBackground">@drawable/darts_repeating</item>
+        <item name="android:textColor">@color/text_primary</item>
 
     </style>
 
-    <style name="Widget.ActionBar.Logo">
-        <item name="android:logo">@drawable/logo</item>
-        <item name="android:displayOptions">useLogo|showHome</item>
+    <style name="MyToolbarTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="actionMenuTextColor">@color/text_secondary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
     </style>
+
 
 </resources>
