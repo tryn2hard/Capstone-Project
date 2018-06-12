@@ -10,15 +10,22 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import java.util.List;
+
 import butterknife.BindView;
+import butterknife.BindViews;
 import butterknife.ButterKnife;
 
 public class HowToPlayActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @BindView(R.id.how_to_play_instructions)
-    TextView instructions_TV;
+
+    @BindViews({ R.id.game_objective_header, R.id.cricket_numbers_header, R.id.game_start_header})
+    List<TextView> headerViews;
+
+    @BindViews({ R.id.game_objective_body, R.id.cricket_numbers_body, R.id.game_start_body})
+    List<TextView> bodyViews;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,12 +58,28 @@ public class HowToPlayActivity extends AppCompatActivity {
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
             case R.id.toolbar_menu:
-                if(instructions_TV.getTextSize() < getResources().getDimension(R.dimen.large_font))
-                instructions_TV.setTextSize(TypedValue.COMPLEX_UNIT_PX,
-                        getResources().getDimension(R.dimen.large_font));
-                else{
-                    instructions_TV.setTextSize(TypedValue.COMPLEX_UNIT_PX,
-                            getResources().getDimension(R.dimen.med_font));
+                if (headerViews.get(0).getTextSize() <
+                        getResources().getDimension(R.dimen.large_font_header)) {
+
+                    for(int i = 0; i < bodyViews.size(); i++){
+                        bodyViews.get(i).setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                                getResources().getDimension(R.dimen.large_font_body));
+                    }
+
+                    for(int i = 0; i < headerViews.size(); i++){
+                        headerViews.get(i).setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                            getResources().getDimension(R.dimen.large_font_header));
+                    }
+                } else {
+                    for(int i = 0; i < headerViews.size(); i++) {
+                        headerViews.get(i).setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                                getResources().getDimension(R.dimen.med_font_header));
+                    }
+
+                        for(int i = 0; i < headerViews.size(); i++){
+                            bodyViews.get(i).setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                                    getResources().getDimension(R.dimen.med_font_body));
+                    }
                 }
                 return true;
         }

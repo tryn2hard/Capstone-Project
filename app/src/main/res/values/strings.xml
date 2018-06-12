@@ -6,8 +6,20 @@
     <string name="start_button">Start Game</string>
     <string name="how_to_button">How to Play</string>
     <string name="settings_button">Settings</string>
-
-    <string name="instructions">Cricket Numbers
-Cricket uses the numbers 15 to 20 (or sometimes 10 to 20, and less frequently a predetermined selection of numbers) and the bull\'s-eye. To open or close a number, it must have been scored 3 times in any fashion, on one or more turns. Hitting the triple will open or close a number in one throw; a single and the double will open or close it in two throws or three singles will open or close it in three throws. Except in strict variants which count down from 20 to 15, numbers do not have to be opened or closed in any particular order and several numbers can be hit in the same turn. A scoreboard is used to keep track of the hits on all the numbers. Hitting a number once is shown by placing a slash (/) beside the number, second hit by turning the slash to an X, and the third by a circle (O) around the X.</string>
     <string name="icon_text_size">Text Size</string>
+
+    <!--How to play instructions-->
+
+    <string name="game_objective_header">Game Objective</string>
+    <string name="game_objective_body">Cricket is typically played between 2, 3 or 4 players, or teams of players. The goal of cricket is to be the first player to close all the cricket numbers and have a higher or even point total.</string>
+
+    <string name="cricket_numbers_header">Cricket Numbers</string>
+    <string name="cricket_numbers_body">Cricket uses the numbers 15 to 20 and the bull\'s-eye. To close a number, it must have been scored 3 times in any fashion, on one or more turns. Hitting the triple will close a number in one throw; a single and the double will close it in two throws or three singles will close it in three throws. Numbers do not have to be closed in any particular order and several numbers can be hit in the same turn. Hitting a number once is shown by placing a slash (/) beside the number, second hit by turning the slash to an X, and the third by a circle (O) around the X.</string>
+
+    <string name="game_start_header">Game Start</string>
+    <string name="game_start_body">To start the game, each player or one player from each team throws one dart. This is known as the "diddle". The player whose dart lands closest to the center goes first. Generally, if both players darts are in the same section of the bullseye or in the event of a tie, each player throws another dart until there is an obvious winner. </string>
+
+    <string name="game_play_header">Game Play</string>
+    <string name="game_play_body">During a player\'s turn, the player throws three darts. After the last dart, the player\'s score is totaled. Any number that has not been hit three times (cumulative across all turns) by a player is neither open for that player nor closed (if currently open for the opponent). </string>
+
 </resources>

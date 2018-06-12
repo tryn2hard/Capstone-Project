@@ -6,9 +6,17 @@
     <dimen name="text_horizontal_margin">8dp</dimen>
     <dimen name="text_vertical_margin">8dp</dimen>
 
+    <dimen name="text_vertical_margin_body">12dp</dimen>
+
     <dimen name="toolbar_height">56dp</dimen>
+    <dimen name="toolbar_offset">70dp</dimen>
 
     <!--Font Sizes-->
-    <dimen name="large_font">16sp</dimen>
-    <dimen name="med_font">14sp</dimen>
+    <dimen name="large_font_body">16sp</dimen>
+    <dimen name="med_font_body">14sp</dimen>
+
+    <dimen name="med_font_header">24sp</dimen>
+    <dimen name="large_font_header">26sp</dimen>
+
+    <dimen name="line_spacing">2dp</dimen>
 </resources>

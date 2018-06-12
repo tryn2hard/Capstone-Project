@@ -9,9 +9,9 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
-        android:background="@color/toolbar_background"
+        android:background="@color/buttonRed1"
         android:elevation="4dp"
-        android:theme="@style/MyToolbarTheme"/>
+        android:theme="@style/MyToolbarTheme" />
 
     <View
         android:id="@+id/divider"
@@ -23,20 +23,75 @@
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        android:paddingBottom="@dimen/toolbar_offset">
 
-        <TextView
-            android:id="@+id/how_to_play_instructions"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginEnd="@dimen/text_horizontal_margin"
-            android:layout_marginStart="@dimen/text_horizontal_margin"
-            android:layout_marginTop="@dimen/text_vertical_margin"
-            android:text="@string/instructions"
-            android:textSize="@dimen/med_font"
-            android:textColor="@color/text_primary" />
+            android:orientation="vertical"
+            android:layout_marginEnd="@dimen/text_vertical_margin_body">
+
+            <TextView
+                android:id="@+id/game_objective_header"
+                style="@style/howToPlay_style_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/game_objective_header" />
+
+            <TextView
+                android:id="@+id/game_objective_body"
+                style="@style/howToPlay_style_body"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/game_objective_body" />
+
+            <TextView
+                android:id="@+id/cricket_numbers_header"
+                style="@style/howToPlay_style_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/cricket_numbers_header" />
+
+            <TextView
+                android:id="@+id/cricket_numbers_body"
+                style="@style/howToPlay_style_body"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/cricket_numbers_body" />
+
+            <TextView
+                android:id="@+id/game_start_header"
+                style="@style/howToPlay_style_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/game_start_header" />
+
+            <TextView
+                android:id="@+id/game_start_body"
+                style="@style/howToPlay_style_body"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/game_start_body" />
+
+            <TextView
+                android:id="@+id/game_play_header"
+                style="@style/howToPlay_style_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/game_play_header" />
+
+            <TextView
+                android:id="@+id/game_play_body"
+                style="@style/howToPlay_style_body"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/game_play_body" />
+
+        </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
+
 </android.support.constraint.ConstraintLayout>

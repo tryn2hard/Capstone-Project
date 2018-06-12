@@ -3,15 +3,34 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="android:windowBackground">@drawable/darts_repeating</item>
+        <!--<item name="android:windowBackground">@drawable/darts_repeating</item>-->
+        <item name="android:windowBackground">@color/toolbar_background</item>
         <item name="android:textColor">@color/text_primary</item>
+        <item name="android:statusBarColor">@color/buttonRed2</item>
 
     </style>
 
     <style name="MyToolbarTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="android:textColorPrimary">@color/text_primary</item>
-        <item name="actionMenuTextColor">@color/text_secondary</item>
-        <item name="android:textColorSecondary">@color/text_secondary</item>
+        <item name="actionMenuTextColor">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_primary</item>
+    </style>
+
+    <style name="howToPlay_style_body" parent="TextAppearance.AppCompat">
+        <item name="android:layout_marginStart">@dimen/text_horizontal_margin</item>
+        <item name="android:layout_marginEnd">@dimen/text_horizontal_margin</item>
+        <item name="android:layout_marginTop">@dimen/text_vertical_margin</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">@dimen/med_font_body</item>
+        <item name="android:lineSpacingExtra">@dimen/line_spacing</item>
+    </style>
+
+    <style name="howToPlay_style_header" parent="TextAppearance.AppCompat">
+        <item name="android:layout_marginStart">@dimen/text_horizontal_margin</item>
+        <item name="android:layout_marginEnd">@dimen/text_horizontal_margin</item>
+        <item name="android:layout_marginTop">@dimen/text_vertical_margin_body</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">@dimen/med_font_header</item>
     </style>
 
 
