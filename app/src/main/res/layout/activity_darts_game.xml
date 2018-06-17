@@ -6,4 +6,168 @@
     android:layout_height="match_parent"
     tools:context=".DartsGameActivity">
 
+    <View
+        android:id="@+id/divider4"
+        android:layout_width="1dp"
+        android:layout_height="375dp"
+        android:layout_marginStart="150dp"
+        android:background="@color/text_primary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/marker_20_tv" />
+
+    <View
+        android:id="@+id/divider5"
+        android:layout_width="1dp"
+        android:layout_height="375dp"
+        android:layout_marginEnd="150dp"
+        android:background="@color/text_primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/marker_20_tv" />
+
+    <TextView
+        android:id="@+id/marker_20_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="@dimen/small_horizontal_margin"
+        android:layout_marginTop="80dp"
+        android:text="@string/marker_20_tv"
+        android:textSize="@dimen/dart_score_label"
+        app:layout_constraintBottom_toTopOf="@+id/marker_19_tv"
+        app:layout_constraintEnd_toStartOf="@+id/divider5"
+        app:layout_constraintHorizontal_bias="0.545"
+        app:layout_constraintStart_toEndOf="@+id/divider4"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/marker_19_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/marker_19_tv"
+        android:textSize="@dimen/dart_score_label"
+        app:layout_constraintBottom_toTopOf="@+id/marker_18_tv"
+        app:layout_constraintEnd_toEndOf="@+id/marker_20_tv"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/marker_20_tv"
+        app:layout_constraintTop_toBottomOf="@+id/marker_20_tv" />
+
+    <TextView
+        android:id="@+id/marker_18_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/marker_18_tv"
+        android:textSize="@dimen/dart_score_label"
+        app:layout_constraintEnd_toEndOf="@+id/marker_19_tv"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/marker_19_tv"
+        app:layout_constraintTop_toBottomOf="@+id/marker_19_tv" />
+
+    <TextView
+        android:id="@+id/marker_17_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:text="@string/marker_17_tv"
+        android:textSize="@dimen/dart_score_label"
+        app:layout_constraintEnd_toEndOf="@+id/marker_18_tv"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/marker_18_tv"
+        app:layout_constraintTop_toBottomOf="@+id/marker_18_tv" />
+
+    <TextView
+        android:id="@+id/marker_16_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:text="@string/marker_16_tv"
+        android:textSize="@dimen/dart_score_label"
+        app:layout_constraintEnd_toEndOf="@+id/marker_17_tv"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/marker_17_tv"
+        app:layout_constraintTop_toBottomOf="@+id/marker_17_tv" />
+
+    <TextView
+        android:id="@+id/marker_15_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/marker_15_tv"
+        android:textSize="@dimen/dart_score_label"
+        app:layout_constraintEnd_toEndOf="@+id/marker_16_tv"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/marker_16_tv"
+        app:layout_constraintTop_toBottomOf="@+id/marker_16_tv" />
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/player_1_container"
+        android:layout_width="85dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/small_vertical_margin"
+        android:layout_marginEnd="@dimen/small_horizontal_margin"
+        android:layout_marginStart="@dimen/small_horizontal_margin"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/divider4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></android.support.design.widget.CoordinatorLayout>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/player_2_container"
+        android:layout_width="85dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="@dimen/small_horizontal_margin"
+        android:layout_marginStart="@dimen/small_horizontal_margin"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/divider5"
+        app:layout_constraintTop_toTopOf="parent"></android.support.design.widget.CoordinatorLayout>
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="14dp"
+        android:contentDescription="@string/bull_s_eye_label"
+        android:foregroundGravity="center_horizontal"
+        app:layout_constraintEnd_toEndOf="@+id/marker_15_tv"
+        app:layout_constraintHorizontal_bias="0.833"
+        app:layout_constraintStart_toStartOf="@+id/marker_15_tv"
+        app:layout_constraintTop_toBottomOf="@+id/marker_15_tv"
+        app:srcCompat="@drawable/bullseye_white" />
+
+    <Button
+        android:id="@+id/undo_mark_button"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/custom_button"
+        android:text="Undo throw"
+        android:textColor="@color/text_primary"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/end_game_button"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/custom_button"
+        android:text="End Game"
+        android:textColor="@color/text_primary"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </android.support.constraint.ConstraintLayout>

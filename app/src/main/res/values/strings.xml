@@ -1,10 +1,7 @@
 <resources>
     <string name="app_name">Pocket Tally</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
     <string name="start_button">Start Game</string>
-    <string name="how_to_button">How to Play</string>
+    <string name="how_to_play">How to Play</string>
     <string name="settings_button">Settings</string>
     <string name="icon_text_size">Text Size</string>
 
@@ -21,5 +18,25 @@
 
     <string name="game_play_header">Game Play</string>
     <string name="game_play_body">During a player\'s turn, the player throws three darts. After the last dart, the player\'s score is totaled. Any number that has not been hit three times (cumulative across all turns) by a player is neither open for that player nor closed (if currently open for the opponent). </string>
+    <string name="avatar_content_description_man">Man Avatar</string>
+
+    <!--Player Fragment-->
+    <string name="player_name_hint">Name</string>
+
+
+    <!--cricket number marker labels-->
+    <string name="marker_20_tv">20</string>
+    <string name="marker_19_tv">19</string>
+    <string name="marker_18_tv">18</string>
+    <string name="marker_17_tv">17</string>
+    <string name="marker_16_tv">16</string>
+    <string name="marker_15_tv">15</string>
+
+
+    <!--content description for images-->
+    <string name="bull_s_eye_label">Bull\'s eye label</string>
+    <string name="menu_option_game_settings">Game Settings</string>
+    <string name="menu_option_profile">Profile</string>
+
 
 </resources>

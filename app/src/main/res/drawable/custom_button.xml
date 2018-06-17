@@ -12,7 +12,7 @@
                  />
             <stroke
                 android:width="2dp"
-                android:color="@color/buttonStroke" />
+                android:color="@color/white" />
             <corners
                 android:radius="10dp" />
             <padding
@@ -33,7 +33,7 @@
 />
             <stroke
                 android:width="2dp"
-                android:color="@color/buttonStroke" />
+                android:color="@color/white" />
             <corners
                 android:radius="10dp" />
             <padding

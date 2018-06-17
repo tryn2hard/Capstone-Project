@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#272727</color>
     <color name="colorPrimaryDark">#353535</color>
-    <color name="colorAccent">#FF4081</color>
+
 
     <color name="buttonGreen0">#1b5e20</color>
     <color name="buttonGreen1">#2e7d32</color>
@@ -14,12 +14,11 @@
 
     <color name="buttonRed1">#cb2424</color>
     <color name="buttonRed2">#bf0000</color>
+    <color name="Red3">#f93131</color>
 
-    <color name="buttonStroke">#FFFFFF</color>
+    <color name="white">#FFFFFF</color>
+    <color name="tally_start">#a5a5a5</color>
 
     <color name="text_primary">#f5f5f5</color>
-    <color name="text_secondary">#c5c5c5</color>
 
-    <color name="statusbar_background">#424242</color>
-    <color name="toolbar_background">#272727</color>
 </resources>

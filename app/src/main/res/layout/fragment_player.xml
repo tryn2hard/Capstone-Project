@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
+    android:layout_width="85dp"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".PlayerFragment">
+
+    <ImageView
+        android:id="@+id/player_avatar_image"
+        android:layout_width="@dimen/avatar_width"
+        android:layout_height="@dimen/avatar_height"
+        android:layout_gravity="center_horizontal"
+        android:contentDescription="@string/avatar_content_description_man"
+        android:src="@drawable/man_3" />
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/colorPrimaryDark"
+        android:cursorVisible="false"
+        android:hint="@string/player_name_hint"
+        android:inputType="text"
+        android:textColor="@color/text_primary"
+        android:textColorHint="@color/text_primary" />
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/white" />
+
+    <ImageView
+        android:id="@+id/scoreboard_20"
+        android:layout_width="@dimen/marker_width"
+        android:layout_height="@dimen/marker_height"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/small_vertical_margin"
+        android:layout_marginTop="@dimen/small_vertical_margin"
+        android:background="@drawable/tally_no_marks" />
+
+    <ImageView
+        android:id="@+id/scoreboard_19"
+        android:layout_width="@dimen/marker_width"
+        android:layout_height="@dimen/marker_height"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/small_vertical_margin"
+        android:background="@drawable/tally_no_marks" />
+
+    <ImageView
+        android:id="@+id/scoreboard_18"
+        android:layout_width="@dimen/marker_width"
+        android:layout_height="@dimen/marker_height"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/small_vertical_margin"
+        android:background="@drawable/tally_no_marks" />
+
+    <ImageView
+        android:id="@+id/scoreboard_17"
+        android:layout_width="@dimen/marker_width"
+        android:layout_height="@dimen/marker_height"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/small_vertical_margin"
+        android:background="@drawable/tally_no_marks" />
+
+    <ImageView
+        android:id="@+id/scoreboard_16"
+        android:layout_width="@dimen/marker_width"
+        android:layout_height="@dimen/marker_height"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/small_vertical_margin"
+        android:background="@drawable/tally_no_marks" />
+
+    <ImageView
+        android:id="@+id/scoreboard_15"
+        android:layout_width="@dimen/marker_width"
+        android:layout_height="@dimen/marker_height"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/small_vertical_margin"
+        android:background="@drawable/tally_no_marks" />
+
+    <ImageView
+        android:id="@+id/scoreboard_bulls"
+        android:layout_width="@dimen/marker_width"
+        android:layout_height="@dimen/marker_height"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/small_vertical_margin"
+        android:background="@drawable/tally_no_marks" />
+
+    <View
+        android:id="@+id/divider3"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/white" />
+
+    <TextView
+        android:id="@+id/game_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/small_vertical_margin"
+        android:layout_marginTop="@dimen/small_vertical_margin"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:text="0"
+        android:textSize="36sp" />
+
+    <View
+        android:id="@+id/divider4"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/white" />
+
+</LinearLayout>

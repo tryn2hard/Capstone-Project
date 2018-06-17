@@ -18,8 +18,6 @@ import butterknife.ButterKnife;
 
 public class HowToPlayActivity extends AppCompatActivity {
 
-    @BindView(R.id.toolbar)
-    Toolbar mToolbar;
 
     @BindViews({ R.id.game_objective_header, R.id.cricket_numbers_header, R.id.game_start_header})
     List<TextView> headerViews;
@@ -33,10 +31,7 @@ public class HowToPlayActivity extends AppCompatActivity {
         setContentView(R.layout.activity_how_to_play);
         ButterKnife.bind(this);
 
-        mToolbar.setTitle(R.string.how_to_button);
-        mToolbar.setTitleTextColor(getResources().getColor(R.color.text_primary));
-        setSupportActionBar(mToolbar);
-
+        getSupportActionBar().setTitle(R.string.how_to_play);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 

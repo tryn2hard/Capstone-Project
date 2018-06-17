@@ -6,5 +6,4 @@
         app:showAsAction="always"
         android:title="@string/icon_text_size">
     </item>
-
 </menu>

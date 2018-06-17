@@ -1,14 +1,24 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
-        <!-- Customize your theme here. -->
-        <!--<item name="android:windowBackground">@drawable/darts_repeating</item>-->
-        <item name="android:windowBackground">@color/toolbar_background</item>
-        <item name="android:textColor">@color/text_primary</item>
-        <item name="android:statusBarColor">@color/buttonRed2</item>
-
+    <style name="AppTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">#F44336</item>
+        <item name="colorPrimaryDark">#b71c1c</item>
+        <item name="android:colorBackground">@color/colorPrimaryDark</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
     </style>
+
+    <!-- dart game activity action bar styles -->
+    <style name="ActionBar.Solid.DartsGame" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="displayOptions">useLogo|showHome</item>
+        <item name="logo">@drawable/logo_outline</item>
+    </style>
+
+    <style name="AppTheme.DartGame" parent="@style/AppTheme">
+        <item name="actionBarStyle">@style/ActionBar.Solid.DartsGame</item>
+    </style>
+
+    <!-- how to play activity action bar styles -->
 
     <style name="MyToolbarTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="android:textColorPrimary">@color/text_primary</item>
@@ -17,21 +27,23 @@
     </style>
 
     <style name="howToPlay_style_body" parent="TextAppearance.AppCompat">
-        <item name="android:layout_marginStart">@dimen/text_horizontal_margin</item>
-        <item name="android:layout_marginEnd">@dimen/text_horizontal_margin</item>
-        <item name="android:layout_marginTop">@dimen/text_vertical_margin</item>
+        <item name="android:layout_marginStart">@dimen/small_horizontal_margin</item>
+        <item name="android:layout_marginEnd">@dimen/small_horizontal_margin</item>
+        <item name="android:layout_marginTop">@dimen/small_vertical_margin</item>
         <item name="android:textColor">@color/text_primary</item>
         <item name="android:textSize">@dimen/med_font_body</item>
         <item name="android:lineSpacingExtra">@dimen/line_spacing</item>
     </style>
 
     <style name="howToPlay_style_header" parent="TextAppearance.AppCompat">
-        <item name="android:layout_marginStart">@dimen/text_horizontal_margin</item>
-        <item name="android:layout_marginEnd">@dimen/text_horizontal_margin</item>
-        <item name="android:layout_marginTop">@dimen/text_vertical_margin_body</item>
+        <item name="android:layout_marginStart">@dimen/small_horizontal_margin</item>
+        <item name="android:layout_marginEnd">@dimen/small_horizontal_margin</item>
+        <item name="android:layout_marginTop">@dimen/med_vertical_margin</item>
         <item name="android:textColor">@color/text_primary</item>
         <item name="android:textSize">@dimen/med_font_header</item>
     </style>
+
+
 
 
 </resources>

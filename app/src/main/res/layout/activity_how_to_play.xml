@@ -5,14 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_height"
-        android:background="@color/buttonRed1"
-        android:elevation="4dp"
-        android:theme="@style/MyToolbarTheme" />
-
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
@@ -32,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_marginEnd="@dimen/text_vertical_margin_body">
+            android:layout_marginEnd="@dimen/med_vertical_margin">
 
             <TextView
                 android:id="@+id/game_objective_header"
