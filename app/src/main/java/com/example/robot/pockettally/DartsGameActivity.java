@@ -32,7 +32,11 @@ public class DartsGameActivity extends AppCompatActivity {
                     .add(R.id.player_2_container, player2Frag )
                     .commit();
 
+
+
         }
+
+
 
     }
 

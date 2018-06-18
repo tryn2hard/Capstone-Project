@@ -1,6 +1,7 @@
 package com.example.robot.pockettally;
 
 
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
@@ -35,31 +36,29 @@ public class PlayerFragment extends Fragment {
     private final static int TALLY_MARK_BULLS_VALUE = 25;
     private final static int MAX_NUM_OF_TALLY_MARKS = 3;
 
+
+    // Binding the image views
     @BindView(R.id.scoreboard_20)
     ImageView scoreboard_20_iv;
-
     @BindView(R.id.scoreboard_19)
     ImageView scoreboard_19_iv;
-
     @BindView(R.id.scoreboard_18)
     ImageView scoreboard_18_iv;
-
     @BindView(R.id.scoreboard_17)
     ImageView scoreboard_17_iv;
-
     @BindView(R.id.scoreboard_16)
     ImageView scoreboard_16_iv;
-
     @BindView(R.id.scoreboard_15)
     ImageView scoreboard_15_iv;
-
     @BindView(R.id.scoreboard_bulls)
     ImageView scoreboard_bulls_iv;
-
     @BindView(R.id.game_score)
     TextView game_score_tv;
+    @BindView(R.id.player_avatar_image)
+    ImageView player_avatar_iv;
 
 
+    //Counters for each tally mark
     private int marker20Count = 0;
     private int marker19Count = 0;
     private int marker18Count = 0;
@@ -67,8 +66,9 @@ public class PlayerFragment extends Fragment {
     private int marker16Count = 0;
     private int marker15Count = 0;
     private int markerBullsCount = 0;
-    private int totalScore = 0;
 
+
+    private int totalScore = 0;
     private Vibrator vibe;
 
     public PlayerFragment() {
@@ -172,6 +172,97 @@ public class PlayerFragment extends Fragment {
                 else {
                     addScore(TALLY_MARK_BULLS_VALUE);
                 }
+            }
+        });
+
+        player_avatar_iv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Dialog dialog = new Dialog(getActivity());
+                dialog.setContentView(R.layout.avatar_dialog);
+
+                ImageView avatar_man = (ImageView) dialog.findViewById(R.id.avatar_man);
+                avatar_man.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        player_avatar_iv.setImageResource(R.drawable.man);
+                        dialog.dismiss();
+                    }
+                });
+
+                ImageView avatar_man1 = (ImageView) dialog.findViewById(R.id.avatar_man_1);
+                avatar_man1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        player_avatar_iv.setImageResource(R.drawable.man_1);
+                        dialog.dismiss();
+                    }
+                });
+
+                ImageView avatar_man2 = (ImageView) dialog.findViewById(R.id.avatar_man_2);
+                avatar_man2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        player_avatar_iv.setImageResource(R.drawable.man_2);
+                        dialog.dismiss();
+                    }
+                });
+
+                ImageView avatar_man3 = (ImageView) dialog.findViewById(R.id.avatar_man_3);
+                avatar_man3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        player_avatar_iv.setImageResource(R.drawable.man_3);
+                        dialog.dismiss();
+                    }
+                });
+
+                ImageView avatar_man4 = (ImageView) dialog.findViewById(R.id.avatar_man_4);
+                avatar_man4.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        player_avatar_iv.setImageResource(R.drawable.man_4);
+                        dialog.dismiss();
+                    }
+                });
+
+                ImageView avatar_man5 = (ImageView) dialog.findViewById(R.id.avatar_man_5);
+                avatar_man5.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        player_avatar_iv.setImageResource(R.drawable.man_5);
+                        dialog.dismiss();
+                    }
+                });
+
+                ImageView avatar_man6 = (ImageView) dialog.findViewById(R.id.avatar_man_6);
+                avatar_man6.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        player_avatar_iv.setImageResource(R.drawable.man_6);
+                        dialog.dismiss();
+                    }
+                });
+
+                ImageView avatar_woman = (ImageView) dialog.findViewById(R.id.avatar_woman);
+                avatar_woman.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        player_avatar_iv.setImageResource(R.drawable.woman);
+                        dialog.dismiss();
+                    }
+                });
+
+                ImageView avatar_woman1 = (ImageView) dialog.findViewById(R.id.avatar_woman_1);
+                avatar_woman1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        player_avatar_iv.setImageResource(R.drawable.woman_1);
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
             }
         });
 
