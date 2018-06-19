@@ -122,7 +122,8 @@
         app:layout_constraintBottom_toTopOf="@+id/end_game_button"
         app:layout_constraintEnd_toStartOf="@+id/divider4"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></android.support.design.widget.CoordinatorLayout>
+        app:layout_constraintTop_toTopOf="parent">
+    </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/player_2_container"
@@ -135,7 +136,8 @@
         app:layout_constraintBottom_toTopOf="@+id/undo_mark_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/divider5"
-        app:layout_constraintTop_toTopOf="parent"></android.support.design.widget.CoordinatorLayout>
+        app:layout_constraintTop_toTopOf="parent">
+    </android.support.design.widget.CoordinatorLayout>
 
     <ImageView
         android:id="@+id/imageView3"

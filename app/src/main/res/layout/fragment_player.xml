@@ -40,7 +40,8 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="@dimen/small_vertical_margin"
         android:layout_marginTop="@dimen/small_vertical_margin"
-        android:background="@drawable/tally_no_marks" />
+        android:background="@drawable/tally_no_marks"
+        android:contentDescription="@string/tally_marker_20_content_decrip"/>
 
     <ImageView
         android:id="@+id/scoreboard_19"
@@ -48,7 +49,8 @@
         android:layout_height="@dimen/marker_height"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="@dimen/small_vertical_margin"
-        android:background="@drawable/tally_no_marks" />
+        android:background="@drawable/tally_no_marks"
+        android:contentDescription="@string/tally_marker_19_content_decrip"/>
 
     <ImageView
         android:id="@+id/scoreboard_18"
@@ -56,7 +58,8 @@
         android:layout_height="@dimen/marker_height"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="@dimen/small_vertical_margin"
-        android:background="@drawable/tally_no_marks" />
+        android:background="@drawable/tally_no_marks"
+        android:contentDescription="@string/tally_marker_18_content_decrip"/>
 
     <ImageView
         android:id="@+id/scoreboard_17"
@@ -64,7 +67,8 @@
         android:layout_height="@dimen/marker_height"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="@dimen/small_vertical_margin"
-        android:background="@drawable/tally_no_marks" />
+        android:background="@drawable/tally_no_marks"
+        android:contentDescription="@string/tally_marker_17_content_decrip"/>
 
     <ImageView
         android:id="@+id/scoreboard_16"
@@ -72,7 +76,8 @@
         android:layout_height="@dimen/marker_height"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="@dimen/small_vertical_margin"
-        android:background="@drawable/tally_no_marks" />
+        android:background="@drawable/tally_no_marks"
+        android:contentDescription="@string/tally_marker_16_content_decrip"/>
 
     <ImageView
         android:id="@+id/scoreboard_15"
@@ -80,7 +85,8 @@
         android:layout_height="@dimen/marker_height"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="@dimen/small_vertical_margin"
-        android:background="@drawable/tally_no_marks" />
+        android:background="@drawable/tally_no_marks"
+        android:contentDescription="@string/tally_marker_15_content_decrip"/>
 
     <ImageView
         android:id="@+id/scoreboard_bulls"
@@ -88,7 +94,8 @@
         android:layout_height="@dimen/marker_height"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="@dimen/small_vertical_margin"
-        android:background="@drawable/tally_no_marks" />
+        android:background="@drawable/tally_no_marks"
+        android:contentDescription="@string/tally_marker_bullseye_content_decrip"/>
 
     <View
         android:id="@+id/divider3"
@@ -104,7 +111,7 @@
         android:layout_marginTop="@dimen/small_vertical_margin"
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
-        android:text="0"
+        android:text="@string/initial_total_score_tv"
         android:textColor="@color/text_primary"
         android:textSize="36sp" />
 
