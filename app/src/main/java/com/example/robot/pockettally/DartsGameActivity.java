@@ -1,6 +1,7 @@
 package com.example.robot.pockettally;
 
 import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,26 +18,28 @@ public class DartsGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_darts_game);
 
-        if(savedInstanceState == null){
+
+        Fragment player1Frag = getSupportFragmentManager()
+                .findFragmentById(R.id.player_1_container);
+
+        Fragment player2Frag = getSupportFragmentManager()
+                .findFragmentById(R.id.player_2_container);
+
+        if(player1Frag == null && player2Frag == null){
 
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
 
-            PlayerFragment player1Frag = new PlayerFragment();
-            PlayerFragment player2Frag = new PlayerFragment();
+            player1Frag = new PlayerFragment();
+            player2Frag = new PlayerFragment();
 
             fm.beginTransaction()
-                    .add(R.id.player_1_container, player1Frag)
+                    .add(R.id.player_1_container, player1Frag, "PLAYER_1_FRAG_TAG")
                     .commit();
 
             fm.beginTransaction()
-                    .add(R.id.player_2_container, player2Frag )
+                    .add(R.id.player_2_container, player2Frag, "PLAYER_2_FRAG_TAG")
                     .commit();
-
-
-
         }
-
-
 
     }
 

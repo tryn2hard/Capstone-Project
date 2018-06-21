@@ -77,13 +77,13 @@
         android:id="@+id/avatar_man_5"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         android:layout_marginTop="16dp"
+        android:contentDescription="@string/avatar_man_5_content_descrip"
         android:src="@drawable/man_5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/avatar_man"
-        app:layout_constraintTop_toBottomOf="@+id/avatar_man"
-        android:contentDescription="@string/avatar_man_5_content_descrip"/>
+        app:layout_constraintTop_toBottomOf="@+id/avatar_man" />
 
     <ImageView
         android:id="@+id/avatar_man_6"
