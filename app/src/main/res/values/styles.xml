@@ -11,7 +11,7 @@
     <!-- dart game activity action bar styles -->
     <style name="ActionBar.Solid.DartsGame" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="displayOptions">useLogo|showHome</item>
-        <item name="logo">@drawable/logo_white</item>
+        <item name="logo">@mipmap/logo</item>
     </style>
 
     <style name="AppTheme.DartGame" parent="@style/AppTheme">

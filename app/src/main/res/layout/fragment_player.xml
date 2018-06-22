@@ -13,7 +13,7 @@
         android:layout_height="@dimen/avatar_height"
         android:layout_gravity="center_horizontal"
         android:contentDescription="@string/avatar_content_description_man"
-        android:src="@drawable/man_3" />
+        android:src="@mipmap/man_3"/>
 
     <EditText
         android:id="@+id/editText"

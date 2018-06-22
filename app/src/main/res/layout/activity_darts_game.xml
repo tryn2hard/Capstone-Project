@@ -151,7 +151,7 @@
         app:layout_constraintHorizontal_bias="0.833"
         app:layout_constraintStart_toStartOf="@+id/marker_15_tv"
         app:layout_constraintTop_toBottomOf="@+id/marker_15_tv"
-        app:srcCompat="@drawable/bullseye_white" />
+        app:srcCompat="@mipmap/bullseye_white" />
 
     <Button
         android:id="@+id/undo_mark_button"
