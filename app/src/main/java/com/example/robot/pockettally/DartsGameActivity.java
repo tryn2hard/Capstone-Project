@@ -2,13 +2,10 @@ package com.example.robot.pockettally;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,10 +21,12 @@ import butterknife.ButterKnife;
 
 
 public class DartsGameActivity extends AppCompatActivity
-        implements SharedPreferences.OnSharedPreferenceChangeListener {
+        implements SharedPreferences.OnSharedPreferenceChangeListener,
+        PlayerFragment.PlayerProgressListener {
+
 
     private int num_of_players;
-    private String game_mode_string;
+    private String game_mode;
     private Boolean pref_vibrate;
 
     @BindView(R.id.end_game_button)
@@ -75,9 +74,10 @@ public class DartsGameActivity extends AppCompatActivity
     private void setupSharedPreferences() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         num_of_players = Integer.parseInt(sharedPreferences.getString(getResources()
-                .getString(R.string.pref_num_of_players_key), "2"));
+                .getString(R.string.pref_num_of_players_key), getResources().getString(R.string.pref_num_of_players_default)));
         pref_vibrate = sharedPreferences.getBoolean(getResources()
                 .getString(R.string.pref_vibrate_key), getResources().getBoolean(R.bool.pref_vibrate_default));
+        game_mode = sharedPreferences.getString(getResources().getString(R.string.pref_game_mode_key), getResources().getString(R.string.pref_game_mode_default));
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
 
@@ -94,10 +94,11 @@ public class DartsGameActivity extends AppCompatActivity
         for(int i = 0; i < playerCount; i++){
             PlayerFragment playerFragment = new PlayerFragment();
             Bundle args = new Bundle();
-            args.putBoolean("vibe", pref_vibrate);
+            args.putBoolean(PlayerFragment.FRAGMENT_ARGS_VIBE_KEY, pref_vibrate);
+            args.putString(PlayerFragment.FRAGMENT_ARGS_GAME_MODE_KEY, game_mode);
             playerFragment.setArguments(args);
             fm.beginTransaction()
-                    .add(fragment_containers.get(i), playerFragment, "PlayerFrag" + i)
+                    .add(fragment_containers.get(i), playerFragment, "Player " + (i+1))
                     .commit();
         }
 
@@ -139,7 +140,7 @@ public class DartsGameActivity extends AppCompatActivity
             num_of_players = Integer.parseInt(sharedPreferences.getString(key,
                     getString(R.string.pref_num_of_players_default)));
         } else if (key.equals(getString(R.string.pref_game_mode_key))){
-            game_mode_string = sharedPreferences.getString(key,
+            game_mode = sharedPreferences.getString(key,
                     getString(R.string.pref_game_mode_default));
         } else if (key.equals(getString(R.string.pref_vibrate_key))) {
             pref_vibrate = sharedPreferences.getBoolean(key,
@@ -155,5 +156,10 @@ public class DartsGameActivity extends AppCompatActivity
         super.onDestroy();
         PreferenceManager.getDefaultSharedPreferences(this)
                 .unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void TallyClosed(String tag, int position) {
+        Toast.makeText(this, tag + " has closed number " + position, Toast.LENGTH_SHORT).show();
     }
 }

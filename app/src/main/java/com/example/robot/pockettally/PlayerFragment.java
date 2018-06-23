@@ -5,13 +5,11 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.BindViews;
 import butterknife.ButterKnife;
 
 import static butterknife.ButterKnife.bind;
@@ -29,6 +26,23 @@ import static butterknife.ButterKnife.findById;
  * A simple {@link Fragment} subclass.
  */
 public class PlayerFragment extends Fragment {
+    PlayerProgressListener mCallback;
+
+    public interface PlayerProgressListener {
+        public void TallyClosed(String tag, int position);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try{
+            mCallback = (PlayerProgressListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+            + " must implement PlayerProgressListener");
+        }
+    }
 
     // Constants
     private final static int TALLY_MARK_20_VALUE = 20;
@@ -43,6 +57,9 @@ public class PlayerFragment extends Fragment {
     private final static int SINGLE_TALLY_MARK = 1;
     private final static int DOUBLE_TALLY_MARK = 2;
     private final static int TRIPLE_TALLY_MARK = 3;
+
+    public final static String FRAGMENT_ARGS_GAME_MODE_KEY = "game mode";
+    public final static String FRAGMENT_ARGS_VIBE_KEY = "vibe";
 
     private Scoreboard[] scoreboards = new Scoreboard[7];
 
@@ -65,6 +82,10 @@ public class PlayerFragment extends Fragment {
     TextView game_score_tv;
     @BindView(R.id.player_avatar_image)
     ImageView player_avatar_iv;
+    @BindView(R.id.divider4)
+    View divider_v;
+    @BindView(R.id.editText)
+    EditText name_et;
 
     private List<Integer> avatars;
 
@@ -86,7 +107,18 @@ public class PlayerFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_player, container, false);
         ButterKnife.bind(this, rootView);
 
-        mVibe = getArguments().getBoolean("vibe");
+        if (getArguments() != null) {
+            mVibe = getArguments().getBoolean(FRAGMENT_ARGS_VIBE_KEY);
+            mGameMode = getArguments().getString(FRAGMENT_ARGS_GAME_MODE_KEY);
+        }
+
+        if(mGameMode.equals(getResources().getString(R.string.pref_no_points_game_mode_value))){
+            game_score_tv.setVisibility(View.INVISIBLE);
+            divider_v.setVisibility(View.INVISIBLE);
+
+        }
+
+        name_et.setText(getTag());
 
         vibe = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
 
@@ -117,7 +149,7 @@ public class PlayerFragment extends Fragment {
                     // else only update totalScore and game_score_tv
                     if (!current_Scoreboard.isClosedOut()) {
                         tallyImageSelector(current_Scoreboard);
-                    } else {
+                    } else if(!mGameMode.equals(getResources().getString(R.string.pref_no_points_game_mode_value))){
                         game_score_tv.setText(String.valueOf(totalScore += current_Scoreboard.getValue()));
                     }
                 }
@@ -128,7 +160,8 @@ public class PlayerFragment extends Fragment {
                 public boolean onLongClick(View view) {
                     final Dialog multiMarkDialog = new Dialog(getActivity());
                     multiMarkDialog.setContentView(R.layout.multiple_marks_dialog);
-                    multiMarkDialog.findViewById(R.id.double_mark_button).setOnClickListener(new View.OnClickListener() {
+                    multiMarkDialog.findViewById(R.id.double_mark_button)
+                            .setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             if(mVibe) {
@@ -137,7 +170,7 @@ public class PlayerFragment extends Fragment {
                             current_Scoreboard.incrementCount(DOUBLE_TALLY_MARK);
                             if (!current_Scoreboard.isClosedOut()) {
                                 tallyImageSelector(current_Scoreboard);
-                            } else {
+                            } else if(!mGameMode.equals(getResources().getString(R.string.pref_no_points_game_mode_value))){
                                 game_score_tv.setText(String.valueOf(totalScore += current_Scoreboard.getValue() * DOUBLE_TALLY_MARK));
                             }
                             multiMarkDialog.dismiss();
@@ -153,7 +186,7 @@ public class PlayerFragment extends Fragment {
                             current_Scoreboard.incrementCount(TRIPLE_TALLY_MARK);
                             if (!current_Scoreboard.isClosedOut()) {
                                 tallyImageSelector(current_Scoreboard);
-                            } else {
+                            } else if(!mGameMode.equals(getResources().getString(R.string.pref_no_points_game_mode_value))){
                                 game_score_tv.setText(String.valueOf(totalScore += current_Scoreboard.getValue() * TRIPLE_TALLY_MARK));
                             }
                             multiMarkDialog.dismiss();
@@ -191,6 +224,7 @@ public class PlayerFragment extends Fragment {
             });
         }
 
+
         player_avatar_iv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -200,6 +234,7 @@ public class PlayerFragment extends Fragment {
         });
         return rootView;
     }
+
 
     private void tallyImageSelector(Scoreboard current_Scoreboard) {
         int tallyCount = current_Scoreboard.getCount();
@@ -212,13 +247,16 @@ public class PlayerFragment extends Fragment {
                 break;
             case 3:
                 current_Scoreboard.setClosedOut(true);
+                mCallback.TallyClosed(getTag(), current_Scoreboard.getValue());
                 current_Scoreboard.getImageView().setImageResource(R.drawable.tally_three_marks);
                 break;
             default:
                 current_Scoreboard.setClosedOut(true);
                 current_Scoreboard.getImageView().setImageResource(R.drawable.tally_three_marks);
-                totalScore += (tallyCount - MAX_NUM_OF_TALLY_MARKS) * current_Scoreboard.getValue();
-                game_score_tv.setText(String.valueOf(totalScore));
+                if(!mGameMode.equals(getResources().getString(R.string.pref_no_points_game_mode_value))) {
+                    totalScore += (tallyCount - MAX_NUM_OF_TALLY_MARKS) * current_Scoreboard.getValue();
+                    game_score_tv.setText(String.valueOf(totalScore));
+                }
         }
     }
 }
