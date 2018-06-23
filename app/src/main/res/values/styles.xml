@@ -6,6 +6,10 @@
         <item name="colorPrimaryDark">#b71c1c</item>
         <item name="android:colorBackground">@color/colorPrimaryDark</item>
         <item name="android:textColorPrimary">@color/text_primary</item>
+
+        <!--Preference Theme-->
+        <item name="preferenceTheme">@style/game_settings_frag_style</item>
+
     </style>
 
     <!-- dart game activity action bar styles -->
@@ -42,8 +46,12 @@
         <item name="android:textColor">@color/text_primary</item>
         <item name="android:textSize">@dimen/med_font_header</item>
     </style>
-
-
-
+    
+    <style name="game_settings_frag_style">
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:textColorTertiary">@color/white</item>
+        <item name="android:textAppearanceMediumInverse">@color/buttonRed2</item>
+    </style>
 
 </resources>

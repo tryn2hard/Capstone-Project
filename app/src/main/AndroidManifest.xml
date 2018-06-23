@@ -10,10 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:screenOrientation="portrait"
-        android:label="Pocket Tally">
+        android:label="Pocket Tally"
+        android:allowBackup="true">
         <activity android:name=".DartsGameActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.DartGame">
+            android:theme="@style/AppTheme.DartGame"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,6 +32,10 @@
 
             </meta-data>
         </activity>
+
+        <activity
+            android:name=".GameSettingsActivity"
+            android:label="@string/game_settings_label"/>
 
     </application>
 

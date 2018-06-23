@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="pref_num_of_players_options">
+        <item>@string/pref_2_players_label</item>
+        <item>@string/pref_3_players_label</item>
+        <item>@string/pref_4_players_label</item>
+    </string-array>
+
+    <string-array name="pref_num_of_players_values">
+        <item>@string/pref_num_of_players_2</item>
+        <item>@string/pref_num_of_players_3</item>
+        <item>@string/pref_num_of_players_4</item>
+    </string-array>
+
+    <string-array name = "pref_game_mode_options">
+        <item>@string/pref_standard_game_mode_label</item>
+        <item>@string/pref_cut_throat_game_mode_label</item>
+        <item>@string/pref_no_points_game_mode_label</item>
+    </string-array>
+
+    <string-array name = "pref_game_mode_values">
+        <item>@string/pref_standard_game_mode_value</item>
+        <item>@string/pref_cut_throat_game_mode_value</item>
+        <item>@string/pref_no_points_game_mode_value</item>
+    </string-array>
+
+</resources>

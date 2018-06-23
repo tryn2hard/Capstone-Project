@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DartsGameActivity">
+
+    <View
+        android:id="@+id/divider4"
+        android:layout_width="1dp"
+        android:layout_height="375dp"
+        android:layout_marginStart="8dp"
+        android:background="@color/text_primary"
+        app:layout_constraintStart_toEndOf="@+id/player_2_container"
+        app:layout_constraintTop_toTopOf="@+id/marker_20_tv" />
+
+    <View
+        android:id="@+id/divider5"
+        android:layout_width="1dp"
+        android:layout_height="375dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/text_primary"
+        app:layout_constraintEnd_toStartOf="@+id/player_3_container"
+        app:layout_constraintTop_toTopOf="@+id/marker_20_tv" />
+
+    <TextView
+        android:id="@+id/marker_20_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="98dp"
+        android:text="@string/marker_20_tv"
+        android:textColor="@color/text_primary"
+        android:textSize="@dimen/dart_score_label"
+        app:layout_constraintBottom_toTopOf="@+id/marker_19_tv"
+        app:layout_constraintEnd_toStartOf="@+id/divider5"
+        app:layout_constraintStart_toEndOf="@+id/divider4"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/marker_19_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/marker_19_tv"
+        android:textColor="@color/text_primary"
+        android:textSize="@dimen/dart_score_label"
+        app:layout_constraintBottom_toTopOf="@+id/marker_18_tv"
+        app:layout_constraintEnd_toEndOf="@+id/marker_20_tv"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/marker_20_tv"
+        app:layout_constraintTop_toBottomOf="@+id/marker_20_tv" />
+
+    <TextView
+        android:id="@+id/marker_18_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/marker_18_tv"
+        android:textColor="@color/text_primary"
+        android:textSize="@dimen/dart_score_label"
+        app:layout_constraintEnd_toEndOf="@+id/marker_19_tv"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/marker_19_tv"
+        app:layout_constraintTop_toBottomOf="@+id/marker_19_tv" />
+
+    <TextView
+        android:id="@+id/marker_17_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/marker_17_tv"
+        android:textColor="@color/text_primary"
+        android:textSize="@dimen/dart_score_label"
+        app:layout_constraintEnd_toEndOf="@+id/marker_18_tv"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/marker_18_tv"
+        app:layout_constraintTop_toBottomOf="@+id/marker_18_tv" />
+
+    <TextView
+        android:id="@+id/marker_16_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/marker_16_tv"
+        android:textColor="@color/text_primary"
+        android:textSize="@dimen/dart_score_label"
+        app:layout_constraintEnd_toEndOf="@+id/marker_17_tv"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/marker_17_tv"
+        app:layout_constraintTop_toBottomOf="@+id/marker_17_tv" />
+
+    <TextView
+        android:id="@+id/marker_15_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:text="@string/marker_15_tv"
+        android:textColor="@color/text_primary"
+        android:textSize="@dimen/dart_score_label"
+        app:layout_constraintEnd_toEndOf="@+id/marker_16_tv"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/marker_16_tv"
+        app:layout_constraintTop_toBottomOf="@+id/marker_16_tv" />
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/player_1_container"
+        android:layout_width="70dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/end_game_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/player_2_container"
+        android:layout_width="70dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/undo_mark_button"
+        app:layout_constraintStart_toEndOf="@+id/player_1_container"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/player_3_container"
+        android:layout_width="70dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/undo_mark_button"
+        app:layout_constraintEnd_toStartOf="@+id/player_4_container"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/player_4_container"
+        android:layout_width="70dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/undo_mark_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="12dp"
+        android:contentDescription="@string/bull_s_eye_label"
+        android:foregroundGravity="center_horizontal"
+        app:layout_constraintEnd_toEndOf="@+id/marker_15_tv"
+        app:layout_constraintStart_toStartOf="@+id/marker_15_tv"
+        app:layout_constraintTop_toBottomOf="@+id/marker_15_tv"
+        app:srcCompat="@mipmap/bullseye_white" />
+
+    <Button
+        android:id="@+id/undo_mark_button"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/custom_button"
+        android:text="Undo throw"
+        android:textColor="@color/text_primary"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/end_game_button"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/custom_button"
+        android:text="End Game"
+        android:textColor="@color/text_primary"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

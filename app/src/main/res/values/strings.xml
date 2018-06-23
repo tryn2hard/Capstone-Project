@@ -74,5 +74,40 @@
     <!--player fragment strings-->
     <string name="initial_total_score_tv">0</string>
 
+    <!--Game Settings Preferences-->
+    <string name="game_settings_label">Game Settings</string>
+
+    <string name="pref_num_of_players_key" translatable="false">number of players</string>
+    <string name="pref_num_of_players_default" translatable="false">2 </string>
+    <string name="pref_num_of_players_label"> Number of Players </string>
+
+    <string name="pref_2_players_label"> 2 players </string>
+    <string name="pref_3_players_label"> 3 players </string>
+    <string name="pref_4_players_label"> 4 players </string>
+
+    <string name="pref_num_of_players_2">2 </string>
+    <string name="pref_num_of_players_3">3 </string>
+    <string name="pref_num_of_players_4">4 </string>
+
+    <string name="pref_game_mode_key" translatable="false"> game mode </string>
+    <string name="pref_game_mode_default" translatable="false"> standard </string>
+    <string name="pref_game_mode_label"> Game Mode </string>
+
+    <string name="pref_standard_game_mode_label"> Standard </string>
+    <string name="pref_cut_throat_game_mode_label"> Cut Throat </string>
+    <string name="pref_no_points_game_mode_label"> No Points </string>
+
+    <string name="pref_standard_game_mode_value"> standard </string>
+    <string name="pref_cut_throat_game_mode_value"> cut throat </string>
+    <string name="pref_no_points_game_mode_value"> no points </string>
+
+    <string name="pref_vibrate_label"> Vibrate On/Off </string>
+    <string name="pref_vibrate_key"> vibrate </string>
+    <string name="pref_vibrate_show_on"> On </string>
+    <string name="pref_vibrate_show_off"> Off </string>
+
+
+
+
 
 </resources>

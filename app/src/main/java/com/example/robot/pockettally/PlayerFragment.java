@@ -72,9 +72,13 @@ public class PlayerFragment extends Fragment {
     private Vibrator vibe;
     private final static int VIBRATE_TIME = 100;
 
+    private String mGameMode;
+    private Boolean mVibe;
+
     public PlayerFragment() {
         // Required empty public constructor
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -82,9 +86,11 @@ public class PlayerFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_player, container, false);
         ButterKnife.bind(this, rootView);
 
-        vibe = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
-        avatars = new AvatarImageAssets().getAvatars();
+        mVibe = getArguments().getBoolean("vibe");
 
+        vibe = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+
+        avatars = new AvatarImageAssets().getAvatars();
 
         // Initialize Scoreboards
         scoreboards[0] = new Scoreboard(TALLY_MARK_20_VALUE, scoreboard_20_iv);
@@ -103,7 +109,9 @@ public class PlayerFragment extends Fragment {
             current_Scoreboard_iv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    vibe.vibrate(VIBRATE_TIME);
+                    if(mVibe) {
+                        vibe.vibrate(VIBRATE_TIME);
+                    }
                     current_Scoreboard.incrementCount(SINGLE_TALLY_MARK);
                     // If this Scoreboard has not yet been closed out, select tally image;
                     // else only update totalScore and game_score_tv
@@ -123,6 +131,9 @@ public class PlayerFragment extends Fragment {
                     multiMarkDialog.findViewById(R.id.double_mark_button).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            if(mVibe) {
+                                vibe.vibrate(VIBRATE_TIME);
+                            }
                             current_Scoreboard.incrementCount(DOUBLE_TALLY_MARK);
                             if (!current_Scoreboard.isClosedOut()) {
                                 tallyImageSelector(current_Scoreboard);
@@ -136,6 +147,9 @@ public class PlayerFragment extends Fragment {
                     multiMarkDialog.findViewById(R.id.triple_mark_button).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            if(mVibe) {
+                                vibe.vibrate(VIBRATE_TIME);
+                            }
                             current_Scoreboard.incrementCount(TRIPLE_TALLY_MARK);
                             if (!current_Scoreboard.isClosedOut()) {
                                 tallyImageSelector(current_Scoreboard);
@@ -151,34 +165,35 @@ public class PlayerFragment extends Fragment {
             });
         }
 
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.setContentView(R.layout.avatar_dialog);
+        final List<Integer> avatars_iv = new ArrayList<Integer>(){{
+            add(R.id.avatar_man);
+            add(R.id.avatar_man_1);
+            add(R.id.avatar_man_2);
+            add(R.id.avatar_man_3);
+            add(R.id.avatar_man_4);
+            add(R.id.avatar_man_5);
+            add(R.id.avatar_man_6);
+            add(R.id.avatar_woman);
+            add(R.id.avatar_woman_1);
+        }};
+
+        for(int i = 0; i < avatars_iv.size(); i++){
+            ImageView currentImageView = dialog.findViewById(avatars_iv.get(i));
+            final int currentIndex = i;
+            currentImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    player_avatar_iv.setImageResource(avatars.get(currentIndex));
+                    dialog.dismiss();
+                }
+            });
+        }
+
         player_avatar_iv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Dialog dialog = new Dialog(getActivity());
-                dialog.setContentView(R.layout.avatar_dialog);
-                final List<Integer> avatars_iv = new ArrayList<Integer>(){{
-                    add(R.id.avatar_man);
-                    add(R.id.avatar_man_1);
-                    add(R.id.avatar_man_2);
-                    add(R.id.avatar_man_3);
-                    add(R.id.avatar_man_4);
-                    add(R.id.avatar_man_5);
-                    add(R.id.avatar_man_6);
-                    add(R.id.avatar_woman);
-                    add(R.id.avatar_woman_1);
-                }};
-
-                for(int i = 0; i < avatars_iv.size(); i++){
-                    ImageView currentImageView = dialog.findViewById(avatars_iv.get(i));
-                    final int currentIndex = i;
-                    currentImageView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            player_avatar_iv.setImageResource(avatars.get(currentIndex));
-                            dialog.dismiss();
-                        }
-                    });
-                }
 
                 dialog.show();
             }

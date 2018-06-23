@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ListPreference
+        android:defaultValue="@string/pref_num_of_players_default"
+        android:entries="@array/pref_num_of_players_options"
+        android:entryValues="@array/pref_num_of_players_values"
+        android:key="@string/pref_num_of_players_key"
+        android:title="@string/pref_num_of_players_label" />
+
+    <ListPreference
+        android:defaultValue="@string/pref_game_mode_default"
+        android:entries="@array/pref_game_mode_options"
+        android:entryValues="@array/pref_game_mode_values"
+        android:key="@string/pref_game_mode_key"
+        android:title="@string/pref_game_mode_label"/>
+
+    <CheckBoxPreference
+        android:defaultValue="@bool/pref_vibrate_default"
+        android:key="@string/pref_vibrate_key"
+        android:summaryOff="@string/pref_vibrate_show_off"
+        android:summaryOn="@string/pref_vibrate_show_on"
+        android:title="@string/pref_vibrate_label" />
+
+</PreferenceScreen>
