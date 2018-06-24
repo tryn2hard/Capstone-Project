@@ -20,12 +20,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:background="@color/colorPrimaryDark"
-        android:cursorVisible="false"
         android:hint="@string/player_name_hint"
         android:inputType="text"
+        android:cursorVisible="false"
         android:textColor="@color/text_primary"
-        android:textColorHint="@color/text_primary" />
+        android:textColorHint="@color/text_primary"
+        android:background="@color/colorPrimaryDark"
+        android:backgroundTint="@color/colorPrimaryDark" />
 
     <View
         android:id="@+id/divider2"

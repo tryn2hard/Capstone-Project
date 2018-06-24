@@ -140,7 +140,7 @@
     </android.support.design.widget.CoordinatorLayout>
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/marker_bulls_iv"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginStart="8dp"
@@ -178,5 +178,91 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <View
+        android:id="@+id/closed_out_20"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/tally_start"
+        app:layout_constraintBottom_toBottomOf="@+id/marker_20_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/marker_20_tv"
+        android:visibility="invisible"/>
+
+    <View
+        android:id="@+id/closed_out_19"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/tally_start"
+        app:layout_constraintBottom_toBottomOf="@+id/marker_19_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/marker_19_tv"
+        android:visibility="invisible"/>
+    <View
+        android:id="@+id/closed_out_18"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/tally_start"
+        app:layout_constraintBottom_toBottomOf="@+id/marker_18_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/marker_18_tv"
+        android:visibility="invisible"/>
+    <View
+        android:id="@+id/closed_out_17"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/tally_start"
+        app:layout_constraintBottom_toBottomOf="@+id/marker_17_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/marker_17_tv"
+        android:visibility="invisible"/>
+    <View
+        android:id="@+id/closed_out_16"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/tally_start"
+        app:layout_constraintBottom_toBottomOf="@+id/marker_16_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/marker_16_tv"
+        android:visibility="invisible"/>
+    <View
+        android:id="@+id/closed_out_15"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/tally_start"
+        app:layout_constraintBottom_toBottomOf="@+id/marker_15_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/marker_15_tv"
+        android:visibility="invisible"/>
+    <View
+        android:id="@+id/closed_out_bulls"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/tally_start"
+        app:layout_constraintBottom_toBottomOf="@id/marker_bulls_iv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/marker_bulls_iv"
+        android:visibility="invisible"/>
 
 </android.support.constraint.ConstraintLayout>

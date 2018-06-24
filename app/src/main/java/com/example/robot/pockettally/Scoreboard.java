@@ -8,6 +8,16 @@ public class Scoreboard {
     private int mCount = 0;
     private ImageView mImageView;
     private boolean mIsClosedOut = false;
+
+    public boolean ismClosedOutByAll() {
+        return mClosedOutByAll;
+    }
+
+    public void setmClosedOutByAll(boolean mClosedOutByAll) {
+        this.mClosedOutByAll = mClosedOutByAll;
+    }
+
+    private boolean mClosedOutByAll = false;
     
     public Scoreboard(int value, ImageView imageView) {
         mValue = value;
