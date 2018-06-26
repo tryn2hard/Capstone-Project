@@ -74,7 +74,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="2dp"
         android:text="@string/marker_17_tv"
         android:textColor="@color/text_primary"
         android:textSize="@dimen/dart_score_label"
@@ -88,7 +88,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="2dp"
         android:text="@string/marker_16_tv"
         android:textColor="@color/text_primary"
         android:textSize="@dimen/dart_score_label"
@@ -160,7 +160,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/custom_button"
-        android:text="Undo throw"
+        android:text="@string/undo_throw_button"
         android:textColor="@color/text_primary"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -173,7 +173,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginStart="16dp"
         android:background="@drawable/custom_button"
-        android:text="End Game"
+        android:text="@string/reset_game_button"
         android:textColor="@color/text_primary"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -252,6 +252,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/marker_15_tv"
         android:visibility="invisible"/>
+
     <View
         android:id="@+id/closed_out_bulls"
         android:layout_width="wrap_content"
@@ -259,10 +260,12 @@
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         android:background="@color/tally_start"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/marker_bulls_iv"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/marker_bulls_iv"
-        android:visibility="invisible"/>
+        app:layout_constraintVertical_bias="0.388" />
 
 </android.support.constraint.ConstraintLayout>

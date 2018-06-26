@@ -40,7 +40,7 @@
 
     <string name="menu_option_game_settings">Game Settings</string>
     <string name="menu_option_profile">Profile</string>
-    <string name="how_to_play">How to Play</string>
+    <string name="menu_how_to_play">How to Play</string>
 
     <!--Menu titles-->
 
@@ -105,9 +105,8 @@
     <string name="pref_vibrate_key"> vibrate </string>
     <string name="pref_vibrate_show_on"> On </string>
     <string name="pref_vibrate_show_off"> Off </string>
-
-
-
+    <string name="reset_game_button">Reset Game</string>
+    <string name="undo_throw_button">Undo throw</string>
 
 
 </resources>

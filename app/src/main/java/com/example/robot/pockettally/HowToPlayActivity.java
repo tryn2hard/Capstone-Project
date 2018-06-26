@@ -3,7 +3,6 @@ package com.example.robot.pockettally;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
 
@@ -31,7 +29,7 @@ public class HowToPlayActivity extends AppCompatActivity {
         setContentView(R.layout.activity_how_to_play);
         ButterKnife.bind(this);
 
-        getSupportActionBar().setTitle(R.string.how_to_play);
+        getSupportActionBar().setTitle(R.string.menu_how_to_play);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
