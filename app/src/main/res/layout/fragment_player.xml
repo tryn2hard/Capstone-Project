@@ -22,6 +22,7 @@
         android:layout_gravity="center_horizontal"
         android:hint="@string/player_name_hint"
         android:inputType="text"
+        android:selectAllOnFocus="true"
         android:cursorVisible="false"
         android:textColor="@color/text_primary"
         android:textColorHint="@color/text_primary"

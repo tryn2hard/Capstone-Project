@@ -60,7 +60,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="8dp"
         android:text="@string/marker_18_tv"
         android:textColor="@color/text_primary"
         android:textSize="@dimen/dart_score_label"
@@ -74,7 +74,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="8dp"
         android:text="@string/marker_17_tv"
         android:textColor="@color/text_primary"
         android:textSize="@dimen/dart_score_label"
@@ -88,7 +88,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="8dp"
         android:text="@string/marker_16_tv"
         android:textColor="@color/text_primary"
         android:textSize="@dimen/dart_score_label"
@@ -144,7 +144,7 @@
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         android:contentDescription="@string/bull_s_eye_label"
         android:foregroundGravity="center_horizontal"
         app:layout_constraintEnd_toEndOf="@+id/marker_15_tv"
@@ -182,81 +182,85 @@
     <View
         android:id="@+id/closed_out_20"
         android:layout_width="wrap_content"
-        android:layout_height="1dp"
+        android:layout_height="2dp"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         android:background="@color/tally_start"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/marker_20_tv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/marker_20_tv"
-        android:visibility="invisible"/>
+        app:layout_constraintTop_toTopOf="@+id/marker_20_tv" />
 
     <View
         android:id="@+id/closed_out_19"
         android:layout_width="wrap_content"
-        android:layout_height="1dp"
+        android:layout_height="2dp"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         android:background="@color/tally_start"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/marker_19_tv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/marker_19_tv"
-        android:visibility="invisible"/>
+        app:layout_constraintTop_toTopOf="@+id/marker_19_tv" />
+
     <View
         android:id="@+id/closed_out_18"
         android:layout_width="wrap_content"
-        android:layout_height="1dp"
+        android:layout_height="2dp"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         android:background="@color/tally_start"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/marker_18_tv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/marker_18_tv"
-        android:visibility="invisible"/>
+        app:layout_constraintTop_toTopOf="@+id/marker_18_tv" />
+
     <View
         android:id="@+id/closed_out_17"
         android:layout_width="wrap_content"
-        android:layout_height="1dp"
+        android:layout_height="2dp"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         android:background="@color/tally_start"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/marker_17_tv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/marker_17_tv"
-        android:visibility="invisible"/>
+        app:layout_constraintTop_toTopOf="@+id/marker_17_tv" />
+
     <View
         android:id="@+id/closed_out_16"
         android:layout_width="wrap_content"
-        android:layout_height="1dp"
+        android:layout_height="2dp"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         android:background="@color/tally_start"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/marker_16_tv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/marker_16_tv"
-        android:visibility="invisible"/>
+        app:layout_constraintTop_toTopOf="@+id/marker_16_tv" />
+
     <View
         android:id="@+id/closed_out_15"
         android:layout_width="wrap_content"
-        android:layout_height="1dp"
+        android:layout_height="2dp"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         android:background="@color/tally_start"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/marker_15_tv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/marker_15_tv"
-        android:visibility="invisible"/>
+        app:layout_constraintTop_toTopOf="@+id/marker_15_tv" />
 
     <View
         android:id="@+id/closed_out_bulls"
         android:layout_width="wrap_content"
-        android:layout_height="1dp"
+        android:layout_height="2dp"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         android:background="@color/tally_start"

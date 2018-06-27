@@ -83,6 +83,27 @@ public class Player {
         }
     }
 
+    public boolean isTallyMarkClosed(int scoreValue){
+        boolean currentTallyMarkCondition = false;
+
+        for(int i = 0; i < ScoreValues.length; i++){
+            int currentScoreValue = ScoreValues[i];
+            if(currentScoreValue == scoreValue){
+                currentTallyMarkCondition = ClosedMarks[i];
+            }
+        }
+        return currentTallyMarkCondition;
+    }
+    public void tallyMarkUnClosed(int scoreValue){
+
+        for(int i = 0; i < ScoreValues.length; i++){
+            int currentScoreValue = ScoreValues[i];
+            if(currentScoreValue == scoreValue){
+                ClosedMarks[i] = false;
+            }
+        }
+    }
+
     public boolean getTallyMarkCondition(int scoreValue){
 
         boolean tallyMarkCondition = false;
@@ -93,7 +114,6 @@ public class Player {
                 tallyMarkCondition = ClosedMarks[i];
             }
         }
-
         return tallyMarkCondition;
     }
 

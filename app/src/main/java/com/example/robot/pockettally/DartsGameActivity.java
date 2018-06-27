@@ -59,7 +59,7 @@ public class DartsGameActivity extends AppCompatActivity
     ImageView marker_bulls_iv;
 
     private List<Player> Players = new ArrayList<>();
-    private List<GameMark> GameHistory = new ArrayList<>();
+    private ArrayList<GameMark> GameHistory = new ArrayList<>();
 
     private FragmentManager mFragmentManager;
 
@@ -69,11 +69,11 @@ public class DartsGameActivity extends AppCompatActivity
 
         setupSharedPreferences();
 
-        if(num_of_players == 0){
+        if (num_of_players == 0) {
             num_of_players = 2;
         }
 
-        if(num_of_players == 2) {
+        if (num_of_players == 2) {
 
             setContentView(R.layout.activity_darts_game);
 
@@ -93,14 +93,15 @@ public class DartsGameActivity extends AppCompatActivity
 
                 resetGame();
 
-                }
+            }
 
         });
 
         undo_mark_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Undo last throw", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "Undo last throw", Toast.LENGTH_SHORT).show();
+                undoThrow();
             }
         });
 
@@ -116,15 +117,15 @@ public class DartsGameActivity extends AppCompatActivity
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
 
-    private void setupPlayerFragments(int playerCount){
-        final List<Integer> fragment_containers = new ArrayList<Integer>(){{
+    private void setupPlayerFragments(int playerCount) {
+        final List<Integer> fragment_containers = new ArrayList<Integer>() {{
             add(R.id.player_1_container);
             add(R.id.player_2_container);
             add(R.id.player_3_container);
             add(R.id.player_4_container);
         }};
 
-        for(int i = 0; i < playerCount; i++){
+        for (int i = 0; i < playerCount; i++) {
             PlayerFragment playerFragment = new PlayerFragment();
             String tag = tagGenerator(i);
             setupPlayer(i, tag);
@@ -139,11 +140,11 @@ public class DartsGameActivity extends AppCompatActivity
 
     }
 
-    private String tagGenerator(int value){
+    private String tagGenerator(int value) {
         return "Player " + (value + 1);
     }
 
-    private void setupPlayer(int ID, String tag){
+    private void setupPlayer(int ID, String tag) {
         Players.add(new Player(ID, tag));
     }
 
@@ -179,7 +180,7 @@ public class DartsGameActivity extends AppCompatActivity
         if (key.equals(getString(R.string.pref_num_of_players_key))) {
             num_of_players = Integer.parseInt(sharedPreferences.getString(key,
                     getString(R.string.pref_num_of_players_default)));
-        } else if (key.equals(getString(R.string.pref_game_mode_key))){
+        } else if (key.equals(getString(R.string.pref_game_mode_key))) {
             game_mode = sharedPreferences.getString(key,
                     getString(R.string.pref_game_mode_default));
         } else if (key.equals(getString(R.string.pref_vibrate_key))) {
@@ -201,50 +202,51 @@ public class DartsGameActivity extends AppCompatActivity
 
     @Override
     public void TallyClosed(String tag, int scoreValue) {
-        Toast.makeText(this, tag + " has closed number " + scoreValue, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, tag + " has closed number " + scoreValue, Toast.LENGTH_SHORT).show();
         Players.get(getIdFromTag(tag)).tallyMarkClosed(scoreValue);
-        if(isTallyMarkClosedOutByAll(scoreValue)){
+        if (isTallyMarkClosedOutByAll(scoreValue)) {
             tallyMarkClosedOutByAll(scoreValue, Players.get(getIdFromTag(tag)));
         }
-        if(hasPlayerClosedOutEverything(tag)){
+        if (hasPlayerClosedOutEverything(tag)) {
             showEndOfGameDialog(tag);
         }
     }
 
-    private void tallyMarkClosedOutByAll(int scoreValue, Player currentPlayer){
+    private void tallyMarkClosedOutByAll(int scoreValue, Player currentPlayer) {
 
-        for(int i = 0; i < currentPlayer.getScoreValues().length; i++){
-            if(currentPlayer.getScoreValues()[i]==scoreValue)
-            {
+        for (int i = 0; i < currentPlayer.getScoreValues().length; i++) {
+            if (currentPlayer.getScoreValues()[i] == scoreValue) {
                 CrossedOutDividers.get(i).setVisibility(View.VISIBLE);
-                changeTallyImageInFragment(scoreValue, currentPlayer);
+                changeTallyImageInFragment(scoreValue);
             }
         }
     }
 
-    private void changeTallyImageInFragment(int scoreValue, Player currentPlayer) {
+    private void changeTallyImageInFragment(int scoreValue) {
+        for(int i = 0; i < Players.size(); i++) {
             PlayerFragment frag =
-                    (PlayerFragment) mFragmentManager.findFragmentByTag(currentPlayer.getFragmentTag());
+                    (PlayerFragment) mFragmentManager.findFragmentByTag(Players.get(i).getFragmentTag());
             frag.tallyMarkClosedOutByAll(scoreValue);
+        }
     }
 
-    private boolean isTallyMarkClosedOutByAll(int scoreValue){
+    private boolean isTallyMarkClosedOutByAll(int scoreValue) {
 
-        for(int i = 0; i < Players.size(); i++){
-                boolean isTallyMarkClosed = Players.get(i).getTallyMarkCondition(scoreValue);
-                if(!isTallyMarkClosed){
-                    return false;
-                }
+        for (int i = 0; i < Players.size(); i++) {
+            boolean isTallyMarkClosed = Players.get(i).getTallyMarkCondition(scoreValue);
+            if (!isTallyMarkClosed) {
+                return false;
+            }
         }
         return true;
     }
 
-    private void showEndOfGameDialog(String tag){
+    private void showEndOfGameDialog(String tag) {
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.end_of_game_dialog);
         TextView winner_tv = dialog.findViewById(R.id.winning_player_tv);
         String winner;
-        if(Players.get(getIdFromTag(tag)).getName() != null) {
+        if (Players.get(getIdFromTag(tag)).getName() != null) {
             winner = Players.get(getIdFromTag(tag)).getName() + " has won!";
         } else {
             winner = tag + " has won!";
@@ -263,33 +265,44 @@ public class DartsGameActivity extends AppCompatActivity
         dialog.show();
     }
 
-    private void resetGame(){
+    private void resetGame() {
         Toast.makeText(this, "game has been started again", Toast.LENGTH_SHORT).show();
-        for (int i = 0; i < Players.size(); i++){
+        for (int i = 0; i < Players.size(); i++) {
             Players.get(i).resetPlayer();
             PlayerFragment frag =
                     (PlayerFragment) mFragmentManager.findFragmentByTag(Players.get(i).getFragmentTag());
             frag.resetPlayerFrag();
         }
 
-        for (int j = 0; j < CrossedOutDividers.size(); j++){
+        for (int j = 0; j < CrossedOutDividers.size(); j++) {
             CrossedOutDividers.get(j).setVisibility(View.INVISIBLE);
         }
 
         GameHistory.clear();
     }
 
-    private boolean hasPlayerClosedOutEverything(String tag){
+    private boolean hasPlayerClosedOutEverything(String tag) {
 
         return Players.get(getIdFromTag(tag)).checkAllTallyMarks();
     }
 
-    private void isPlayerLeadingInPoints(){
+    private void isPlayerLeadingInPoints() {
 
     }
 
-    private void storeGameHistory(String tag, int scoreValue, int multiple){
+    private void storeGameHistory(String tag, int scoreValue, int multiple) {
         GameHistory.add(new GameMark(tag, scoreValue, multiple));
+    }
+
+    private GameMark getGameHistory() {
+        GameMark undoMark = null;
+
+        if (!GameHistory.isEmpty()) {
+            undoMark = GameHistory.get(GameHistory.size() - 1);
+            GameHistory.remove(GameHistory.size() - 1);
+            GameHistory.trimToSize();
+        }
+        return undoMark;
     }
 
     @Override
@@ -308,10 +321,35 @@ public class DartsGameActivity extends AppCompatActivity
         storeGameHistory(tag, scoreValue, multiple);
     }
 
-    public int getIdFromTag(String tag){
+    public int getIdFromTag(String tag) {
         int id = Integer.parseInt(tag.substring(tag.length() - 1));
         id -= 1;
         return id;
     }
 
+    public void undoThrow() {
+        GameMark undoMark = getGameHistory();
+        if (undoMark == null) {
+            Toast.makeText(this, "Nothing to undo", Toast.LENGTH_SHORT).show();
+        } else {
+            PlayerFragment currentFrag = (PlayerFragment) mFragmentManager.findFragmentByTag(undoMark.getmTag());
+            currentFrag.undoThrow(undoMark.getmValue(), undoMark.getmMarkMultiple());
+            Player currentPlayer = Players.get(getIdFromTag(undoMark.getmTag()));
+            if (currentPlayer.getTallyMarkCondition(undoMark.getmValue())) {
+                if (isTallyMarkClosedOutByAll(undoMark.getmValue())) {
+                    for (int i = 0; i < currentPlayer.getScoreValues().length; i++) {
+                        if (currentPlayer.getScoreValues()[i] == undoMark.getmValue()) {
+                            CrossedOutDividers.get(i).setVisibility(View.INVISIBLE);
+                            currentPlayer.tallyMarkUnClosed(undoMark.getmValue());
+                        }
+                    }
+                } else {
+                    currentPlayer.tallyMarkUnClosed(undoMark.getmValue());
+                }
+            }
+
+        }
+    }
 }
+
+
