@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -330,8 +331,9 @@ public class DartsGameActivity extends AppCompatActivity
     public void undoThrow() {
         GameMark undoMark = getGameHistory();
         if (undoMark == null) {
-            Toast.makeText(this, "Nothing to undo", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Nothing to Undo", Toast.LENGTH_SHORT).show();
         } else {
+            Log.i("undoThrow", undoMark.getmTag() + " " + undoMark.getmValue() + " " + undoMark.getmMarkMultiple());
             PlayerFragment currentFrag = (PlayerFragment) mFragmentManager.findFragmentByTag(undoMark.getmTag());
             currentFrag.undoThrow(undoMark.getmValue(), undoMark.getmMarkMultiple());
             Player currentPlayer = Players.get(getIdFromTag(undoMark.getmTag()));
