@@ -24,7 +24,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginTop="16dp"
-        android:src="@mipmap/man"
+
         app:layout_constraintStart_toStartOf="@+id/avatar_man_3"
         app:layout_constraintTop_toBottomOf="@+id/avatar_man_3"
         android:contentDescription="@string/avatar_man_content_descrip"/>
@@ -35,7 +35,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
-        android:src="@mipmap/man_1"
+
         app:layout_constraintStart_toEndOf="@+id/avatar_man"
         app:layout_constraintTop_toTopOf="@+id/avatar_man"
         android:contentDescription="@string/avatar_man_1_content_descrip"/>
@@ -46,7 +46,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
-        android:src="@mipmap/man_2"
+
         app:layout_constraintStart_toEndOf="@+id/avatar_man_1"
         app:layout_constraintTop_toTopOf="@+id/avatar_man_1"
         android:contentDescription="@string/avatar_man_2_content_descrip"/>
@@ -56,7 +56,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginTop="8dp"
-        android:src="@mipmap/man_3"
+
         app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textView"
         android:contentDescription="@string/avatar_man_3_content_descrip"/>
@@ -67,7 +67,7 @@
         android:layout_height="60dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:src="@mipmap/man_4"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/avatar_man_2"
         app:layout_constraintTop_toTopOf="@+id/avatar_man_2"
@@ -80,7 +80,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginTop="16dp"
         android:contentDescription="@string/avatar_man_5_content_descrip"
-        android:src="@mipmap/man_5"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/avatar_man"
         app:layout_constraintTop_toBottomOf="@+id/avatar_man" />
@@ -90,7 +90,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
-        android:src="@mipmap/man_6"
+
         app:layout_constraintStart_toEndOf="@+id/avatar_man_5"
         app:layout_constraintTop_toTopOf="@+id/avatar_man_5"
         android:contentDescription="@string/avatar_man_6_content_descrip"/>
@@ -102,7 +102,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:src="@mipmap/woman"
+
         app:layout_constraintBottom_toBottomOf="@+id/avatar_woman_1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -117,7 +117,7 @@
         android:layout_height="60dp"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
-        android:src="@mipmap/woman_1"
+
         app:layout_constraintBottom_toBottomOf="@+id/avatar_man_6"
         app:layout_constraintStart_toEndOf="@+id/avatar_man_6"
         app:layout_constraintTop_toTopOf="@+id/avatar_man_6"

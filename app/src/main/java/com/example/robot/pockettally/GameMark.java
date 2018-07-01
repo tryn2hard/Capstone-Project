@@ -1,5 +1,10 @@
 package com.example.robot.pockettally;
 
+/**
+ * A simple POJO used to the store the instance of a single tally being marked. This class is mainly
+ * stored into an array called GameHistory and call used during the un-marking of an erroneous mark.
+ */
+
 public class GameMark {
 
     private String mTag;

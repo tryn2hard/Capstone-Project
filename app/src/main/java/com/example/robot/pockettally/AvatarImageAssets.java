@@ -3,7 +3,7 @@ package com.example.robot.pockettally;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AvatarImageAssets {
+public final class AvatarImageAssets {
 
     private static final List<Integer> avatars = new ArrayList<Integer>() {{
         add(R.mipmap.man);
