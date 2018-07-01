@@ -1,24 +1,38 @@
 package com.example.robot.pockettally;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+
 /**
  * The Player class stores all the information for an individual player. Including name, avatar,
  * id, and fragment tag. The player class has additional methods to help check if a player has
  * closed out a mark or if the player has finished.
  */
-
+@Entity
 public class Player {
 
+    @PrimaryKey(autoGenerate = true)
     private int playerId;
     private String name;
     private int avatar;
     private String fragmentTag;
 
+    @Ignore
     private Boolean[] ClosedMarks = new Boolean[7];
 
     private int totalScore;
 
+    public Player(String fragTag){
+        this.fragmentTag = fragTag;
+
+        for(int i = 0; i < ClosedMarks.length; i++){
+            ClosedMarks[i] = false;
+        }
+    }
+
     public Player(int PlayerID, String fragTag){
-        playerId = PlayerID;
+        this.playerId = PlayerID;
         fragmentTag = fragTag;
 
         for (int i = 0; i < ClosedMarks.length; i++){
