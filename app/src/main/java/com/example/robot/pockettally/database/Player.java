@@ -1,8 +1,10 @@
-package com.example.robot.pockettally;
+package com.example.robot.pockettally.database;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+
+import com.example.robot.pockettally.ScoreboardUtils;
 
 /**
  * The Player class stores all the information for an individual player. Including name, avatar,

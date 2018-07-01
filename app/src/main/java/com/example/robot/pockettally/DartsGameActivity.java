@@ -16,6 +16,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.robot.pockettally.database.Player;
+
 import java.util.ArrayList;
 import java.util.List;
 
