@@ -19,20 +19,19 @@ public class Player {
     private String name;
     private int avatar;
     private String fragmentTag;
-
-    @Ignore
     private Boolean[] ClosedMarks = new Boolean[7];
-
+    private Boolean[] AllClosedOut = new Boolean[7];
+    private int[] TallyCounts = new int[7];
     private int totalScore;
 
-    public Player(String fragTag){
-        this.fragmentTag = fragTag;
+    public Player(){
 
         for(int i = 0; i < ClosedMarks.length; i++){
             ClosedMarks[i] = false;
         }
     }
 
+    @Ignore
     public Player(int PlayerID, String fragTag){
         this.playerId = PlayerID;
         fragmentTag = fragTag;
@@ -55,12 +54,20 @@ public class Player {
         return playerId;
     }
 
+    public void setPlayerId(int playerId) {
+        this.playerId = playerId;
+    }
+
     public int getAvatar() {
         return avatar;
     }
 
     public void setAvatar(int avatar) {
         this.avatar = avatar;
+    }
+
+    public void setFragmentTag(String fragmentTag) {
+        this.fragmentTag = fragmentTag;
     }
 
     public String getFragmentTag() {
@@ -77,6 +84,26 @@ public class Player {
 
     public Boolean[] getClosedMarks() {
         return ClosedMarks;
+    }
+
+    public void setClosedMarks(Boolean[] closedMarks) {
+        ClosedMarks = closedMarks;
+    }
+
+    public Boolean[] getAllClosedOut() {
+        return AllClosedOut;
+    }
+
+    public void setAllClosedOut(Boolean[] allClosedOut) {
+        AllClosedOut = allClosedOut;
+    }
+
+    public int[] getTallyCounts() {
+        return TallyCounts;
+    }
+
+    public void setTallyCounts(int[] tallyCounts) {
+        TallyCounts = tallyCounts;
     }
 
     /**
