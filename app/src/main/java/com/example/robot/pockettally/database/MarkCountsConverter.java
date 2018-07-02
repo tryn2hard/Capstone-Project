@@ -9,12 +9,13 @@ public class MarkCountsConverter {
 
     @TypeConverter
     public static int[] toCountArray(String counts){
-        String [] parts = counts.split(" ");
 
+        String [] parts = counts.substring(1, counts.length() - 1).split(" ");
         int[] array = new int[parts.length];
-        for (int i = 0; i < parts.length; i++)
-            array[i] = Integer.parseInt(parts[i]);
-
+        for (int i = 0; i < parts.length; i++) {
+            String smallerParts = parts[i].substring(0,1);
+            array[i] = Integer.parseInt(smallerParts);
+        }
         return array;
     }
 

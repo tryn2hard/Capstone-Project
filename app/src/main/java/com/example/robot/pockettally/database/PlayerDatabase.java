@@ -22,6 +22,8 @@ public abstract class PlayerDatabase extends RoomDatabase{
                 Log.d(LOG_TAG, "Creating new database instance");
                 sInstance = Room.databaseBuilder(context.getApplicationContext(),
                         PlayerDatabase.class, PlayerDatabase.DATABASE_NAME)
+                        // Todo don't forget to remove this. It is only to be used for seeing that the database works
+                        .allowMainThreadQueries()
                         .build();
             }
         }

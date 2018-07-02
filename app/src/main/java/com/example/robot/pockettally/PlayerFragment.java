@@ -72,6 +72,8 @@ public class PlayerFragment extends Fragment {
     // constant string to retrieve arguments passed in from the host activity
     public final static String FRAGMENT_ARGS_GAME_MODE_KEY = "game mode";
     public final static String FRAGMENT_ARGS_VIBE_KEY = "vibe";
+    public final static String FRAGMENT_ARGS_PLAYER_NAME_KEY = "name";
+    public final static String FRAGMENT_ARGS_PLAYER_AVATAR_KEY = "avatar";
 
     // an array of scoreboards to hold the data for each of the tally marks.
     private Scoreboard[] scoreboards = new Scoreboard[7];
@@ -132,6 +134,8 @@ public class PlayerFragment extends Fragment {
         if (getArguments() != null) {
             mVibe = getArguments().getBoolean(FRAGMENT_ARGS_VIBE_KEY);
             mGameMode = getArguments().getString(FRAGMENT_ARGS_GAME_MODE_KEY);
+            mName = getArguments().getString(FRAGMENT_ARGS_PLAYER_NAME_KEY);
+            mAvatar = getArguments().getInt(FRAGMENT_ARGS_PLAYER_AVATAR_KEY);
         }
 
         // Removal of the views when in no points mode
@@ -146,6 +150,11 @@ public class PlayerFragment extends Fragment {
             name_et.setText(getTag());
         } else {
             name_et.setText(mName);
+        }
+
+        // Set the user's pre-selected avatars
+        if(mAvatar != 0){
+            player_avatar_iv.setImageResource(mAvatar);
         }
 
         // OnKeyListener for the edit text

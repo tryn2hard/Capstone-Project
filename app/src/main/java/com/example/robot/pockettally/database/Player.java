@@ -24,8 +24,8 @@ public class Player {
     private int[] TallyCounts = new int[7];
     private int totalScore;
 
-    public Player(){
-
+    public Player(String fragmentTag){
+        this.fragmentTag = fragmentTag;
         for(int i = 0; i < ClosedMarks.length; i++){
             ClosedMarks[i] = false;
         }
@@ -106,49 +106,4 @@ public class Player {
         TallyCounts = tallyCounts;
     }
 
-    /**
-     * Method will notify this player that a tally mark has been closed out.
-     * @param scoreValue the integer value of the tally mark that has been closed out
-     */
-    public void tallyMarkClosed(int scoreValue){
-        ClosedMarks[ScoreboardUtils.matchScoreValue(scoreValue)] = true;
-    }
-
-    /**
-     * Method will notify this player that the tally mark is no longer closed as a result of the
-     * undo button being pressed by the user.
-     * @param scoreValue the integer value of the tally mark that has been opened
-     */
-    public void tallyMarkUnClosed(int scoreValue){
-        ClosedMarks[ScoreboardUtils.matchScoreValue(scoreValue)] = false;
-    }
-
-    /**
-     * Method will return the status of a specific tally mark
-     * @param scoreValue the integer value of the tally mark in question
-     * @return boolean value of the current condition of the tally mark
-     */
-    public boolean isTallyMarkClosed(int scoreValue){
-        return ClosedMarks[ScoreboardUtils.matchScoreValue(scoreValue)];
-    }
-
-    /**
-     * Method will check the current condition of all the tally marks for this player.
-     * @return boolean value of true will be returned if all the marks are closed.
-     */
-    public boolean checkAllTallyMarks(){
-        for(boolean b : ClosedMarks) if(!b) return false;
-        return true;
-    }
-
-    /**
-     * Method will reset this player to a start of game state. Usually done when the game has ended
-     * or when the user presses the reset button
-     */
-    public void resetPlayer(){
-        for(int i = 0; i < ClosedMarks.length; i++){
-            ClosedMarks[i] = false;
-        }
-        totalScore = 0;
-    }
 }
