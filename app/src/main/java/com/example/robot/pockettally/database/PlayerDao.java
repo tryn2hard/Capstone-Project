@@ -12,15 +12,21 @@ import java.util.List;
 @Dao
 public interface PlayerDao {
 
-    @Query("SELECT * FROM player ORDER BY playerId")
+    @Query("SELECT * FROM players ORDER BY playerId")
     List<Player> loadAllPlayers();
 
     @Insert
     void insertPlayer(Player player);
+
+    @Insert
+    void insertAllPlayers(List<Player> players);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void updatePlayer(Player player);
 
     @Delete
     void deletePlayer(Player player);
+
+    @Query("DELETE FROM players")
+    void delete();
 }

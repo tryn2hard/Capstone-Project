@@ -13,7 +13,14 @@ public class MarkCountsConverter {
         String [] parts = counts.substring(1, counts.length() - 1).split(" ");
         int[] array = new int[parts.length];
         for (int i = 0; i < parts.length; i++) {
-            String smallerParts = parts[i].substring(0,1);
+            String smallerParts;
+
+            if(parts[i].contains(",")){
+                smallerParts = parts[i].replace(",", "");
+            } else {
+                smallerParts = parts[i];
+            }
+
             array[i] = Integer.parseInt(smallerParts);
         }
         return array;

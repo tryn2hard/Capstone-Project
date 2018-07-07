@@ -13,12 +13,6 @@ public class Scoreboard {
     private int mCount = 0;
     private ImageView mImageView;
     private boolean mIsClosedOut = false;
-    private int[] ScoreValues = new int[7];
-
-    public boolean ismClosedOutByAll() {
-        return mClosedOutByAll;
-    }
-
     private boolean mClosedOutByAll = false;
 
     public Scoreboard(int value, ImageView imageView) {
@@ -29,32 +23,29 @@ public class Scoreboard {
     public int getValue() {
         return mValue;
     }
+    public ImageView getImageView() {
+        return mImageView;
+    }
 
+    public void setCount (int count){mCount = count;}
     public int getCount() {
         return mCount;
     }
-
     public void incrementCount(int increment) {
         mCount += increment;
-    }
-
-    public ImageView getImageView() {
-        return mImageView;
     }
 
     public boolean isClosedOut() {
         return mIsClosedOut;
     }
-
-    public void setClosedOut(boolean closedOut) {
+    public void setClosedOut(Boolean closedOut) {
         mIsClosedOut = closedOut;
     }
 
-    public void setCount (int count){mCount = count;}
-
-    public int[] getScoreValues(){return ScoreValues;}
-
-    public void setmClosedOutByAll(boolean mClosedOutByAll) {
+    public void setClosedOutByAll(boolean mClosedOutByAll) {
         this.mClosedOutByAll = mClosedOutByAll;
+    }
+    public boolean isClosedOutByAll() {
+        return mClosedOutByAll;
     }
 }

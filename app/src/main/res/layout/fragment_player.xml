@@ -113,7 +113,6 @@
         android:layout_marginTop="@dimen/small_vertical_margin"
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
-        android:text="@string/initial_total_score_tv"
         android:textColor="@color/text_primary"
         android:textSize="36sp" />
 

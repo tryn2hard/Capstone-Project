@@ -11,35 +11,31 @@ import com.example.robot.pockettally.ScoreboardUtils;
  * id, and fragment tag. The player class has additional methods to help check if a player has
  * closed out a mark or if the player has finished.
  */
-@Entity
+@Entity(tableName = "players")
 public class Player {
 
     @PrimaryKey(autoGenerate = true)
     private int playerId;
+
     private String name;
     private int avatar;
     private String fragmentTag;
-    private Boolean[] ClosedMarks = new Boolean[7];
-    private Boolean[] AllClosedOut = new Boolean[7];
+    private boolean[] ClosedMarks = new boolean[7];
+    private boolean[] AllClosedOut = new boolean[7];
     private int[] TallyCounts = new int[7];
     private int totalScore;
 
     public Player(String fragmentTag){
         this.fragmentTag = fragmentTag;
+        this.name = null;
+        this.avatar = 0;
+        this.totalScore = 0;
+
         for(int i = 0; i < ClosedMarks.length; i++){
-            ClosedMarks[i] = false;
+            this.ClosedMarks[i] = false;
+            this.AllClosedOut[i] = false;
+            this.TallyCounts[i] = 0;
         }
-    }
-
-    @Ignore
-    public Player(int PlayerID, String fragTag){
-        this.playerId = PlayerID;
-        fragmentTag = fragTag;
-
-        for (int i = 0; i < ClosedMarks.length; i++){
-            ClosedMarks[i] = false;
-        }
-
     }
 
     public String getName() {
@@ -82,19 +78,19 @@ public class Player {
         this.totalScore = totalScore;
     }
 
-    public Boolean[] getClosedMarks() {
+    public boolean[] getClosedMarks() {
         return ClosedMarks;
     }
 
-    public void setClosedMarks(Boolean[] closedMarks) {
+    public void setClosedMarks(boolean[] closedMarks) {
         ClosedMarks = closedMarks;
     }
 
-    public Boolean[] getAllClosedOut() {
+    public boolean[] getAllClosedOut() {
         return AllClosedOut;
     }
 
-    public void setAllClosedOut(Boolean[] allClosedOut) {
+    public void setAllClosedOut(boolean[] allClosedOut) {
         AllClosedOut = allClosedOut;
     }
 
