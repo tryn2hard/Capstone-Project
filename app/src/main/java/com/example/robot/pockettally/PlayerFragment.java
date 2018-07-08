@@ -75,7 +75,6 @@ public class PlayerFragment extends Fragment {
     public final static String FRAGMENT_ARGS_PLAYER_NAME_KEY = "name";
     public final static String FRAGMENT_ARGS_PLAYER_AVATAR_KEY = "avatar";
     public final static String FRAGMENT_ARGS_CLOSED_OUT_KEY = "closedOut";
-    public final static String FRAGMENT_ARGS_ALL_CLOSED_OUT_KEY = "allClosedOut";
     public final static String FRAGMENT_ARGS_TALLY_COUNT_KEY = "mTallyCount";
     public final static String FRAGMENT_ARGS_TOTAL_SCORE_KEY = "mTotalScore";
     public final static String FRAGMENT_ARGS_GAME_INIT_KEY = "gameInitialized";
@@ -122,7 +121,6 @@ public class PlayerFragment extends Fragment {
     public String mTag;
     public int[] mTallyCount = new int[7];
     public boolean[] mClosedOut = new boolean[7];
-    public boolean[] mAllClosedOut = new boolean[7];
     public boolean mGameInit;
     public int mTotalScore;
 
@@ -161,7 +159,6 @@ public class PlayerFragment extends Fragment {
 
         for(int i = 0; i < mClosedOut.length; i++){
             mClosedOut[i] = false;
-            mAllClosedOut[i] = false;
             mTallyCount[i] = 0;
         }
 
@@ -227,7 +224,8 @@ public class PlayerFragment extends Fragment {
                             // select the correct image for the tally mark
                             tallyImageSelector(current_Scoreboard);
                             // If the game is in standard points mode
-                        } else if (mGameMode.equals(getResources().getString(R.string.pref_standard_game_mode_value))) {
+                        } else if (mGameMode.equals(getResources().getString(R.string.pref_standard_game_mode_value))
+                                && !current_Scoreboard.isClosedOutByAll()) {
                             // update the array tracking all the tally counts
                             mTallyCount[ScoreboardUtils.matchScoreValue(current_Scoreboard.getValue())]
                                     = current_Scoreboard.getCount() + Scoreboard.SINGLE_TALLY_MARK;
@@ -275,7 +273,8 @@ public class PlayerFragment extends Fragment {
                                                     Scoreboard.DOUBLE_TALLY_MARK, mTallyCount);
                                             tallyImageSelector(current_Scoreboard);
                                         }
-                                    } else if (mGameMode.equals(getResources().getString(R.string.pref_standard_game_mode_value))) {
+                                    } else if (mGameMode.equals(getResources().getString(R.string.pref_standard_game_mode_value))
+                                            && !current_Scoreboard.isClosedOutByAll()) {
                                         // update the array tracking all the tally counts
                                         mTallyCount[ScoreboardUtils.matchScoreValue(current_Scoreboard.getValue())]
                                                 = current_Scoreboard.getCount() + Scoreboard.DOUBLE_TALLY_MARK;
@@ -315,7 +314,8 @@ public class PlayerFragment extends Fragment {
                                                     Scoreboard.TRIPLE_TALLY_MARK, mTallyCount);
                                             tallyImageSelector(current_Scoreboard);
                                         }
-                                    } else if (mGameMode.equals(getResources().getString(R.string.pref_standard_game_mode_value))) {
+                                    } else if (mGameMode.equals(getResources().getString(R.string.pref_standard_game_mode_value))
+                                            && !current_Scoreboard.isClosedOutByAll()) {
                                         // update the array tracking all the tally counts
                                         mTallyCount[ScoreboardUtils.matchScoreValue(current_Scoreboard.getValue())]
                                                 = current_Scoreboard.getCount() + Scoreboard.TRIPLE_TALLY_MARK;
@@ -344,11 +344,10 @@ public class PlayerFragment extends Fragment {
                 mName = getArguments().getString(FRAGMENT_ARGS_PLAYER_NAME_KEY);
                 mAvatar = getArguments().getInt(FRAGMENT_ARGS_PLAYER_AVATAR_KEY);
                 mClosedOut = getArguments().getBooleanArray(FRAGMENT_ARGS_CLOSED_OUT_KEY);
-                mAllClosedOut = getArguments().getBooleanArray(FRAGMENT_ARGS_ALL_CLOSED_OUT_KEY);
                 mTallyCount = getArguments().getIntArray(FRAGMENT_ARGS_TALLY_COUNT_KEY);
                 mTotalScore = getArguments().getInt(FRAGMENT_ARGS_TOTAL_SCORE_KEY);
 
-                reloadGame(mName, mAvatar, mClosedOut, mAllClosedOut, mTallyCount, mTotalScore);
+                reloadGame(mName, mAvatar, mClosedOut, mTallyCount, mTotalScore);
 
             }
         }
@@ -457,7 +456,7 @@ public class PlayerFragment extends Fragment {
             scoreboard.setCount(0);
             scoreboard.getImageView().setImageResource(R.drawable.tally_no_marks);
             if (mGameMode.equals(getResources().getString(R.string.pref_standard_game_mode_value))) {
-                game_score_tv.setText("0");
+                game_score_tv.setText("");
                 mTotalScore = 0;
             }
         }
@@ -526,7 +525,7 @@ public class PlayerFragment extends Fragment {
         return scoreboards[ScoreboardUtils.matchScoreValue(scoreValue)].isClosedOut();
     }
 
-    private void reloadGame(String name, int avatar, boolean[] closedOut, boolean[] allClosedOut, int[] tallyCounts, int totalScore){
+    private void reloadGame(String name, int avatar, boolean[] closedOut, int[] tallyCounts, int totalScore){
 
         if(name != null){
             name_et.setText(name);
@@ -538,7 +537,6 @@ public class PlayerFragment extends Fragment {
 
         for(int i = 0; i < scoreboards.length; i++){
             scoreboards[i].setClosedOut(closedOut[i]);
-            scoreboards[i].setClosedOutByAll(allClosedOut[i]);
             scoreboards[i].setCount(tallyCounts[i]);
             tallyImageSelector(scoreboards[i]);
         }

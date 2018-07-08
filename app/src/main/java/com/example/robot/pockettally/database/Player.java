@@ -21,7 +21,6 @@ public class Player {
     private int avatar;
     private String fragmentTag;
     private boolean[] ClosedMarks = new boolean[7];
-    private boolean[] AllClosedOut = new boolean[7];
     private int[] TallyCounts = new int[7];
     private int totalScore;
 
@@ -33,7 +32,6 @@ public class Player {
 
         for(int i = 0; i < ClosedMarks.length; i++){
             this.ClosedMarks[i] = false;
-            this.AllClosedOut[i] = false;
             this.TallyCounts[i] = 0;
         }
     }
@@ -82,17 +80,7 @@ public class Player {
         return ClosedMarks;
     }
 
-    public void setClosedMarks(boolean[] closedMarks) {
-        ClosedMarks = closedMarks;
-    }
-
-    public boolean[] getAllClosedOut() {
-        return AllClosedOut;
-    }
-
-    public void setAllClosedOut(boolean[] allClosedOut) {
-        AllClosedOut = allClosedOut;
-    }
+    public void setClosedMarks(boolean[] closedMarks) { ClosedMarks = closedMarks; }
 
     public int[] getTallyCounts() {
         return TallyCounts;

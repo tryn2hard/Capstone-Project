@@ -167,7 +167,6 @@ public class DartsGameActivity extends AppCompatActivity
             int avatar = currentPlayer.getAvatar();
             String fragmentTag = currentPlayer.getFragmentTag();
             boolean[] closedOut = currentPlayer.getClosedMarks();
-            boolean[] allClosedOut = currentPlayer.getAllClosedOut();
             int[] count = currentPlayer.getTallyCounts();
             int totalScore = currentPlayer.getTotalScore();
 
@@ -183,7 +182,6 @@ public class DartsGameActivity extends AppCompatActivity
             args.putString(PlayerFragment.FRAGMENT_ARGS_PLAYER_NAME_KEY, name);
             args.putInt(PlayerFragment.FRAGMENT_ARGS_PLAYER_AVATAR_KEY, avatar);
             args.putBooleanArray(PlayerFragment.FRAGMENT_ARGS_CLOSED_OUT_KEY, closedOut);
-            args.putBooleanArray(PlayerFragment.FRAGMENT_ARGS_ALL_CLOSED_OUT_KEY, allClosedOut);
             args.putIntArray(PlayerFragment.FRAGMENT_ARGS_TALLY_COUNT_KEY, count);
             args.putInt(PlayerFragment.FRAGMENT_ARGS_TOTAL_SCORE_KEY, totalScore);
             args.putBoolean(PlayerFragment.FRAGMENT_ARGS_GAME_INIT_KEY,
@@ -281,13 +279,11 @@ public class DartsGameActivity extends AppCompatActivity
      * or when the user presses the reset button
      */
     public void resetPlayer(Player player) {
-        final Player currentPlayer = player;
-        for (int i = 0; i < currentPlayer.getClosedMarks().length; i++) {
-            currentPlayer.getClosedMarks()[i] = false;
-            currentPlayer.getAllClosedOut()[i] = false;
-            currentPlayer.getTallyCounts()[i] = 0;
-            currentPlayer.setTotalScore(0);
-            updateDB(currentPlayer);
+        for (int i = 0; i < player.getClosedMarks().length; i++) {
+            player.getClosedMarks()[i] = false;
+            player.getTallyCounts()[i] = 0;
+            player.setTotalScore(0);
+            updateDB(player);
         }
     }
 
@@ -308,7 +304,7 @@ public class DartsGameActivity extends AppCompatActivity
      * A simple helper method used to pull the player id out of the fragment tag
      *
      * @param tag string fragmentTag holding the user id .
-     * @return
+     * @return integer value of the id attached to the fragment tag
      */
     public int getIdFromTag(String tag) {
         int id = Integer.parseInt(tag.substring(tag.length() - 1));
@@ -486,12 +482,8 @@ public class DartsGameActivity extends AppCompatActivity
      * @param scoreValue the integer value of the tally mark that has been closed out
      */
     public void changeTallyMarkCondition(int scoreValue, Player player, boolean condition) {
-        final Player currentPlayer = player;
-
-        currentPlayer.getClosedMarks()[ScoreboardUtils.matchScoreValue(scoreValue)] = condition;
-
-        updateDB(currentPlayer);
-
+        player.getClosedMarks()[ScoreboardUtils.matchScoreValue(scoreValue)] = condition;
+        updateDB(player);
     }
 
     /**
@@ -547,7 +539,7 @@ public class DartsGameActivity extends AppCompatActivity
      */
     @Override
     public void TotalScoreHasChanged(String tag, int totalScore) {
-        final Player currentPlayer = Players.get(getIdFromTag(tag));
+        Player currentPlayer = Players.get(getIdFromTag(tag));
         currentPlayer.setTotalScore(totalScore);
 
         updateDB(currentPlayer);
@@ -569,7 +561,7 @@ public class DartsGameActivity extends AppCompatActivity
     @Override
     public void TallyMarked(String tag, int scoreValue, int multiple, int[] tallyCount) {
         PlayerFragment currentFrag = (PlayerFragment) mFragmentManager.findFragmentByTag(tag);
-        final Player currentPlayer = Players.get(getIdFromTag(tag));
+        Player currentPlayer = Players.get(getIdFromTag(tag));
         // if the game is in standard mode store the game history
         if (!(game_mode.equals(getResources().getString(R.string.pref_no_points_game_mode_value)))) {
             storeGameHistory(tag, scoreValue, multiple);
@@ -611,10 +603,8 @@ public class DartsGameActivity extends AppCompatActivity
      */
     @Override
     public void AvatarSelected(String tag, int avatar) {
-        final Player currentPlayer = Players.get(getIdFromTag(tag));
-
+        Player currentPlayer = Players.get(getIdFromTag(tag));
         currentPlayer.setAvatar(avatar);
-
         updateDB(currentPlayer);
     }
 
@@ -664,13 +654,11 @@ public class DartsGameActivity extends AppCompatActivity
      *                   players
      */
     private void changeTallyImageInFragment(int scoreValue) {
-        if (!sharedPreferences.getBoolean("gameInitialized", getResources().getBoolean(R.bool.pref_game_init_default))) {
             for (int i = 0; i < Players.size(); i++) {
                 PlayerFragment frag =
                         (PlayerFragment) mFragmentManager.findFragmentByTag(Players.get(i).getFragmentTag());
                 frag.tallyMarkClosedOutByAll(scoreValue);
             }
-        }
     }
 
     /*
@@ -683,7 +671,9 @@ public class DartsGameActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
 
-        if (sharedPreferences.getBoolean("gameInitialized", getResources().getBoolean(R.bool.pref_game_init_default))){
+        if (sharedPreferences.getBoolean("gameInitialized",
+                getResources().getBoolean(R.bool.pref_game_init_default))){
+
             Log.i(LOG_TAG, "Game is calling loadGame()");
 
             AppExecutors.getsInstance().getDiskIO().execute(new Runnable() {
@@ -734,12 +724,11 @@ public class DartsGameActivity extends AppCompatActivity
      * Method creates a Executor to run an update to the database
      * @param player the current player to update to the database
      */
-    private void updateDB(Player player) {
-        final Player currentPlayer = player;
+    private void updateDB(final Player player) {
         AppExecutors.getsInstance().getDiskIO().execute(new Runnable() {
             @Override
             public void run() {
-                mDb.playerDao().updatePlayer(currentPlayer);
+                mDb.playerDao().updatePlayer(player);
             }
         });
     }
