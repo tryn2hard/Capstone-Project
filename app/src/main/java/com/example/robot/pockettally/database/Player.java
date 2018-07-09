@@ -1,10 +1,7 @@
 package com.example.robot.pockettally.database;
 
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
-
-import com.example.robot.pockettally.ScoreboardUtils;
 
 /**
  * The Player class stores all the information for an individual player. Including name, avatar,
@@ -20,8 +17,8 @@ public class Player {
     private String name;
     private int avatar;
     private String fragmentTag;
-    private boolean[] ClosedMarks = new boolean[7];
-    private int[] TallyCounts = new int[7];
+    private boolean[] scoreboardCondition = new boolean[7];
+    private int[] scoreboardCounts = new int[7];
     private int totalScore;
 
     public Player(String fragmentTag){
@@ -30,9 +27,9 @@ public class Player {
         this.avatar = 0;
         this.totalScore = 0;
 
-        for(int i = 0; i < ClosedMarks.length; i++){
-            this.ClosedMarks[i] = false;
-            this.TallyCounts[i] = 0;
+        for(int i = 0; i < scoreboardCondition.length; i++){
+            this.scoreboardCondition[i] = false;
+            this.scoreboardCounts[i] = 0;
         }
     }
 
@@ -76,18 +73,18 @@ public class Player {
         this.totalScore = totalScore;
     }
 
-    public boolean[] getClosedMarks() {
-        return ClosedMarks;
+    public boolean[] getScoreboardCondition() {
+        return scoreboardCondition;
     }
 
-    public void setClosedMarks(boolean[] closedMarks) { ClosedMarks = closedMarks; }
+    public void setScoreboardCondition(boolean[] scoreboardCondition) { this.scoreboardCondition = scoreboardCondition; }
 
-    public int[] getTallyCounts() {
-        return TallyCounts;
+    public int[] getScoreboardCounts() {
+        return scoreboardCounts;
     }
 
-    public void setTallyCounts(int[] tallyCounts) {
-        TallyCounts = tallyCounts;
+    public void setScoreboardCounts(int[] scoreboardCounts) {
+        this.scoreboardCounts = scoreboardCounts;
     }
 
 }

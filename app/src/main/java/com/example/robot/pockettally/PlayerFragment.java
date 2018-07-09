@@ -8,6 +8,7 @@ import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,24 +32,23 @@ import butterknife.ButterKnife;
 public class PlayerFragment extends Fragment {
     PlayerProgressListener mCallback;
 
-    private static final String LOG_TAG = "PlayerFragment";
+    private static final String LOG_TAG = PlayerFragment.class.getSimpleName();
 
     /**
      * A public interface used to communicate back to the host activity about changes made on the
      * tally marks.
      */
     public interface PlayerProgressListener {
-        void TallyClosed(String tag, int position);
 
         void PlayerNamed(String tag, String name);
 
         void AvatarSelected(String tag, int avatar);
 
-        void TallyMarked(String tag, int scoreValue, int multiple, int[] tallyCount);
+        void ScoreboardMarked(String tag, int scoreValue, int multiple, int[] tallyCount);
+
+        void ChangeToScoreboardConditionNotification(String tag, int position, boolean condition);
 
         void TotalScoreHasChanged(String tag, int totalScore);
-
-        void TallyOpened(String tag, int scoreValue);
     }
 
     /**
@@ -60,7 +60,7 @@ public class PlayerFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
+        Log.i(LOG_TAG, "onAttach called by " + getTag());
         try {
             mCallback = (PlayerProgressListener) context;
         } catch (ClassCastException e) {
@@ -75,7 +75,7 @@ public class PlayerFragment extends Fragment {
     public final static String FRAGMENT_ARGS_PLAYER_NAME_KEY = "name";
     public final static String FRAGMENT_ARGS_PLAYER_AVATAR_KEY = "avatar";
     public final static String FRAGMENT_ARGS_CLOSED_OUT_KEY = "closedOut";
-    public final static String FRAGMENT_ARGS_TALLY_COUNT_KEY = "mTallyCount";
+    public final static String FRAGMENT_ARGS_SCOREBOARD_COUNTS_KEY = "mScoreboardCounts";
     public final static String FRAGMENT_ARGS_TOTAL_SCORE_KEY = "mTotalScore";
     public final static String FRAGMENT_ARGS_GAME_INIT_KEY = "gameInitialized";
 
@@ -119,7 +119,7 @@ public class PlayerFragment extends Fragment {
     public String mName;
     public int mAvatar;
     public String mTag;
-    public int[] mTallyCount = new int[7];
+    public int[] mScoreboardCounts = new int[7];
     public boolean[] mClosedOut = new boolean[7];
     public boolean mGameInit;
     public int mTotalScore;
@@ -134,7 +134,7 @@ public class PlayerFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_player, container, false);
         ButterKnife.bind(this, rootView);
-
+        Log.i(LOG_TAG, "onCreateView called by " + getTag());
         mTag = getTag();
 
         // Retrieval of the arguments sent from the host activity
@@ -157,9 +157,9 @@ public class PlayerFragment extends Fragment {
             name_et.setText(mName);
         }
 
-        for(int i = 0; i < mClosedOut.length; i++){
-            mClosedOut[i] = false;
-            mTallyCount[i] = 0;
+        for (int i = 0; i < mClosedOut.length; i++) {
+            mClosedOut[i] = Scoreboard.SCOREBOARD_OPEN;
+            mScoreboardCounts[i] = 0;
         }
 
         // OnKeyListener for the edit text
@@ -199,11 +199,6 @@ public class PlayerFragment extends Fragment {
             final Scoreboard current_Scoreboard = scoreboards[i];
             final ImageView current_Scoreboard_iv = current_Scoreboard.getImageView(); // get current scoreboard's ImageView
 
-            if(mTallyCount != null){
-                current_Scoreboard.setCount(mTallyCount[i]);
-                tallyImageSelector(current_Scoreboard);
-            }
-
             current_Scoreboard_iv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -213,37 +208,36 @@ public class PlayerFragment extends Fragment {
                         }
                         // If the game is in no points mode and the current scoreboard is not closed out
                         if (mGameMode.equals(getResources().getString(R.string.pref_no_points_game_mode_value)) && !current_Scoreboard.isClosedOut()) {
-                            // update the array tracking all the tally counts
-                            mTallyCount[ScoreboardUtils.matchScoreValue(current_Scoreboard.getValue())]
-                                    = current_Scoreboard.getCount() + Scoreboard.SINGLE_TALLY_MARK;
                             // increment the count
                             current_Scoreboard.incrementCount(Scoreboard.SINGLE_TALLY_MARK);
-                            // notify the host activity that a mark has been made
-                            mCallback.TallyMarked(getTag(), current_Scoreboard.getValue(),
-                                    Scoreboard.SINGLE_TALLY_MARK, mTallyCount);
                             // select the correct image for the tally mark
-                            tallyImageSelector(current_Scoreboard);
+                            scoreboardImageSelector(current_Scoreboard);
+                            // update the array tracking all the tally counts
+                            mScoreboardCounts[ScoreboardUtils.matchScoreValue(current_Scoreboard.getValue())]
+                                    = current_Scoreboard.getCount();
+                            // notify the host activity that a mark has been made
+                            mCallback.ScoreboardMarked(getTag(), current_Scoreboard.getValue(),
+                                    Scoreboard.SINGLE_TALLY_MARK, mScoreboardCounts);
                             // If the game is in standard points mode
                         } else if (mGameMode.equals(getResources().getString(R.string.pref_standard_game_mode_value))
                                 && !current_Scoreboard.isClosedOutByAll()) {
-                            // update the array tracking all the tally counts
-                            mTallyCount[ScoreboardUtils.matchScoreValue(current_Scoreboard.getValue())]
-                                    = current_Scoreboard.getCount() + Scoreboard.SINGLE_TALLY_MARK;
-                            // increment the count
-                            current_Scoreboard.incrementCount(Scoreboard.SINGLE_TALLY_MARK);
-                            // notify the host activity that a mark has been made
-                            mCallback.TallyMarked(getTag(), current_Scoreboard.getValue(),
-                                    Scoreboard.SINGLE_TALLY_MARK, mTallyCount);
-                            // if the tally mark hasn't been closed out then select the image to display,
-                            // else add the current mark to the total score and notify the host activity that
-                            // the total score has changed
                             if (!current_Scoreboard.isClosedOut()) {
-                                tallyImageSelector(current_Scoreboard);
+                                // increment the count
+                                current_Scoreboard.incrementCount(Scoreboard.SINGLE_TALLY_MARK);
+                                // select the proper image to display
+                                scoreboardImageSelector(current_Scoreboard);
+                                // update the array tracking all the tally counts
+                                mScoreboardCounts[ScoreboardUtils.matchScoreValue(current_Scoreboard.getValue())]
+                                        = current_Scoreboard.getCount();
                             } else {
                                 mTotalScore += current_Scoreboard.getValue();
                                 game_score_tv.setText(String.valueOf(mTotalScore));
                                 mCallback.TotalScoreHasChanged(mTag, mTotalScore);
                             }
+                            // notify the host activity that a mark has been made
+                            mCallback.ScoreboardMarked(getTag(), current_Scoreboard.getValue(),
+                                    Scoreboard.SINGLE_TALLY_MARK, mScoreboardCounts);
+
                         }
                     }
                 }
@@ -263,33 +257,36 @@ public class PlayerFragment extends Fragment {
                                     }
                                     if (mGameMode.equals(getResources().getString(R.string.pref_no_points_game_mode_value))) {
                                         if (!current_Scoreboard.isClosedOut()) {
-                                            // update the array tracking all the tally counts
-                                            mTallyCount[ScoreboardUtils.matchScoreValue(current_Scoreboard.getValue())]
-                                                    = current_Scoreboard.getCount() + Scoreboard.DOUBLE_TALLY_MARK;
                                             // increment the count
                                             current_Scoreboard.incrementCount(Scoreboard.DOUBLE_TALLY_MARK);
+                                            // select the correct image for the tally mark
+                                            scoreboardImageSelector(current_Scoreboard);
+                                            // update the array tracking all the tally counts
+                                            mScoreboardCounts[ScoreboardUtils.matchScoreValue(current_Scoreboard.getValue())]
+                                                    = current_Scoreboard.getCount();
                                             // notify the host activity that a mark has been made
-                                            mCallback.TallyMarked(getTag(), current_Scoreboard.getValue(),
-                                                    Scoreboard.DOUBLE_TALLY_MARK, mTallyCount);
-                                            tallyImageSelector(current_Scoreboard);
+                                            mCallback.ScoreboardMarked(getTag(), current_Scoreboard.getValue(),
+                                                    Scoreboard.DOUBLE_TALLY_MARK, mScoreboardCounts);
                                         }
                                     } else if (mGameMode.equals(getResources().getString(R.string.pref_standard_game_mode_value))
                                             && !current_Scoreboard.isClosedOutByAll()) {
-                                        // update the array tracking all the tally counts
-                                        mTallyCount[ScoreboardUtils.matchScoreValue(current_Scoreboard.getValue())]
-                                                = current_Scoreboard.getCount() + Scoreboard.DOUBLE_TALLY_MARK;
-                                        // increment the count
-                                        current_Scoreboard.incrementCount(Scoreboard.DOUBLE_TALLY_MARK);
-                                        // notify the host activity that a mark has been made
-                                        mCallback.TallyMarked(getTag(), current_Scoreboard.getValue(),
-                                                Scoreboard.DOUBLE_TALLY_MARK, mTallyCount);
                                         if (!current_Scoreboard.isClosedOut()) {
-                                            tallyImageSelector(current_Scoreboard);
+                                            // increment the count
+                                            current_Scoreboard.incrementCount(Scoreboard.DOUBLE_TALLY_MARK);
+                                            // select the proper image to display
+                                            scoreboardImageSelector(current_Scoreboard);
+                                            // update the array tracking all the tally counts
+                                            mScoreboardCounts[ScoreboardUtils.matchScoreValue(current_Scoreboard.getValue())]
+                                                    = current_Scoreboard.getCount();
                                         } else {
                                             mTotalScore += current_Scoreboard.getValue() * Scoreboard.DOUBLE_TALLY_MARK;
                                             game_score_tv.setText(String.valueOf(mTotalScore));
                                             mCallback.TotalScoreHasChanged(mTag, mTotalScore);
                                         }
+
+                                        // notify the host activity that a mark has been made
+                                        mCallback.ScoreboardMarked(getTag(), current_Scoreboard.getValue(),
+                                                Scoreboard.DOUBLE_TALLY_MARK, mScoreboardCounts);
                                     }
                                     multiMarkDialog.dismiss();
                                 }
@@ -304,33 +301,36 @@ public class PlayerFragment extends Fragment {
                                     }
                                     if (mGameMode.equals(getResources().getString(R.string.pref_no_points_game_mode_value))) {
                                         if (!current_Scoreboard.isClosedOut()) {
-                                            // update the array tracking all the tally counts
-                                            mTallyCount[ScoreboardUtils.matchScoreValue(current_Scoreboard.getValue())]
-                                                    = current_Scoreboard.getCount() + Scoreboard.TRIPLE_TALLY_MARK;
                                             // increment the count
                                             current_Scoreboard.incrementCount(Scoreboard.TRIPLE_TALLY_MARK);
+                                            // select the correct image for the tally mark
+                                            scoreboardImageSelector(current_Scoreboard);
+                                            // update the array tracking all the tally counts
+                                            mScoreboardCounts[ScoreboardUtils.matchScoreValue(current_Scoreboard.getValue())]
+                                                    = current_Scoreboard.getCount();
                                             // notify the host activity that a mark has been made
-                                            mCallback.TallyMarked(getTag(), current_Scoreboard.getValue(),
-                                                    Scoreboard.TRIPLE_TALLY_MARK, mTallyCount);
-                                            tallyImageSelector(current_Scoreboard);
+                                            mCallback.ScoreboardMarked(getTag(), current_Scoreboard.getValue(),
+                                                    Scoreboard.TRIPLE_TALLY_MARK, mScoreboardCounts);
                                         }
                                     } else if (mGameMode.equals(getResources().getString(R.string.pref_standard_game_mode_value))
                                             && !current_Scoreboard.isClosedOutByAll()) {
-                                        // update the array tracking all the tally counts
-                                        mTallyCount[ScoreboardUtils.matchScoreValue(current_Scoreboard.getValue())]
-                                                = current_Scoreboard.getCount() + Scoreboard.TRIPLE_TALLY_MARK;
-                                        // increment the count
-                                        current_Scoreboard.incrementCount(Scoreboard.TRIPLE_TALLY_MARK);
-                                        // notify the host activity that a mark has been made
-                                        mCallback.TallyMarked(getTag(), current_Scoreboard.getValue(),
-                                                Scoreboard.TRIPLE_TALLY_MARK, mTallyCount);
                                         if (!current_Scoreboard.isClosedOut()) {
-                                            tallyImageSelector(current_Scoreboard);
+                                            // increment the count
+                                            current_Scoreboard.incrementCount(Scoreboard.TRIPLE_TALLY_MARK);
+                                            // select the proper image to display
+                                            scoreboardImageSelector(current_Scoreboard);
+                                            // update the array tracking all the tally counts
+                                            mScoreboardCounts[ScoreboardUtils.matchScoreValue(current_Scoreboard.getValue())]
+                                                    = current_Scoreboard.getCount();
                                         } else {
                                             mTotalScore += current_Scoreboard.getValue() * Scoreboard.TRIPLE_TALLY_MARK;
                                             game_score_tv.setText(String.valueOf(mTotalScore));
                                             mCallback.TotalScoreHasChanged(mTag, mTotalScore);
                                         }
+
+                                        // notify the host activity that a mark has been made
+                                        mCallback.ScoreboardMarked(getTag(), current_Scoreboard.getValue(),
+                                                Scoreboard.TRIPLE_TALLY_MARK, mScoreboardCounts);
                                     }
                                     multiMarkDialog.dismiss();
                                 }
@@ -339,17 +339,18 @@ public class PlayerFragment extends Fragment {
                     return false;
                 }
             });
+        }
 
-            if(mGameInit){
-                mName = getArguments().getString(FRAGMENT_ARGS_PLAYER_NAME_KEY);
-                mAvatar = getArguments().getInt(FRAGMENT_ARGS_PLAYER_AVATAR_KEY);
-                mClosedOut = getArguments().getBooleanArray(FRAGMENT_ARGS_CLOSED_OUT_KEY);
-                mTallyCount = getArguments().getIntArray(FRAGMENT_ARGS_TALLY_COUNT_KEY);
-                mTotalScore = getArguments().getInt(FRAGMENT_ARGS_TOTAL_SCORE_KEY);
+        if (mGameInit) {
 
-                reloadGame(mName, mAvatar, mClosedOut, mTallyCount, mTotalScore);
+            mName = getArguments().getString(FRAGMENT_ARGS_PLAYER_NAME_KEY);
+            mAvatar = getArguments().getInt(FRAGMENT_ARGS_PLAYER_AVATAR_KEY);
+            mClosedOut = getArguments().getBooleanArray(FRAGMENT_ARGS_CLOSED_OUT_KEY);
+            mScoreboardCounts = getArguments().getIntArray(FRAGMENT_ARGS_SCOREBOARD_COUNTS_KEY);
+            mTotalScore = getArguments().getInt(FRAGMENT_ARGS_TOTAL_SCORE_KEY);
 
-            }
+            reloadGame(mName, mAvatar, mClosedOut, mScoreboardCounts, mTotalScore);
+
         }
 
         /*
@@ -397,10 +398,12 @@ public class PlayerFragment extends Fragment {
     /**
      * Method will select the proper tally mark to be displayed to the user based on the current
      * count of the scoreboard.
+     *
      * @param current_Scoreboard a instance of the scoreboard class, will be used to retrieve the
      *                           current count
      */
-    private void tallyImageSelector(Scoreboard current_Scoreboard) {
+    private void scoreboardImageSelector(Scoreboard current_Scoreboard) {
+        Log.i(getTag(), " has called scoreboardImageSelector for " + current_Scoreboard.getValue() + " scoreboard.");
         int tallyCount = current_Scoreboard.getCount();
         switch (current_Scoreboard.getCount()) {
             case 0:
@@ -413,14 +416,20 @@ public class PlayerFragment extends Fragment {
                 current_Scoreboard.getImageView().setImageResource(R.drawable.tally_two_marks);
                 break;
             case 3:
-                current_Scoreboard.setClosedOut(true);
-                mCallback.TallyClosed(getTag(), current_Scoreboard.getValue());
+                current_Scoreboard.setClosedOut(Scoreboard.SCOREBOARD_CLOSED);
+                mCallback.ChangeToScoreboardConditionNotification(
+                        getTag(),
+                        current_Scoreboard.getValue(),
+                        Scoreboard.SCOREBOARD_CLOSED);
                 current_Scoreboard.getImageView().setImageResource(R.drawable.tally_three_marks);
                 break;
             default:
-                current_Scoreboard.setClosedOut(true);
+                current_Scoreboard.setClosedOut(Scoreboard.SCOREBOARD_CLOSED);
                 current_Scoreboard.getImageView().setImageResource(R.drawable.tally_three_marks);
-                mCallback.TallyClosed(getTag(), current_Scoreboard.getValue());
+                mCallback.ChangeToScoreboardConditionNotification(
+                        getTag(),
+                        current_Scoreboard.getValue(),
+                        Scoreboard.SCOREBOARD_CLOSED);
                 // if the current game mode is standard, the default should be to add the total points
                 // accumulated to the total score
                 if (mGameMode.equals(getResources().getString(R.string.pref_standard_game_mode_value))
@@ -434,13 +443,15 @@ public class PlayerFragment extends Fragment {
 
     /**
      * Method will set the mClosedOutByAll boolean to true for the scoreboard associated with the scorevalue
+     *
      * @param scoreValue integer value to find the correct scoreboard
      */
 
-    public void tallyMarkClosedOutByAll(int scoreValue) {
+    public void scoreboardClosedOutByAll(int scoreValue) {
+        Log.i(LOG_TAG, "scoreboardClosedOutByAll called by " + getTag());
         for (Scoreboard scoreboard : scoreboards) {
             if (scoreValue == scoreboard.getValue()) {
-                scoreboard.setClosedOutByAll(true);
+                scoreboard.setClosedOutByAll(Scoreboard.SCOREBOARD_CLOSED);
             }
         }
     }
@@ -450,98 +461,122 @@ public class PlayerFragment extends Fragment {
      * marks to their original starting state
      */
     public void resetPlayerFrag() {
+        Log.i(LOG_TAG, "resetPlayerFrag called by " + getTag());
         for (Scoreboard scoreboard : scoreboards) {
-            scoreboard.setClosedOut(false);
-            scoreboard.setClosedOutByAll(false);
+            scoreboard.setClosedOut(Scoreboard.SCOREBOARD_OPEN);
+            scoreboard.setClosedOutByAll(Scoreboard.SCOREBOARD_OPEN);
             scoreboard.setCount(0);
             scoreboard.getImageView().setImageResource(R.drawable.tally_no_marks);
-            if (mGameMode.equals(getResources().getString(R.string.pref_standard_game_mode_value))) {
-                game_score_tv.setText("");
-                mTotalScore = 0;
-            }
+            Log.i(LOG_TAG, getTag() + " has reset " + scoreboard.getValue() + " scoreboard");
+        }
+        if (mGameMode.equals(getResources().getString(R.string.pref_standard_game_mode_value))) {
+            game_score_tv.setText("");
+            mTotalScore = 0;
         }
     }
 
     /**
      * Method removes a mark made by the user.
+     *
      * @param scoreValue the integer score value used to find the proper scoreboard
-     * @param multiple the incremental value of the mark to be removed from the total count
+     * @param incrementValue   the incremental value of the mark to be removed from the total count
      */
-    public void undoThrow(int scoreValue, int multiple) {
-        int previousTotalCount;
+    public void undoThrow(int scoreValue, int incrementValue) {
+        Log.i(LOG_TAG, "undoThrow called by " + getTag());
+
         // Find the correct scoreboard
         Scoreboard currentScoreboard = scoreboards[ScoreboardUtils.matchScoreValue(scoreValue)];
         // store the previous count
-        previousTotalCount = currentScoreboard.getCount();
+
         // set a new count
-        currentScoreboard.setCount(currentScoreboard.getCount() - multiple);
-        // if the count goes below the max number of counts, set the mTallyCount trackers to false,
-        // revert the tally mark image, and notify the host activity that the tally mark has been
-        // opened
-        if ((currentScoreboard.getCount() < Scoreboard.MAX_NUM_OF_TALLY_MARKS)) {
-            tallyImageSelector(currentScoreboard);
-            currentScoreboard.setClosedOut(false);
-            currentScoreboard.setClosedOutByAll(false);
-            mCallback.TallyOpened(mTag, scoreValue);
-        }
+        Log.i(LOG_TAG, getTag() + " has a total score of " + mTotalScore);
 
-        // if the game mode is standard, and the total score is above zero
-        if (mGameMode.equals(getResources().getString(R.string.pref_standard_game_mode_value))
-                && mTotalScore > 0) {
+        Log.i(LOG_TAG, mGameMode);
 
-            // if the current count is over the max number of tally marks then subtract the value
-            // from the total score
-            if (currentScoreboard.getCount() >= Scoreboard.MAX_NUM_OF_TALLY_MARKS) {
-                mTotalScore = mTotalScore - (scoreValue * multiple);
-                game_score_tv.setText(String.valueOf(mTotalScore));
-                mCallback.TotalScoreHasChanged(mTag, mTotalScore);
-            // if the previous mark minus the max number of tallies is greater than zero, and the
-            // the increment value is greater than one, subtract only the value of the marks that
-            // were overflowed into the total score
-            } else if (multiple > 1 && previousTotalCount - Scoreboard.MAX_NUM_OF_TALLY_MARKS > 0) {
-                int overflow = previousTotalCount - Scoreboard.MAX_NUM_OF_TALLY_MARKS;
-                mTotalScore = mTotalScore - (scoreValue * overflow);
-                game_score_tv.setText(String.valueOf(mTotalScore));
-                mCallback.TotalScoreHasChanged(mTag, mTotalScore);
-
+        if (mGameMode.equals(getResources().getString(R.string.pref_no_points_game_mode_value))){
+            // set a new count
+            currentScoreboard.setCount(currentScoreboard.getCount() - incrementValue);
+            // if the count goes below the max number of counts, set the mScoreboardCount to false,
+            // revert the tally mark image, and notify the host activity that the tally mark has been
+            // opened
+            if ((currentScoreboard.getCount() < Scoreboard.MAX_NUM_OF_TALLY_MARKS)) {
+                scoreboardImageSelector(currentScoreboard);
+                currentScoreboard.setClosedOut(Scoreboard.SCOREBOARD_OPEN);
+                currentScoreboard.setClosedOutByAll(Scoreboard.SCOREBOARD_OPEN);
+                mCallback.ChangeToScoreboardConditionNotification(
+                        mTag,
+                        scoreValue,
+                        Scoreboard.SCOREBOARD_OPEN);
             }
+        } else if (mGameMode.equals(getResources().getString(R.string.pref_standard_game_mode_value))) {
+
+            int previousCount;
+            previousCount = currentScoreboard.getCount();
+            Log.i(LOG_TAG, getTag() + " has a previous count of " + previousCount);
+
+            if (mTotalScore > 0) {
+                if (previousCount >= 3 && previousCount <= 5) {
+                    int overflow = previousCount - Scoreboard.MAX_NUM_OF_TALLY_MARKS;
+                    if (overflow != 0) {
+                        mTotalScore = mTotalScore - (scoreValue * overflow);
+                        currentScoreboard.setCount(previousCount - incrementValue);
+                        scoreboardImageSelector(currentScoreboard);
+                        currentScoreboard.setClosedOut(Scoreboard.SCOREBOARD_OPEN);
+                        currentScoreboard.setClosedOutByAll(Scoreboard.SCOREBOARD_OPEN);
+                        mCallback.ChangeToScoreboardConditionNotification(
+                                mTag,
+                                scoreValue,
+                                Scoreboard.SCOREBOARD_OPEN);
+                    } else {
+                        mTotalScore = mTotalScore - (scoreValue * incrementValue);
+                    }
+                } else {
+                    mTotalScore = mTotalScore - (scoreValue * incrementValue);
+                }
+                game_score_tv.setText(String.valueOf(mTotalScore));
+                mCallback.TotalScoreHasChanged(mTag, mTotalScore);
+            } else {
+                currentScoreboard.setCount(previousCount - incrementValue);
+                scoreboardImageSelector(currentScoreboard);
+                currentScoreboard.setClosedOut(Scoreboard.SCOREBOARD_OPEN);
+                currentScoreboard.setClosedOutByAll(Scoreboard.SCOREBOARD_OPEN);
+                mCallback.ChangeToScoreboardConditionNotification(
+                        mTag,
+                        scoreValue,
+                        Scoreboard.SCOREBOARD_OPEN);
+            }
+
         }
     }
 
     /**
-     * Method will set the scoreboard mClosedOutByAll to false
+     * Method will set the scoreboard mClosedOutByAll to the condition passed in by the host activity
+     *
      * @param scoreValue integer of the scoreboard to be changed to false
+     * @param condition boolean value of the state of the scoreboard
      */
-    public void setClosedOutByAll(int scoreValue, boolean notClosedOut) {
-        scoreboards[ScoreboardUtils.matchScoreValue(scoreValue)].setClosedOutByAll(notClosedOut);
+    public void setScoreboardAsClosedOutByAll(int scoreValue, boolean condition) {
+        Log.i(LOG_TAG, "setClosedOutByAll called by " + getTag());
+        scoreboards[ScoreboardUtils.matchScoreValue(scoreValue)].setClosedOutByAll(condition);
     }
 
-    /**
-     * Method will return the current state of the scoreboard
-     * @param scoreValue integer of the scoreboard to be checked
-     * @return current boolean condition of the scoreboard
-     */
-    public boolean isClosedOut(int scoreValue) {
-        return scoreboards[ScoreboardUtils.matchScoreValue(scoreValue)].isClosedOut();
-    }
-
-    private void reloadGame(String name, int avatar, boolean[] closedOut, int[] tallyCounts, int totalScore){
-
-        if(name != null){
+    private void reloadGame(String name, int avatar, boolean[] closedOut, int[] tallyCounts, int totalScore) {
+        Log.i(LOG_TAG, "reloadGame called by " + getTag());
+        if (name != null) {
             name_et.setText(name);
         }
 
-        if(avatar != 0){
+        if (avatar != 0) {
             player_avatar_iv.setImageResource(avatar);
         }
 
-        for(int i = 0; i < scoreboards.length; i++){
+        for (int i = 0; i < scoreboards.length; i++) {
             scoreboards[i].setClosedOut(closedOut[i]);
             scoreboards[i].setCount(tallyCounts[i]);
-            tallyImageSelector(scoreboards[i]);
+            scoreboardImageSelector(scoreboards[i]);
         }
 
-        if(mGameMode.equals(getResources().getString(R.string.pref_standard_game_mode_value)) &&
+        if (mGameMode.equals(getResources().getString(R.string.pref_standard_game_mode_value)) &&
                 this.mTotalScore != 0) {
             this.mTotalScore = totalScore;
             game_score_tv.setText(String.valueOf(this.mTotalScore));

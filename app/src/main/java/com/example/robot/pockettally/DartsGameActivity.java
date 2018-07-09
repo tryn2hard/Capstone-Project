@@ -62,6 +62,7 @@ public class DartsGameActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i(LOG_TAG, "onCreate called");
         super.onCreate(savedInstanceState);
 
         Log.i(LOG_TAG, DebugDB.getAddressLog());
@@ -77,49 +78,6 @@ public class DartsGameActivity extends AppCompatActivity
 
         // Get sharedPreferences
         setupSharedPreferences();
-
-        if (!sharedPreferences.getBoolean("gameInitialized", getResources().getBoolean(R.bool.pref_game_init_default))) {
-            Log.i(LOG_TAG, "Game is calling initNewGame()");
-            initNewGame(num_of_players);
-            sharedPreferences.edit().putBoolean("gameInitialized", true).apply();
-        } else {
-            Log.i(LOG_TAG, "Game is calling loadGame()");
-
-            AppExecutors.getsInstance().getDiskIO().execute(new Runnable() {
-                @Override
-                public void run() {
-                    Players = mDb.playerDao().loadAllPlayers();
-                }
-            });
-
-            loadGame();
-
-        }
-
-        // Choose which layout the user will see based on the number of players in the game
-        if (num_of_players == 2) {
-            setContentView(R.layout.activity_darts_game);
-        } else {
-            setContentView(R.layout.activity_darts_game_multi_player);
-        }
-
-        ButterKnife.bind(this);
-
-        // Reset current game
-        end_game_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                resetGame();
-            }
-        });
-
-        // Remove the previous throw from the user
-        undo_mark_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                undoThrow();
-            }
-        });
 
     }
 
@@ -138,7 +96,7 @@ public class DartsGameActivity extends AppCompatActivity
      * @param playerCount an integer value showing number of players. Can range from 2-4
      */
     private void initNewGame(int playerCount) {
-
+        Log.i(LOG_TAG, "initNewGame called");
         for (int i = 0; i < playerCount; i++) {
             PlayerFragment playerFragment = new PlayerFragment();
             String tag = tagGenerator(i);
@@ -146,6 +104,7 @@ public class DartsGameActivity extends AppCompatActivity
             Bundle args = new Bundle();
             args.putBoolean(PlayerFragment.FRAGMENT_ARGS_VIBE_KEY, pref_vibrate);
             args.putString(PlayerFragment.FRAGMENT_ARGS_GAME_MODE_KEY, game_mode);
+            args.putBoolean(PlayerFragment.FRAGMENT_ARGS_GAME_INIT_KEY, false);
             playerFragment.setArguments(args);
             mFragmentManager.beginTransaction()
                     .add(fragment_containers.get(i), playerFragment, tag)
@@ -159,15 +118,15 @@ public class DartsGameActivity extends AppCompatActivity
      * database
      */
     private void loadGame() {
-
+        Log.i(LOG_TAG, "loadGame called");
         for (int i = 0; i < Players.size(); i++) {
             // Retrieve player's current game status
             Player currentPlayer = Players.get(i);
             String name = currentPlayer.getName();
             int avatar = currentPlayer.getAvatar();
             String fragmentTag = currentPlayer.getFragmentTag();
-            boolean[] closedOut = currentPlayer.getClosedMarks();
-            int[] count = currentPlayer.getTallyCounts();
+            boolean[] closedOut = currentPlayer.getScoreboardCondition();
+            int[] count = currentPlayer.getScoreboardCounts();
             int totalScore = currentPlayer.getTotalScore();
 
             // Create new fragments and bundle player's data
@@ -182,7 +141,7 @@ public class DartsGameActivity extends AppCompatActivity
             args.putString(PlayerFragment.FRAGMENT_ARGS_PLAYER_NAME_KEY, name);
             args.putInt(PlayerFragment.FRAGMENT_ARGS_PLAYER_AVATAR_KEY, avatar);
             args.putBooleanArray(PlayerFragment.FRAGMENT_ARGS_CLOSED_OUT_KEY, closedOut);
-            args.putIntArray(PlayerFragment.FRAGMENT_ARGS_TALLY_COUNT_KEY, count);
+            args.putIntArray(PlayerFragment.FRAGMENT_ARGS_SCOREBOARD_COUNTS_KEY, count);
             args.putInt(PlayerFragment.FRAGMENT_ARGS_TOTAL_SCORE_KEY, totalScore);
             args.putBoolean(PlayerFragment.FRAGMENT_ARGS_GAME_INIT_KEY,
                     sharedPreferences.getBoolean("gameInitialized",
@@ -201,9 +160,9 @@ public class DartsGameActivity extends AppCompatActivity
      * that the user may continue to play with the previous players.
      */
     private void resetGame() {
+        Log.i(LOG_TAG, "resetGame called");
         for (int i = 0; i < Players.size(); i++) {
             resetPlayer(Players.get(i));
-
             PlayerFragment frag =
                     (PlayerFragment) mFragmentManager.findFragmentByTag(Players.get(i).getFragmentTag());
             frag.resetPlayerFrag();
@@ -224,6 +183,7 @@ public class DartsGameActivity extends AppCompatActivity
      */
 
     private void endGame(String tag) {
+        Log.i(LOG_TAG, "endGame called");
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.end_of_game_dialog);
         TextView winner_tv = dialog.findViewById(R.id.winning_player_tv);
@@ -262,6 +222,7 @@ public class DartsGameActivity extends AppCompatActivity
      * @param tag A string containing the fragment tag that the player is tied to.
      */
     private void setupPlayer(String tag) {
+        Log.i(LOG_TAG, "setupPlayer called");
         final Player newPlayer = new Player(tag);
         Players.add(newPlayer);
 
@@ -279,12 +240,13 @@ public class DartsGameActivity extends AppCompatActivity
      * or when the user presses the reset button
      */
     public void resetPlayer(Player player) {
-        for (int i = 0; i < player.getClosedMarks().length; i++) {
-            player.getClosedMarks()[i] = false;
-            player.getTallyCounts()[i] = 0;
+        Log.i(LOG_TAG, "resetPlayer called");
+        for (int i = 0; i < player.getScoreboardCondition().length; i++) {
+            player.getScoreboardCondition()[i] = false;
+            player.getScoreboardCounts()[i] = 0;
             player.setTotalScore(0);
-            updateDB(player);
         }
+            updateDB(player);
     }
 
     /**
@@ -395,6 +357,7 @@ public class DartsGameActivity extends AppCompatActivity
      * @param multiple   integer used to indentify the increment value of the mark
      */
     private void storeGameHistory(String tag, int scoreValue, int multiple) {
+        Log.i(LOG_TAG, "storeGameHistory called");
         GameHistory.add(new GameMark(tag, scoreValue, multiple));
     }
 
@@ -405,6 +368,7 @@ public class DartsGameActivity extends AppCompatActivity
      * @return GameMark object holding the fragment tag, scoreValue, and increment
      */
     private GameMark getGameHistory() {
+        Log.i(LOG_TAG, "getGameHistory called");
         GameMark undoMark = null;
 
         if (!GameHistory.isEmpty()) {
@@ -421,6 +385,7 @@ public class DartsGameActivity extends AppCompatActivity
      * the method will display a simple toast.
      */
     public void undoThrow() {
+        Log.i(LOG_TAG, "undoThrow called");
         GameMark undoMark = getGameHistory();
         if (undoMark == null) {
             Toast.makeText(this, "Nothing to Undo", Toast.LENGTH_SHORT).show();
@@ -438,37 +403,39 @@ public class DartsGameActivity extends AppCompatActivity
      */
 
     /**
-     * Method will return the status of a specific tally mark
+     * Method will return the status of a specific scoreboard
      *
-     * @param scoreValue the integer value of the tally mark in question
-     * @return boolean value of the current condition of the tally mark
+     * @param scoreValue the integer value of the scoreboard in question
+     * @return boolean value of the current condition of the scoreboard
      */
-    public boolean isTallyMarkClosed(int scoreValue, Player currentPlayer) {
-        return currentPlayer.getClosedMarks()[ScoreboardUtils.matchScoreValue(scoreValue)];
+    public boolean isScoreboardClosed(int scoreValue, Player currentPlayer) {
+        Log.i(LOG_TAG, "isScoreboardClosed called");
+        return currentPlayer.getScoreboardCondition()[ScoreboardUtils.matchScoreValue(scoreValue)];
     }
 
     /**
-     * Method will check the current condition of all the tally marks for this player.
+     * Method will check the current condition of all the scoreboards for this player.
      *
-     * @return boolean value of true will be returned if all the marks are closed.
+     * @return boolean value of true will be returned if all the scoreboards are closed.
      */
-    public boolean areAllTallyMarksClosed(Player currentPlayer) {
-        for (boolean b : currentPlayer.getClosedMarks()) if (!b) return false;
+    public boolean areAllScoreboardsClosedForPlayer(Player currentPlayer) {
+        Log.i(LOG_TAG, "areAllScoreboardsClosedForPlayer called");
+        for (boolean b : currentPlayer.getScoreboardCondition()) if (!b) return false;
         return true;
     }
 
     /**
-     * Method will check all the players to see if a tally mark has been closed out.
+     * Method will check all the players to see if a scoreboard has been closed out.
      *
      * @param scoreValue the integer score value that will be checked
-     * @return a boolean value will be returned. True if the tally mark in questions is closed out
+     * @return a boolean value will be returned. True if the scoreboard in questions is closed out
      * by all, otherwise false.
      */
-    private boolean isTallyMarkClosedOutByAll(int scoreValue) {
-
+    private boolean isScoreboardClosedutByAll(int scoreValue) {
+        Log.i(LOG_TAG, "isScoreboardClosedutByAll called");
         for (int i = 0; i < Players.size(); i++) {
-            boolean tallyCondition = isTallyMarkClosed(scoreValue, Players.get(i));
-            Log.i("isTallyMarkClosedOutByAll", Players.get(i).getFragmentTag() + " is " + tallyCondition);
+            boolean tallyCondition = isScoreboardClosed(scoreValue, Players.get(i));
+            Log.i("isScoreboardClosedutByAll", Players.get(i).getFragmentTag() + " is " + tallyCondition);
             if (!tallyCondition) {
                 return false;
             }
@@ -478,11 +445,13 @@ public class DartsGameActivity extends AppCompatActivity
 
     /**
      * Method will notify this player that a tally mark has had it's state changed.
-     *
      * @param scoreValue the integer value of the tally mark that has been closed out
      */
-    public void changeTallyMarkCondition(int scoreValue, Player player, boolean condition) {
-        player.getClosedMarks()[ScoreboardUtils.matchScoreValue(scoreValue)] = condition;
+    public void setScoreboardCondition(int scoreValue, Player player, boolean condition) {
+        Log.i(LOG_TAG, "setScoreboardCondition called");
+
+        player.getScoreboardCondition()[ScoreboardUtils.matchScoreValue(scoreValue)] = condition;
+
         updateDB(player);
     }
 
@@ -494,6 +463,7 @@ public class DartsGameActivity extends AppCompatActivity
      * @return will return true if the player is leading in points
      */
     private boolean isPlayerLeadingInPoints(String tag) {
+        Log.i(LOG_TAG, "isPlayerLeadingInPoints called");
         int currentPlayerTotalScore = 0;
         int scoreToCompare = Players.get(getIdFromTag(tag)).getTotalScore();
         boolean playerIsLeading;
@@ -514,22 +484,6 @@ public class DartsGameActivity extends AppCompatActivity
     ***********************************************************************************************
      */
 
-    @Override
-    public void TallyOpened(String tag, int scoreValue) {
-        changeTallyMarkCondition(scoreValue, Players.get(getIdFromTag(tag)), false);
-        if (!isTallyMarkClosedOutByAll(scoreValue)) {
-            // remove the cross out divider
-            CrossedOutLine.get(ScoreboardUtils.matchScoreValue(scoreValue)).setVisibility(View.INVISIBLE);
-
-            // notify all the playerFragment that the tally mark is no longer closed out by all
-            for (int j = 0; j < num_of_players; j++) {
-                PlayerFragment frag = (PlayerFragment) mFragmentManager.findFragmentByTag(tagGenerator(j));
-                frag.setClosedOutByAll(scoreValue, false);
-
-            }
-        }
-    }
-
     /**
      * An implemented method from the PlayerFragment. Method updated the player in question with the
      * current total score in the game.
@@ -539,12 +493,13 @@ public class DartsGameActivity extends AppCompatActivity
      */
     @Override
     public void TotalScoreHasChanged(String tag, int totalScore) {
+        Log.i(LOG_TAG, "TotalScoreHasChanged called");
         Player currentPlayer = Players.get(getIdFromTag(tag));
         currentPlayer.setTotalScore(totalScore);
 
         updateDB(currentPlayer);
 
-        if (areAllTallyMarksClosed(Players.get(getIdFromTag(tag))) && isPlayerLeadingInPoints(tag)) {
+        if (areAllScoreboardsClosedForPlayer(Players.get(getIdFromTag(tag))) && isPlayerLeadingInPoints(tag)) {
             Log.i(LOG_TAG, "The end of game has been called from TotalScoreHasChanged");
             endGame(tag);
         }
@@ -559,24 +514,27 @@ public class DartsGameActivity extends AppCompatActivity
      * @param multiple   integer of the step number
      */
     @Override
-    public void TallyMarked(String tag, int scoreValue, int multiple, int[] tallyCount) {
-        PlayerFragment currentFrag = (PlayerFragment) mFragmentManager.findFragmentByTag(tag);
+    public void ScoreboardMarked(String tag, int scoreValue, int multiple, int[] tallyCount) {
+        Log.i(LOG_TAG, "ScoreboardMarked called");
         Player currentPlayer = Players.get(getIdFromTag(tag));
         // if the game is in standard mode store the game history
-        if (!(game_mode.equals(getResources().getString(R.string.pref_no_points_game_mode_value)))) {
+        if (game_mode.equals(getResources().getString(R.string.pref_standard_game_mode_value))) {
             storeGameHistory(tag, scoreValue, multiple);
-            currentPlayer.setTallyCounts(tallyCount);
+            currentPlayer.setScoreboardCounts(tallyCount);
+            updateDB(currentPlayer);
+            if (areAllScoreboardsClosedForPlayer(Players.get(getIdFromTag(tag))) && isPlayerLeadingInPoints(tag)) {
+                endGame(tag);
+            }
             // only save the game history for no points mode if the current scoreboard is not closed out
-        } else if (!(currentFrag.isClosedOut(scoreValue))) {
-            storeGameHistory(tag, scoreValue, multiple);
-            currentPlayer.setTallyCounts(tallyCount);
-        }
-
-        updateDB(currentPlayer);
-
-        if (areAllTallyMarksClosed(currentPlayer) && isPlayerLeadingInPoints(tag)) {
-            Log.i(LOG_TAG, "The end of game has been called from TallyMarked");
-            endGame(tag);
+        } else if (game_mode.equals(getResources().getString(R.string.pref_no_points_game_mode_value))){
+            if (!(currentPlayer.getScoreboardCondition()[ScoreboardUtils.matchScoreValue(scoreValue)])) {
+                storeGameHistory(tag, scoreValue, multiple);
+                currentPlayer.setScoreboardCounts(tallyCount);
+                updateDB(currentPlayer);
+            }
+            if (areAllScoreboardsClosedForPlayer(Players.get(getIdFromTag(tag)))) {
+                endGame(tag);
+            }
         }
     }
 
@@ -589,6 +547,7 @@ public class DartsGameActivity extends AppCompatActivity
      */
     @Override
     public void PlayerNamed(String tag, String name) {
+        Log.i(LOG_TAG, "PlayerNamed called");
         Players.get(getIdFromTag(tag)).setName(name);
 
         mDb.playerDao().updatePlayer(Players.get(getIdFromTag(tag)));
@@ -603,6 +562,7 @@ public class DartsGameActivity extends AppCompatActivity
      */
     @Override
     public void AvatarSelected(String tag, int avatar) {
+        Log.i(LOG_TAG, "AvatarSelected called");
         Player currentPlayer = Players.get(getIdFromTag(tag));
         currentPlayer.setAvatar(avatar);
         updateDB(currentPlayer);
@@ -623,19 +583,24 @@ public class DartsGameActivity extends AppCompatActivity
      * @param scoreValue an integer value of the score which has been closed out
      */
     @Override
-    public void TallyClosed(String tag, int scoreValue) {
-        changeTallyMarkCondition(scoreValue, Players.get(getIdFromTag(tag)), true);
-
-        if (isTallyMarkClosedOutByAll(scoreValue)) {
-            setClosedOutLine(scoreValue);
-        }
-        if (game_mode.equals(getResources().getString(R.string.pref_no_points_game_mode_value))) {
-            if (areAllTallyMarksClosed(Players.get(getIdFromTag(tag)))) {
-                endGame(tag);
+    public void ChangeToScoreboardConditionNotification(String tag, int scoreValue, boolean condition){
+        if(condition){
+            setScoreboardCondition(scoreValue, Players.get(getIdFromTag(tag)), Scoreboard.SCOREBOARD_CLOSED);
+            if (isScoreboardClosedutByAll(scoreValue)) {
+                setClosedOutLine(scoreValue);
             }
-        } else if (game_mode.equals(getResources().getString(R.string.pref_standard_game_mode_value))) {
-            if (areAllTallyMarksClosed(Players.get(getIdFromTag(tag))) && isPlayerLeadingInPoints(tag)) {
-                endGame(tag);
+        } else {
+            setScoreboardCondition(scoreValue, Players.get(getIdFromTag(tag)), Scoreboard.SCOREBOARD_OPEN);
+            if (!isScoreboardClosedutByAll(scoreValue)) {
+                // remove the cross out divider
+                CrossedOutLine.get(ScoreboardUtils.matchScoreValue(scoreValue)).setVisibility(View.INVISIBLE);
+
+                // notify all the playerFragment that the tally mark is no longer closed out by all
+                for (int j = 0; j < num_of_players; j++) {
+                    PlayerFragment frag = (PlayerFragment) mFragmentManager.findFragmentByTag(tagGenerator(j));
+                    frag.setScoreboardAsClosedOutByAll(scoreValue, false);
+
+                }
             }
         }
     }
@@ -653,11 +618,12 @@ public class DartsGameActivity extends AppCompatActivity
      * @param scoreValue the integer score value indicating which mark has been closed out by all
      *                   players
      */
-    private void changeTallyImageInFragment(int scoreValue) {
+    private void notifyAllFragsScoreboardIsClosedOutByAll(int scoreValue) {
+        Log.i(LOG_TAG, "notifyAllFragsScoreboardIsClosedOutByAll called");
             for (int i = 0; i < Players.size(); i++) {
                 PlayerFragment frag =
                         (PlayerFragment) mFragmentManager.findFragmentByTag(Players.get(i).getFragmentTag());
-                frag.tallyMarkClosedOutByAll(scoreValue);
+                frag.scoreboardClosedOutByAll(scoreValue);
             }
     }
 
@@ -670,22 +636,46 @@ public class DartsGameActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        Log.i(LOG_TAG, "onResume called");
 
-        if (sharedPreferences.getBoolean("gameInitialized",
-                getResources().getBoolean(R.bool.pref_game_init_default))){
-
-            Log.i(LOG_TAG, "Game is calling loadGame()");
-
+        if (!sharedPreferences.getBoolean("gameInitialized", getResources().getBoolean(R.bool.pref_game_init_default))) {
+            initNewGame(num_of_players);
+            sharedPreferences.edit().putBoolean("gameInitialized", true).apply();
+        } else {
             AppExecutors.getsInstance().getDiskIO().execute(new Runnable() {
                 @Override
                 public void run() {
                     Players = mDb.playerDao().loadAllPlayers();
+                    loadGame();
                 }
             });
 
-            loadGame();
-
         }
+
+        // Choose which layout the user will see based on the number of players in the game
+        if (num_of_players == 2) {
+            setContentView(R.layout.activity_darts_game);
+        } else {
+            setContentView(R.layout.activity_darts_game_multi_player);
+        }
+
+        ButterKnife.bind(this);
+
+        // Reset current game
+        end_game_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                resetGame();
+            }
+        });
+
+        // Remove the previous throw from the user
+        undo_mark_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                undoThrow();
+            }
+        });
     }
 
     @Override
@@ -710,8 +700,9 @@ public class DartsGameActivity extends AppCompatActivity
      * @param scoreValue the integer score value indicating which tally mark has been closed.
      */
     private void setClosedOutLine(int scoreValue) {
+        Log.i(LOG_TAG, "setClosedOutLine called");
         CrossedOutLine.get(ScoreboardUtils.matchScoreValue(scoreValue)).setVisibility(View.VISIBLE);
-        changeTallyImageInFragment(scoreValue);
+        notifyAllFragsScoreboardIsClosedOutByAll(scoreValue);
     }
 
     /*
@@ -725,6 +716,7 @@ public class DartsGameActivity extends AppCompatActivity
      * @param player the current player to update to the database
      */
     private void updateDB(final Player player) {
+        Log.i(LOG_TAG, "updateDB called");
         AppExecutors.getsInstance().getDiskIO().execute(new Runnable() {
             @Override
             public void run() {
