@@ -17,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amitshekhar.DebugDB;
+import com.example.robot.pockettally.database.GameMark;
+import com.example.robot.pockettally.database.GameMarkDatabase;
 import com.example.robot.pockettally.database.Player;
 import com.example.robot.pockettally.database.PlayerDatabase;
 
@@ -48,7 +50,8 @@ public class DartsGameActivity extends AppCompatActivity
     private String game_mode;
     private Boolean pref_vibrate;
     private FragmentManager mFragmentManager;
-    private PlayerDatabase mDb;
+    private PlayerDatabase mPlayersDb;
+    private GameMarkDatabase mGameMarkDb;
     private SharedPreferences sharedPreferences;
 
     private final List<Integer> fragment_containers = new ArrayList<Integer>() {{
@@ -67,8 +70,11 @@ public class DartsGameActivity extends AppCompatActivity
 
         Log.i(LOG_TAG, DebugDB.getAddressLog());
 
-        // Get instance of the database
-        mDb = PlayerDatabase.getsInstance(getApplicationContext());
+        // Get instance of the Players database
+        mPlayersDb = PlayerDatabase.getsInstance(getApplicationContext());
+
+        // Get instance of the GameMarks database
+        mGameMarkDb = GameMarkDatabase.getsInstance(getApplicationContext());
 
         // Get instance of the fragment manager
         mFragmentManager = getSupportFragmentManager();
@@ -119,7 +125,7 @@ public class DartsGameActivity extends AppCompatActivity
      */
     private void loadGame() {
         Log.i(LOG_TAG, "loadGame called");
-        for (int i = 0; i < num_of_players; i++) {
+        for (int i = 0; i < Players.size(); i++) {
                 // Retrieve player's current game status
                 Player currentPlayer = Players.get(i);
                 String name = currentPlayer.getName();
@@ -128,6 +134,7 @@ public class DartsGameActivity extends AppCompatActivity
                 boolean[] closedOut = currentPlayer.getScoreboardCondition();
                 int[] count = currentPlayer.getScoreboardCounts();
                 int totalScore = currentPlayer.getTotalScore();
+                boolean[] scoreboardDone = currentPlayer.getScoreboardDone();
 
                 // Create new fragments and bundle player's data
                 PlayerFragment playerFragment = new PlayerFragment();
@@ -141,6 +148,7 @@ public class DartsGameActivity extends AppCompatActivity
                 args.putString(PlayerFragment.FRAGMENT_ARGS_PLAYER_NAME_KEY, name);
                 args.putInt(PlayerFragment.FRAGMENT_ARGS_PLAYER_AVATAR_KEY, avatar);
                 args.putBooleanArray(PlayerFragment.FRAGMENT_ARGS_CLOSED_OUT_KEY, closedOut);
+                args.putBooleanArray(PlayerFragment.FRAGMENT_ARGS_SCOREBOARD_DONE_KEY, scoreboardDone);
                 args.putIntArray(PlayerFragment.FRAGMENT_ARGS_SCOREBOARD_COUNTS_KEY, count);
                 args.putInt(PlayerFragment.FRAGMENT_ARGS_TOTAL_SCORE_KEY, totalScore);
                 args.putBoolean(PlayerFragment.FRAGMENT_ARGS_GAME_INIT_KEY,
@@ -162,6 +170,7 @@ public class DartsGameActivity extends AppCompatActivity
      */
     private void resetGame() {
         Log.i(LOG_TAG, "resetGame called");
+
         for (int i = 0; i < Players.size(); i++) {
             resetPlayer(Players.get(i));
             PlayerFragment frag =
@@ -174,6 +183,9 @@ public class DartsGameActivity extends AppCompatActivity
         }
 
         GameHistory.clear();
+        deleteAllGameMarksDb();
+
+
     }
 
     /**
@@ -195,8 +207,6 @@ public class DartsGameActivity extends AppCompatActivity
             winner = tag + " has won!";
         }
         winner_tv.setText(winner);
-
-
 
         Button play_again_button = dialog.findViewById(R.id.play_again_button);
         play_again_button.setOnClickListener(new View.OnClickListener() {
@@ -230,7 +240,7 @@ public class DartsGameActivity extends AppCompatActivity
         AppExecutors.getsInstance().getDiskIO().execute(new Runnable() {
             @Override
             public void run() {
-                mDb.playerDao().insertPlayer(newPlayer);
+                mPlayersDb.playerDao().insertPlayer(newPlayer);
                 Log.i(LOG_TAG, "Player inserted");
             }
         });
@@ -243,11 +253,12 @@ public class DartsGameActivity extends AppCompatActivity
     public void resetPlayer(Player player) {
         Log.i(LOG_TAG, "resetPlayer called");
         for (int i = 0; i < player.getScoreboardCondition().length; i++) {
-            player.getScoreboardCondition()[i] = false;
+            player.getScoreboardCondition()[i] = Scoreboard.SCOREBOARD_OPEN;
             player.getScoreboardCounts()[i] = 0;
             player.setTotalScore(0);
+            player.getScoreboardDone()[i] = Scoreboard.SCOREBOARD_OPEN;
         }
-            updateDB(player);
+            updatePlayersDb(player);
     }
 
     /**
@@ -358,11 +369,20 @@ public class DartsGameActivity extends AppCompatActivity
      *
      * @param tag        string used to identify which player and fragment made the mark
      * @param scoreValue integer used to identify which tally mark was struck
-     * @param multiple   integer used to identify the increment value of the mark
+     * @param increment   integer used to identify the increment value of the mark
      */
-    private void storeGameHistory(String tag, int scoreValue, int multiple) {
+    private void storeGameHistory(final String tag, final int scoreValue, final int increment) {
         Log.i(LOG_TAG, "storeGameHistory called");
-        GameHistory.add(new GameMark(tag, scoreValue, multiple));
+        GameHistory.add(new GameMark(tag, scoreValue, increment));
+
+        AppExecutors.getsInstance().getDiskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mGameMarkDb.gameMarkDao().insertGameMark(new GameMark(tag, scoreValue, increment));
+                Log.i(LOG_TAG, "GameMark inserted");
+            }
+        });
+
     }
 
     /**
@@ -379,6 +399,7 @@ public class DartsGameActivity extends AppCompatActivity
             undoMark = GameHistory.get(GameHistory.size() - 1);
             GameHistory.remove(GameHistory.size() - 1);
             GameHistory.trimToSize();
+            deleteGameMarkDb(undoMark);
         }
         return undoMark;
     }
@@ -394,8 +415,8 @@ public class DartsGameActivity extends AppCompatActivity
         if (undoMark == null) {
             Toast.makeText(this, "Nothing to Undo", Toast.LENGTH_SHORT).show();
         } else {
-            PlayerFragment currentFrag = (PlayerFragment) mFragmentManager.findFragmentByTag(undoMark.getmTag());
-            currentFrag.undoThrow(undoMark.getmValue(), undoMark.getmMarkMultiple());
+            PlayerFragment currentFrag = (PlayerFragment) mFragmentManager.findFragmentByTag(undoMark.getTag());
+            currentFrag.undoThrow(undoMark.getValue(), undoMark.getIncrement());
         }
 
     }
@@ -439,7 +460,6 @@ public class DartsGameActivity extends AppCompatActivity
         Log.i(LOG_TAG, "isScoreboardClosedOutByAll called");
         for (int i = 0; i < Players.size(); i++) {
             boolean tallyCondition = isScoreboardClosed(scoreValue, Players.get(i));
-            Log.i("isScoreboardClosedOutByAll", Players.get(i).getFragmentTag() + " is " + tallyCondition);
             if (!tallyCondition) {
                 return false;
             }
@@ -456,7 +476,7 @@ public class DartsGameActivity extends AppCompatActivity
 
         player.getScoreboardCondition()[ScoreboardUtils.matchScoreValue(scoreValue)] = condition;
 
-        updateDB(player);
+        updatePlayersDb(player);
     }
 
     /**
@@ -501,10 +521,9 @@ public class DartsGameActivity extends AppCompatActivity
         Player currentPlayer = Players.get(getIdFromTag(tag));
         currentPlayer.setTotalScore(totalScore);
 
-        updateDB(currentPlayer);
+        updatePlayersDb(currentPlayer);
 
         if (areAllScoreboardsClosedForPlayer(Players.get(getIdFromTag(tag))) && isPlayerLeadingInPoints(tag)) {
-            Log.i(LOG_TAG, "The end of game has been called from TotalScoreHasChanged");
             endGame(tag);
         }
     }
@@ -525,7 +544,7 @@ public class DartsGameActivity extends AppCompatActivity
         if (game_mode.equals(getResources().getString(R.string.pref_standard_game_mode_value))) {
             storeGameHistory(tag, scoreValue, multiple);
             currentPlayer.setScoreboardCounts(tallyCount);
-            updateDB(currentPlayer);
+            updatePlayersDb(currentPlayer);
             if (areAllScoreboardsClosedForPlayer(Players.get(getIdFromTag(tag))) && isPlayerLeadingInPoints(tag)) {
                 endGame(tag);
             }
@@ -534,7 +553,7 @@ public class DartsGameActivity extends AppCompatActivity
             if (!(currentPlayer.getScoreboardCondition()[ScoreboardUtils.matchScoreValue(scoreValue)])) {
                 storeGameHistory(tag, scoreValue, multiple);
                 currentPlayer.setScoreboardCounts(tallyCount);
-                updateDB(currentPlayer);
+                updatePlayersDb(currentPlayer);
             }
             if (areAllScoreboardsClosedForPlayer(Players.get(getIdFromTag(tag)))) {
                 endGame(tag);
@@ -553,7 +572,7 @@ public class DartsGameActivity extends AppCompatActivity
     public void PlayerNamed(String tag, String name) {
         Log.i(LOG_TAG, "PlayerNamed called");
         Players.get(getIdFromTag(tag)).setName(name);
-        updateDB(Players.get(getIdFromTag(tag)));
+        updatePlayersDb(Players.get(getIdFromTag(tag)));
 
     }
 
@@ -569,7 +588,7 @@ public class DartsGameActivity extends AppCompatActivity
         Log.i(LOG_TAG, "AvatarSelected called");
         Player currentPlayer = Players.get(getIdFromTag(tag));
         currentPlayer.setAvatar(avatar);
-        updateDB(currentPlayer);
+        updatePlayersDb(currentPlayer);
     }
 
     /**
@@ -587,11 +606,11 @@ public class DartsGameActivity extends AppCompatActivity
      * @param scoreValue an integer value of the score which has been closed out
      */
     @Override
-    public void ChangeToScoreboardConditionNotification(String tag, int scoreValue, boolean condition){
+    public void ChangeToScoreboardConditionNotification(String tag, int scoreValue, boolean condition, boolean reloadGame){
         if(condition){
             setScoreboardCondition(scoreValue, Players.get(getIdFromTag(tag)), Scoreboard.SCOREBOARD_CLOSED);
             if (isScoreboardClosedOutByAll(scoreValue)) {
-                setClosedOutLine(scoreValue);
+                setClosedOutLine(scoreValue, reloadGame);
             }
         } else {
             setScoreboardCondition(scoreValue, Players.get(getIdFromTag(tag)), Scoreboard.SCOREBOARD_OPEN);
@@ -599,12 +618,13 @@ public class DartsGameActivity extends AppCompatActivity
                 // remove the cross out divider
                 CrossedOutLine.get(ScoreboardUtils.matchScoreValue(scoreValue)).setVisibility(View.INVISIBLE);
 
+
                 // notify all the playerFragment that the tally mark is no longer closed out by all
-                for (int j = 0; j < num_of_players; j++) {
+                    for (int j = 0; j < num_of_players; j++) {
                     PlayerFragment frag = (PlayerFragment) mFragmentManager.findFragmentByTag(tagGenerator(j));
                     frag.setScoreboardAsClosedOutByAll(scoreValue, false);
+                    }
 
-                }
             }
         }
     }
@@ -622,13 +642,18 @@ public class DartsGameActivity extends AppCompatActivity
      * @param scoreValue the integer score value indicating which mark has been closed out by all
      *                   players
      */
-    private void notifyAllFragsScoreboardIsClosedOutByAll(int scoreValue) {
-        Log.i(LOG_TAG, "notifyAllFragsScoreboardIsClosedOutByAll called");
+    private void notifyAllFragsScoreboardIsClosedOutByAll(int scoreValue, boolean reloadGame) {
+
+        if(!reloadGame){
+            Log.i(LOG_TAG, "notifyAllFragsScoreboardIsClosedOutByAll called");
             for (int i = 0; i < Players.size(); i++) {
+                Players.get(i).getScoreboardDone()[ScoreboardUtils.matchScoreValue(scoreValue)] = true;
+                updatePlayersDb(Players.get(i));
                 PlayerFragment frag =
                         (PlayerFragment) mFragmentManager.findFragmentByTag(Players.get(i).getFragmentTag());
                 frag.scoreboardClosedOutByAll(scoreValue);
             }
+        }
     }
 
     /*
@@ -642,9 +667,11 @@ public class DartsGameActivity extends AppCompatActivity
         super.onResume();
         Log.i(LOG_TAG, "onResume called");
 
+        // Get sharedPreferences
+        setupSharedPreferences();
+
         if (!sharedPreferences.getBoolean(getResources().getString(R.string.pref_game_init_key),
                 getResources().getBoolean(R.bool.pref_game_init_default))) {
-            Log.i(LOG_TAG, "initGame called in the first if statement");
             initNewGame(num_of_players);
             sharedPreferences.edit().putBoolean(getResources().getString(R.string.pref_game_init_key),
                     true).apply();
@@ -652,20 +679,11 @@ public class DartsGameActivity extends AppCompatActivity
             AppExecutors.getsInstance().getDiskIO().execute(new Runnable() {
                 @Override
                 public void run() {
-                    Players = mDb.playerDao().loadAllPlayers();
-
-                    if(num_of_players > Players.size()){
-                        Log.i(LOG_TAG, "number of players = " + num_of_players);
-                        Log.i(LOG_TAG, "Players size = " + Players.size());
-                        Log.i(LOG_TAG, "initGame called in the second if statement");
-                        initNewGame(num_of_players);
-                    } else {
-                        loadGame();
-                    }
+                    Players = mPlayersDb.playerDao().loadAllPlayers();
+                    GameHistory = (ArrayList) mGameMarkDb.gameMarkDao().loadAllGameMarks();
+                    loadGame();
                 }
-
             });
-
 
         }
 
@@ -716,10 +734,11 @@ public class DartsGameActivity extends AppCompatActivity
      *
      * @param scoreValue the integer score value indicating which tally mark has been closed.
      */
-    private void setClosedOutLine(int scoreValue) {
+    private void setClosedOutLine(int scoreValue, boolean reloadGame) {
         Log.i(LOG_TAG, "setClosedOutLine called");
         CrossedOutLine.get(ScoreboardUtils.matchScoreValue(scoreValue)).setVisibility(View.VISIBLE);
-        notifyAllFragsScoreboardIsClosedOutByAll(scoreValue);
+        notifyAllFragsScoreboardIsClosedOutByAll(scoreValue, reloadGame);
+
     }
 
     /*
@@ -732,12 +751,34 @@ public class DartsGameActivity extends AppCompatActivity
      * Method creates a Executor to run an update to the database
      * @param player the current player to update to the database
      */
-    private void updateDB(final Player player) {
-        Log.i(LOG_TAG, "updateDB called");
+    private void updatePlayersDb(final Player player) {
+        Log.i(LOG_TAG, "updatePlayersDb called");
         AppExecutors.getsInstance().getDiskIO().execute(new Runnable() {
             @Override
             public void run() {
-                mDb.playerDao().updatePlayer(player);
+                mPlayersDb.playerDao().updatePlayer(player);
+            }
+        });
+    }
+
+    private void deleteGameMarkDb(final GameMark gameMark){
+
+        AppExecutors.getsInstance().getDiskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mGameMarkDb.gameMarkDao().deleteGameMark(gameMark);
+
+            }
+        });
+    }
+
+    private void deleteAllGameMarksDb(){
+
+        AppExecutors.getsInstance().getDiskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mGameMarkDb.gameMarkDao().delete();
+
             }
         });
     }

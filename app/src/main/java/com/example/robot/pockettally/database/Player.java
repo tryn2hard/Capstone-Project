@@ -18,6 +18,7 @@ public class Player {
     private int avatar;
     private String fragmentTag;
     private boolean[] scoreboardCondition = new boolean[7];
+    private boolean[] scoreboardDone = new boolean[7];
     private int[] scoreboardCounts = new int[7];
     private int totalScore;
 
@@ -30,6 +31,7 @@ public class Player {
         for(int i = 0; i < scoreboardCondition.length; i++){
             this.scoreboardCondition[i] = false;
             this.scoreboardCounts[i] = 0;
+            this.scoreboardDone[i] = false;
         }
     }
 
@@ -78,6 +80,14 @@ public class Player {
     }
 
     public void setScoreboardCondition(boolean[] scoreboardCondition) { this.scoreboardCondition = scoreboardCondition; }
+
+    public boolean[] getScoreboardDone() {
+        return scoreboardDone;
+    }
+
+    public void setScoreboardDone(boolean[] scoreboardDone) {
+        this.scoreboardDone = scoreboardDone;
+    }
 
     public int[] getScoreboardCounts() {
         return scoreboardCounts;
