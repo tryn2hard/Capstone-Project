@@ -81,6 +81,8 @@
     <string name="pref_num_of_players_default" translatable="false">2 </string>
     <string name="pref_num_of_players_label"> Number of Players </string>
 
+    <string name="pref_game_init_key" translatable="false">game initialized</string>
+
     <string name="pref_2_players_label"> 2 players </string>
     <string name="pref_3_players_label"> 3 players </string>
     <string name="pref_4_players_label"> 4 players </string>

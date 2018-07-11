@@ -77,7 +77,7 @@ public class PlayerFragment extends Fragment {
     public final static String FRAGMENT_ARGS_CLOSED_OUT_KEY = "closedOut";
     public final static String FRAGMENT_ARGS_SCOREBOARD_COUNTS_KEY = "mScoreboardCounts";
     public final static String FRAGMENT_ARGS_TOTAL_SCORE_KEY = "mTotalScore";
-    public final static String FRAGMENT_ARGS_GAME_INIT_KEY = "gameInitialized";
+    public final static String FRAGMENT_ARGS_GAME_INIT_KEY = "game initialized";
 
     // an array of scoreboards to hold the data for each of the tally marks.
     public Scoreboard[] scoreboards = new Scoreboard[7];
