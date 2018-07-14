@@ -14,7 +14,11 @@ public class ClosedMarksConverter {
         boolean [] array = new boolean[parts.length];
         for (int i = 0; i < parts.length; i++) {
             String smallerParts = parts[i].substring(0, parts[i].length()- LAST_INDEX);
-            array[i] = Boolean.parseBoolean(smallerParts);
+            if(i == parts.length - 1) {
+                array[i] = Boolean.parseBoolean(parts[i]);
+            }else{
+                array[i] = Boolean.parseBoolean(smallerParts);
+            }
         }
         return array;
     }

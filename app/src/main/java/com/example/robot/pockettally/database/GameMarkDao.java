@@ -1,5 +1,6 @@
 package com.example.robot.pockettally.database;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -13,7 +14,7 @@ import java.util.List;
 public interface GameMarkDao {
 
     @Query("SELECT * FROM gameMarks ORDER BY markID")
-    List<GameMark> loadAllGameMarks();
+    LiveData<List<GameMark>> loadAllGameMarks();
 
     @Insert
     void insertGameMark(GameMark gameMark);

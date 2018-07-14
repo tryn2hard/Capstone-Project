@@ -1,8 +1,11 @@
 package com.example.robot.pockettally;
 
 import android.app.Dialog;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -82,9 +85,80 @@ public class DartsGameActivity extends AppCompatActivity
         // Get instance of default shared preferences
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
+        final LiveData<List<Player>> players = mPlayersDb.playerDao().loadAllPlayersLiveData();
+        players.observe(this, new Observer<List<Player>>() {
+            @Override
+            public void onChanged(@Nullable List<Player> players) {
+                Log.i(LOG_TAG, "onChanged called for Players database");
+                Players = players;
+            }
+        });
+
+        final LiveData<List<GameMark>> marks = mGameMarkDb.gameMarkDao().loadAllGameMarks();
+        marks.observe(this, new Observer<List<GameMark>>() {
+            @Override
+            public void onChanged(@Nullable List<GameMark> gameMarks) {
+                GameHistory = (ArrayList) gameMarks;
+            }
+        });
+
+    }
+
+        /*
+    ***********************************************************************************************
+    Additional LifeCycle methods
+    ***********************************************************************************************
+     */
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(LOG_TAG, "onResume called");
+
         // Get sharedPreferences
         setupSharedPreferences();
 
+        // Choose which layout the user will see based on the number of players in the game
+        if (num_of_players == 2) {
+            setContentView(R.layout.activity_darts_game);
+        } else {
+            setContentView(R.layout.activity_darts_game_multi_player);
+        }
+
+        ButterKnife.bind(this);
+
+
+        AppExecutors.getsInstance().getDiskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                Players = mPlayersDb.playerDao().loadAlPlayers();
+                loadGame();
+            }
+        });
+
+
+        // Reset current game
+        end_game_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                resetGame();
+            }
+        });
+
+        // Remove the previous throw from the user
+        undo_mark_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                undoThrow();
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .unregisterOnSharedPreferenceChangeListener(this);
     }
 
     /*
@@ -104,17 +178,11 @@ public class DartsGameActivity extends AppCompatActivity
     private void initNewGame(int playerCount) {
         Log.i(LOG_TAG, "initNewGame called");
         for (int i = 0; i < playerCount; i++) {
-            PlayerFragment playerFragment = new PlayerFragment();
             String tag = tagGenerator(i);
             setupPlayer(tag);
-            Bundle args = new Bundle();
-            args.putBoolean(PlayerFragment.FRAGMENT_ARGS_VIBE_KEY, pref_vibrate);
-            args.putString(PlayerFragment.FRAGMENT_ARGS_GAME_MODE_KEY, game_mode);
-            args.putBoolean(PlayerFragment.FRAGMENT_ARGS_GAME_INIT_KEY, false);
-            playerFragment.setArguments(args);
-            mFragmentManager.beginTransaction()
-                    .replace(fragment_containers.get(i), playerFragment, tag)
-                    .commit();
+            sharedPreferences.edit().putBoolean(getResources().getString(R.string.pref_game_init_key),
+                    true).apply();
+
         }
 
     }
@@ -125,41 +193,49 @@ public class DartsGameActivity extends AppCompatActivity
      */
     private void loadGame() {
         Log.i(LOG_TAG, "loadGame called");
+        Log.i(LOG_TAG, "players size is " + Players.size());
+
+        if (Players.size() != num_of_players) {
+
+            initNewGame(num_of_players);
+
+        }
+
         for (int i = 0; i < Players.size(); i++) {
-                // Retrieve player's current game status
-                Player currentPlayer = Players.get(i);
-                String name = currentPlayer.getName();
-                int avatar = currentPlayer.getAvatar();
-                String fragmentTag = currentPlayer.getFragmentTag();
-                boolean[] closedOut = currentPlayer.getScoreboardCondition();
-                int[] count = currentPlayer.getScoreboardCounts();
-                int totalScore = currentPlayer.getTotalScore();
-                boolean[] scoreboardDone = currentPlayer.getScoreboardDone();
+            // Retrieve player's current game status
+            Player currentPlayer = Players.get(i);
+            String name = currentPlayer.getName();
+            int avatar = currentPlayer.getAvatar();
+            String fragmentTag = currentPlayer.getFragmentTag();
+            boolean[] closedOut = currentPlayer.getScoreboardCondition();
+            int[] count = currentPlayer.getScoreboardCounts();
+            int totalScore = currentPlayer.getTotalScore();
+            boolean[] scoreboardDone = currentPlayer.getScoreboardDone();
 
-                // Create new fragments and bundle player's data
-                PlayerFragment playerFragment = new PlayerFragment();
-                Bundle args = new Bundle();
+            // Create new fragments and bundle player's data
+            PlayerFragment playerFragment = new PlayerFragment();
+            Bundle args = new Bundle();
 
-                // Shared preferences for the game
-                args.putBoolean(PlayerFragment.FRAGMENT_ARGS_VIBE_KEY, pref_vibrate);
-                args.putString(PlayerFragment.FRAGMENT_ARGS_GAME_MODE_KEY, game_mode);
+            // Shared preferences for the game
+            args.putBoolean(PlayerFragment.FRAGMENT_ARGS_VIBE_KEY, pref_vibrate);
+            args.putString(PlayerFragment.FRAGMENT_ARGS_GAME_MODE_KEY, game_mode);
 
-                // Bundle all the Player data
-                args.putString(PlayerFragment.FRAGMENT_ARGS_PLAYER_NAME_KEY, name);
-                args.putInt(PlayerFragment.FRAGMENT_ARGS_PLAYER_AVATAR_KEY, avatar);
-                args.putBooleanArray(PlayerFragment.FRAGMENT_ARGS_CLOSED_OUT_KEY, closedOut);
-                args.putBooleanArray(PlayerFragment.FRAGMENT_ARGS_SCOREBOARD_DONE_KEY, scoreboardDone);
-                args.putIntArray(PlayerFragment.FRAGMENT_ARGS_SCOREBOARD_COUNTS_KEY, count);
-                args.putInt(PlayerFragment.FRAGMENT_ARGS_TOTAL_SCORE_KEY, totalScore);
-                args.putBoolean(PlayerFragment.FRAGMENT_ARGS_GAME_INIT_KEY,
-                        sharedPreferences.getBoolean(getResources().getString(R.string.pref_game_init_key),
-                                true));
+            // Bundle all the Player data
+            args.putString(PlayerFragment.FRAGMENT_ARGS_PLAYER_NAME_KEY, name);
+            args.putInt(PlayerFragment.FRAGMENT_ARGS_PLAYER_AVATAR_KEY, avatar);
+            args.putBooleanArray(PlayerFragment.FRAGMENT_ARGS_CLOSED_OUT_KEY, closedOut);
+            args.putBooleanArray(PlayerFragment.FRAGMENT_ARGS_SCOREBOARD_DONE_KEY, scoreboardDone);
+            args.putIntArray(PlayerFragment.FRAGMENT_ARGS_SCOREBOARD_COUNTS_KEY, count);
+            args.putInt(PlayerFragment.FRAGMENT_ARGS_TOTAL_SCORE_KEY, totalScore);
+            args.putBoolean(PlayerFragment.FRAGMENT_ARGS_GAME_INIT_KEY,
+                    sharedPreferences.getBoolean(getResources().getString(R.string.pref_game_init_key),
+                            true));
 
-                // Attach the bundle to the fragment and away we go
-                playerFragment.setArguments(args);
-                mFragmentManager.beginTransaction()
-                        .replace(fragment_containers.get(i), playerFragment, fragmentTag)
-                        .commit();
+            // Attach the bundle to the fragment and away we go
+            playerFragment.setArguments(args);
+            mFragmentManager.beginTransaction()
+                    .replace(fragment_containers.get(i), playerFragment, fragmentTag)
+                    .commit();
         }
 
     }
@@ -175,7 +251,7 @@ public class DartsGameActivity extends AppCompatActivity
             resetPlayer(Players.get(i));
             PlayerFragment frag =
                     (PlayerFragment) mFragmentManager.findFragmentByTag(Players.get(i).getFragmentTag());
-            frag.resetPlayerFrag();
+            frag.resetScoreboards();
         }
 
         for (int j = 0; j < CrossedOutLine.size(); j++) {
@@ -252,13 +328,15 @@ public class DartsGameActivity extends AppCompatActivity
      */
     public void resetPlayer(Player player) {
         Log.i(LOG_TAG, "resetPlayer called");
+        Log.i("resetPlayer", player.getFragmentTag() + " has called reset.");
         for (int i = 0; i < player.getScoreboardCondition().length; i++) {
             player.getScoreboardCondition()[i] = Scoreboard.SCOREBOARD_OPEN;
             player.getScoreboardCounts()[i] = 0;
-            player.setTotalScore(0);
             player.getScoreboardDone()[i] = Scoreboard.SCOREBOARD_OPEN;
         }
-            updatePlayersDb(player);
+
+        player.setTotalScore(0);
+        updatePlayersDb(player);
     }
 
     /**
@@ -307,6 +385,7 @@ public class DartsGameActivity extends AppCompatActivity
 
         game_mode = sharedPreferences.getString(getResources()
                 .getString(R.string.pref_game_mode_key), getResources().getString(R.string.pref_game_mode_default));
+
 
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
 
@@ -369,7 +448,7 @@ public class DartsGameActivity extends AppCompatActivity
      *
      * @param tag        string used to identify which player and fragment made the mark
      * @param scoreValue integer used to identify which tally mark was struck
-     * @param increment   integer used to identify the increment value of the mark
+     * @param increment  integer used to identify the increment value of the mark
      */
     private void storeGameHistory(final String tag, final int scoreValue, final int increment) {
         Log.i(LOG_TAG, "storeGameHistory called");
@@ -417,6 +496,10 @@ public class DartsGameActivity extends AppCompatActivity
         } else {
             PlayerFragment currentFrag = (PlayerFragment) mFragmentManager.findFragmentByTag(undoMark.getTag());
             currentFrag.undoThrow(undoMark.getValue(), undoMark.getIncrement());
+            Players.get(getIdFromTag(undoMark.getTag()))
+                    .getScoreboardCounts()[ScoreboardUtils.matchScoreValue(undoMark.getValue())]
+                    -= undoMark.getIncrement();
+            updatePlayersDb(Players.get(getIdFromTag(undoMark.getTag())));
         }
 
     }
@@ -469,13 +552,13 @@ public class DartsGameActivity extends AppCompatActivity
 
     /**
      * Method will notify this player that a tally mark has had it's state changed.
+     *
      * @param scoreValue the integer value of the tally mark that has been closed out
      */
     public void setScoreboardCondition(int scoreValue, Player player, boolean condition) {
         Log.i(LOG_TAG, "setScoreboardCondition called");
-
+        Log.i(LOG_TAG, player.getFragmentTag() + " has set " + scoreValue + " to " + condition);
         player.getScoreboardCondition()[ScoreboardUtils.matchScoreValue(scoreValue)] = condition;
-
         updatePlayersDb(player);
     }
 
@@ -520,9 +603,7 @@ public class DartsGameActivity extends AppCompatActivity
         Log.i(LOG_TAG, "TotalScoreHasChanged called");
         Player currentPlayer = Players.get(getIdFromTag(tag));
         currentPlayer.setTotalScore(totalScore);
-
         updatePlayersDb(currentPlayer);
-
         if (areAllScoreboardsClosedForPlayer(Players.get(getIdFromTag(tag))) && isPlayerLeadingInPoints(tag)) {
             endGame(tag);
         }
@@ -534,25 +615,25 @@ public class DartsGameActivity extends AppCompatActivity
      *
      * @param tag        string fragmentTag to help identify the player
      * @param scoreValue integer of the position marked on the scoreboard
-     * @param multiple   integer of the step number
+     * @param increment   integer of the number of marks made
      */
     @Override
-    public void ScoreboardMarked(String tag, int scoreValue, int multiple, int[] tallyCount) {
-        Log.i(LOG_TAG, "ScoreboardMarked called");
+    public void ScoreboardMarked(String tag, int scoreValue, int increment) {
+        Log.i(LOG_TAG, "ScoreboardMarked called by " + tag + " for " + scoreValue);
         Player currentPlayer = Players.get(getIdFromTag(tag));
         // if the game is in standard mode store the game history
         if (game_mode.equals(getResources().getString(R.string.pref_standard_game_mode_value))) {
-            storeGameHistory(tag, scoreValue, multiple);
-            currentPlayer.setScoreboardCounts(tallyCount);
+            storeGameHistory(tag, scoreValue, increment);
+            currentPlayer.getScoreboardCounts()[ScoreboardUtils.matchScoreValue(scoreValue)] += increment;
             updatePlayersDb(currentPlayer);
             if (areAllScoreboardsClosedForPlayer(Players.get(getIdFromTag(tag))) && isPlayerLeadingInPoints(tag)) {
                 endGame(tag);
             }
             // only save the game history for no points mode if the current scoreboard is not closed out
-        } else if (game_mode.equals(getResources().getString(R.string.pref_no_points_game_mode_value))){
+        } else if (game_mode.equals(getResources().getString(R.string.pref_no_points_game_mode_value))) {
             if (!(currentPlayer.getScoreboardCondition()[ScoreboardUtils.matchScoreValue(scoreValue)])) {
-                storeGameHistory(tag, scoreValue, multiple);
-                currentPlayer.setScoreboardCounts(tallyCount);
+                storeGameHistory(tag, scoreValue, increment);
+                currentPlayer.getScoreboardCounts()[ScoreboardUtils.matchScoreValue(scoreValue)] += increment;
                 updatePlayersDb(currentPlayer);
             }
             if (areAllScoreboardsClosedForPlayer(Players.get(getIdFromTag(tag)))) {
@@ -598,32 +679,25 @@ public class DartsGameActivity extends AppCompatActivity
      * has been closed. After which, a check in conducted to check if the tally mark has been closed
      * out by all the other players. If the tally mark has been closed out by all, then the
      * setClosedOutLine method will be called.
-     * In addition to a check of if the tally mark has been closed out by everyone, there is secondary
-     * evaluation to see if the game has reached its' end. If true, then the endGame will
-     * be called.
      *
      * @param tag        string holding the fragment tag
      * @param scoreValue an integer value of the score which has been closed out
+     * @param condition  the state of the scoreboard in the fragment
      */
     @Override
-    public void ChangeToScoreboardConditionNotification(String tag, int scoreValue, boolean condition, boolean reloadGame){
-        if(condition){
+    public void ChangeToScoreboardConditionNotification(String tag, int scoreValue, boolean condition) {
+        if (condition) {
             setScoreboardCondition(scoreValue, Players.get(getIdFromTag(tag)), Scoreboard.SCOREBOARD_CLOSED);
             if (isScoreboardClosedOutByAll(scoreValue)) {
-                setClosedOutLine(scoreValue, reloadGame);
+                setClosedOutLine(scoreValue);
+                setAllClosedOutForFrags(scoreValue, condition);
             }
         } else {
             setScoreboardCondition(scoreValue, Players.get(getIdFromTag(tag)), Scoreboard.SCOREBOARD_OPEN);
             if (!isScoreboardClosedOutByAll(scoreValue)) {
                 // remove the cross out divider
                 CrossedOutLine.get(ScoreboardUtils.matchScoreValue(scoreValue)).setVisibility(View.INVISIBLE);
-
-
-                // notify all the playerFragment that the tally mark is no longer closed out by all
-                    for (int j = 0; j < num_of_players; j++) {
-                    PlayerFragment frag = (PlayerFragment) mFragmentManager.findFragmentByTag(tagGenerator(j));
-                    frag.setScoreboardAsClosedOutByAll(scoreValue, false);
-                    }
+                setAllClosedOutForFrags(scoreValue, condition);
 
             }
         }
@@ -642,82 +716,18 @@ public class DartsGameActivity extends AppCompatActivity
      * @param scoreValue the integer score value indicating which mark has been closed out by all
      *                   players
      */
-    private void notifyAllFragsScoreboardIsClosedOutByAll(int scoreValue, boolean reloadGame) {
+    private void setAllClosedOutForFrags(int scoreValue, boolean condition) {
+        Log.i(LOG_TAG, "setAllClosedOutForFrags called");
 
-        if(!reloadGame){
-            Log.i(LOG_TAG, "notifyAllFragsScoreboardIsClosedOutByAll called");
             for (int i = 0; i < Players.size(); i++) {
-                Players.get(i).getScoreboardDone()[ScoreboardUtils.matchScoreValue(scoreValue)] = true;
+                Players.get(i).getScoreboardDone()[ScoreboardUtils.matchScoreValue(scoreValue)] = condition;
                 updatePlayersDb(Players.get(i));
                 PlayerFragment frag =
                         (PlayerFragment) mFragmentManager.findFragmentByTag(Players.get(i).getFragmentTag());
-                frag.scoreboardClosedOutByAll(scoreValue);
+                if(frag != null){
+                frag.setAllClosedOut(scoreValue, condition);
             }
         }
-    }
-
-    /*
-    ***********************************************************************************************
-    LifeCycle methods
-    ***********************************************************************************************
-     */
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.i(LOG_TAG, "onResume called");
-
-        // Get sharedPreferences
-        setupSharedPreferences();
-
-        if (!sharedPreferences.getBoolean(getResources().getString(R.string.pref_game_init_key),
-                getResources().getBoolean(R.bool.pref_game_init_default))) {
-            initNewGame(num_of_players);
-            sharedPreferences.edit().putBoolean(getResources().getString(R.string.pref_game_init_key),
-                    true).apply();
-        } else {
-            AppExecutors.getsInstance().getDiskIO().execute(new Runnable() {
-                @Override
-                public void run() {
-                    Players = mPlayersDb.playerDao().loadAllPlayers();
-                    GameHistory = (ArrayList) mGameMarkDb.gameMarkDao().loadAllGameMarks();
-                    loadGame();
-                }
-            });
-
-        }
-
-        // Choose which layout the user will see based on the number of players in the game
-        if (num_of_players == 2) {
-            setContentView(R.layout.activity_darts_game);
-        } else {
-            setContentView(R.layout.activity_darts_game_multi_player);
-        }
-
-        ButterKnife.bind(this);
-
-        // Reset current game
-        end_game_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                resetGame();
-            }
-        });
-
-        // Remove the previous throw from the user
-        undo_mark_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                undoThrow();
-            }
-        });
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        PreferenceManager.getDefaultSharedPreferences(this)
-                .unregisterOnSharedPreferenceChangeListener(this);
     }
 
     /*
@@ -734,11 +744,9 @@ public class DartsGameActivity extends AppCompatActivity
      *
      * @param scoreValue the integer score value indicating which tally mark has been closed.
      */
-    private void setClosedOutLine(int scoreValue, boolean reloadGame) {
+    private void setClosedOutLine(int scoreValue) {
         Log.i(LOG_TAG, "setClosedOutLine called");
         CrossedOutLine.get(ScoreboardUtils.matchScoreValue(scoreValue)).setVisibility(View.VISIBLE);
-        notifyAllFragsScoreboardIsClosedOutByAll(scoreValue, reloadGame);
-
     }
 
     /*
@@ -749,6 +757,7 @@ public class DartsGameActivity extends AppCompatActivity
 
     /**
      * Method creates a Executor to run an update to the database
+     *
      * @param player the current player to update to the database
      */
     private void updatePlayersDb(final Player player) {
@@ -761,7 +770,7 @@ public class DartsGameActivity extends AppCompatActivity
         });
     }
 
-    private void deleteGameMarkDb(final GameMark gameMark){
+    private void deleteGameMarkDb(final GameMark gameMark) {
 
         AppExecutors.getsInstance().getDiskIO().execute(new Runnable() {
             @Override
@@ -772,13 +781,22 @@ public class DartsGameActivity extends AppCompatActivity
         });
     }
 
-    private void deleteAllGameMarksDb(){
+    private void deleteAllGameMarksDb() {
 
         AppExecutors.getsInstance().getDiskIO().execute(new Runnable() {
             @Override
             public void run() {
                 mGameMarkDb.gameMarkDao().delete();
 
+            }
+        });
+    }
+
+    private void deleteAllPlayersDb() {
+        AppExecutors.getsInstance().getDiskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mPlayersDb.playerDao().delete();
             }
         });
     }

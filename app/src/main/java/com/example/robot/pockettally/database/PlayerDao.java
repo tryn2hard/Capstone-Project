@@ -1,5 +1,6 @@
 package com.example.robot.pockettally.database;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -13,7 +14,10 @@ import java.util.List;
 public interface PlayerDao {
 
     @Query("SELECT * FROM players ORDER BY playerId")
-    List<Player> loadAllPlayers();
+    LiveData<List<Player>> loadAllPlayersLiveData();
+
+    @Query("SELECT * FROM players ORDER BY playerId")
+    List<Player> loadAlPlayers();
 
     @Insert
     void insertPlayer(Player player);

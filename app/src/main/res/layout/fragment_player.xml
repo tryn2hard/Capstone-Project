@@ -114,7 +114,8 @@
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
         android:textColor="@color/text_primary"
-        android:textSize="36sp" />
+        android:textSize="36sp"
+        android:text="@string/default_starting_score"/>
 
     <View
         android:id="@+id/divider4"
