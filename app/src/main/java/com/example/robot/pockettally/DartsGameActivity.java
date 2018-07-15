@@ -636,9 +636,6 @@ public class DartsGameActivity extends AppCompatActivity
                 currentPlayer.getScoreboardCounts()[ScoreboardUtils.matchScoreValue(scoreValue)] += increment;
                 updatePlayersDb(currentPlayer);
             }
-            if (areAllScoreboardsClosedForPlayer(Players.get(getIdFromTag(tag)))) {
-                endGame(tag);
-            }
         }
     }
 
@@ -691,6 +688,11 @@ public class DartsGameActivity extends AppCompatActivity
             if (isScoreboardClosedOutByAll(scoreValue)) {
                 setClosedOutLine(scoreValue);
                 setAllClosedOutForFrags(scoreValue, condition);
+            }
+            if (game_mode.equals(getResources().getString(R.string.pref_no_points_game_mode_value))){
+                if (areAllScoreboardsClosedForPlayer(Players.get(getIdFromTag(tag)))) {
+                    endGame(tag);
+                }
             }
         } else {
             setScoreboardCondition(scoreValue, Players.get(getIdFromTag(tag)), Scoreboard.SCOREBOARD_OPEN);
