@@ -23,6 +23,7 @@ import com.amitshekhar.DebugDB;
 import com.example.robot.pockettally.database.GameMark;
 import com.example.robot.pockettally.database.GameMarkDatabase;
 import com.example.robot.pockettally.database.Player;
+import com.example.robot.pockettally.database.PlayerDao;
 import com.example.robot.pockettally.database.PlayerDatabase;
 
 import java.util.ArrayList;
@@ -177,12 +178,15 @@ public class DartsGameActivity extends AppCompatActivity
      */
     private void initNewGame(int playerCount) {
         Log.i(LOG_TAG, "initNewGame called");
+
+        deleteAllPlayersDb();
+        Players.clear();
+
         for (int i = 0; i < playerCount; i++) {
             String tag = tagGenerator(i);
             setupPlayer(tag);
             sharedPreferences.edit().putBoolean(getResources().getString(R.string.pref_game_init_key),
                     true).apply();
-
         }
 
     }
@@ -196,9 +200,7 @@ public class DartsGameActivity extends AppCompatActivity
         Log.i(LOG_TAG, "players size is " + Players.size());
 
         if (Players.size() != num_of_players) {
-
             initNewGame(num_of_players);
-
         }
 
         for (int i = 0; i < Players.size(); i++) {
@@ -233,9 +235,16 @@ public class DartsGameActivity extends AppCompatActivity
 
             // Attach the bundle to the fragment and away we go
             playerFragment.setArguments(args);
+            if(sharedPreferences.getBoolean(getResources().getString(R.string.pref_game_init_key),
+                    true))
             mFragmentManager.beginTransaction()
                     .replace(fragment_containers.get(i), playerFragment, fragmentTag)
                     .commit();
+            else{
+                mFragmentManager.beginTransaction()
+                        .add(fragment_containers.get(i), playerFragment, fragmentTag)
+                        .commit();
+            }
         }
 
     }
