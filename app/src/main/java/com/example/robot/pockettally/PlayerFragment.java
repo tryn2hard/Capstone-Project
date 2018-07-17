@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -265,14 +266,16 @@ public class PlayerFragment extends Fragment {
                                             if (mVibe) {
                                                 vibe.vibrate(VIBRATE_TIME);
                                             }
-                                            // select the correct image for the tally mark
-                                            scoreboardImageSelector(current_Scoreboard, getResources().getBoolean(R.bool.pref_game_init_default));
+                                            // increment the count
+                                            current_Scoreboard.incrementCount(Scoreboard.DOUBLE_TALLY_MARK);
 
                                             // notify the host activity that a mark has been made
                                             mCallback.ScoreboardMarked(getTag(), current_Scoreboard.getValue(),
                                                     Scoreboard.DOUBLE_TALLY_MARK);
-                                            // increment the count
-                                            current_Scoreboard.incrementCount(Scoreboard.DOUBLE_TALLY_MARK);
+
+                                            // select the correct image for the tally mark
+                                            scoreboardImageSelector(current_Scoreboard, getResources().getBoolean(R.bool.pref_game_init_default));
+
 
                                         }
                                     } else if (mGameMode.equals(getResources().getString(R.string.pref_standard_game_mode_value))
@@ -307,24 +310,32 @@ public class PlayerFragment extends Fragment {
                             .setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    if (mVibe) {
-                                        vibe.vibrate(VIBRATE_TIME);
-                                    }
+
                                     if (mGameMode.equals(getResources().getString(R.string.pref_no_points_game_mode_value))) {
                                         if (!current_Scoreboard.isClosedOut()) {
 
-                                            // select the correct image for the tally mark
-                                            scoreboardImageSelector(current_Scoreboard, getResources().getBoolean(R.bool.pref_game_init_default));
+                                            if (mVibe) {
+                                                vibe.vibrate(VIBRATE_TIME);
+                                            }
+
+                                            // increment the count
+                                            current_Scoreboard.incrementCount(Scoreboard.TRIPLE_TALLY_MARK);
 
                                             // notify the host activity that a mark has been made
                                             mCallback.ScoreboardMarked(getTag(), current_Scoreboard.getValue(),
                                                     Scoreboard.TRIPLE_TALLY_MARK);
 
-                                            // increment the count
-                                            current_Scoreboard.incrementCount(Scoreboard.TRIPLE_TALLY_MARK);
+                                            // select the correct image for the tally mark
+                                            scoreboardImageSelector(current_Scoreboard, getResources().getBoolean(R.bool.pref_game_init_default));
+
+
                                         }
                                     } else if (mGameMode.equals(getResources().getString(R.string.pref_standard_game_mode_value))
                                             && !current_Scoreboard.isClosedOutByAll()) {
+
+                                        if (mVibe) {
+                                            vibe.vibrate(VIBRATE_TIME);
+                                        }
 
                                         // increment the count
                                         current_Scoreboard.incrementCount(Scoreboard.TRIPLE_TALLY_MARK);
@@ -573,5 +584,6 @@ public class PlayerFragment extends Fragment {
         }
 
     }
+
 }
 

@@ -3,6 +3,7 @@ package com.example.robot.pockettally;
 import android.app.Dialog;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
@@ -23,7 +24,6 @@ import com.amitshekhar.DebugDB;
 import com.example.robot.pockettally.database.GameMark;
 import com.example.robot.pockettally.database.GameMarkDatabase;
 import com.example.robot.pockettally.database.Player;
-import com.example.robot.pockettally.database.PlayerDao;
 import com.example.robot.pockettally.database.PlayerDatabase;
 
 import java.util.ArrayList;
@@ -66,6 +66,7 @@ public class DartsGameActivity extends AppCompatActivity
     }};
 
     private static final String LOG_TAG = DartsGameActivity.class.getSimpleName();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
