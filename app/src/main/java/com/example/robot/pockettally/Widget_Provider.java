@@ -14,7 +14,7 @@ import java.util.Date;
 /**
  * Implementation of App Widget functionality.
  */
-public class PocketTallyWidget extends AppWidgetProvider {
+public class Widget_Provider extends AppWidgetProvider {
 
     private static final String mSharedPrefFile =
             "com.example.robot.pockettally.widget";
@@ -44,7 +44,7 @@ public class PocketTallyWidget extends AppWidgetProvider {
         prefEditor.putInt(COUNT_KEY + appWidgetId, count);
         prefEditor.apply();
 
-        Intent intentUpdate = new Intent(context, PocketTallyWidget.class);
+        Intent intentUpdate = new Intent(context, Widget_Provider.class);
         intentUpdate.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
 
         int[] idArray = new int[]{appWidgetId};

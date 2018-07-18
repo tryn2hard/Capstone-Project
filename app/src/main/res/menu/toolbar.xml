@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/toolbar_menu"
-        android:icon="@mipmap/font_size"
+        android:icon="@drawable/font_size"
         app:showAsAction="always"
         android:title="@string/icon_text_size">
     </item>

@@ -37,7 +37,7 @@
             android:name=".GameSettingsActivity"
             android:label="@string/game_settings_label" />
 
-        <receiver android:name=".PocketTallyWidget">
+        <receiver android:name=".Widget_Provider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
