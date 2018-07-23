@@ -1,62 +1,83 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#09C"
-    android:padding="@dimen/widget_margin">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="@dimen/widget_margin"
+    android:orientation="vertical"
+    android:background="@color/primary_background">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/section_id"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:orientation="horizontal"
-        style="@style/AppWidgetSection">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/appwidget_id_label"
-            android:layout_weight="1"
-            android:text="xx"
-            style="@style/AppWidgetText"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/section_update"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/section_id"
-        android:orientation="vertical"
-        style="@style/AppWidgetSection">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/appwidget_update_label"
-            android:layout_marginBottom="2dp"
-            android:text="Last Updated"
-            style="@style/AppWidgetLabel"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/appwidget_update"
-            android:layout_weight="1"
-            android:text="@string/date_count_format"
-            style="@style/AppWidgetText"/>
-
-    </LinearLayout>
-
-    <Button
+        android:id="@+id/widget_top_row"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/button_update"
-        android:layout_below="@+id/section_update"
-        android:layout_centerHorizontal="true"
-        android:text="update now"
-        style="@style/AppWidgetButton"/>
+        android:layout_margin="@dimen/small_horizontal_margin">
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/widget_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/player_name_hint"
+            android:textColor="@color/text_primary"
+            />
+
+        <TextView
+            android:id="@+id/widget_20_scoreboard_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Wins"
+            android:layout_marginStart="12dp"
+            android:textColor="@color/text_primary"/>
+
+        <TextView
+            android:id="@+id/widget_19_scoreboard_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Loss"
+            android:layout_marginStart="18dp"
+            android:textColor="@color/text_primary"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/widget_bottom_row"
+        android:layout_marginStart="@dimen/small_horizontal_margin"
+        android:layout_marginEnd="@dimen/small_horizontal_margin"
+        android:layout_marginBottom="@dimen/small_vertical_margin"
+        android:layout_below="@id/widget_top_row">
+
+    <ImageView
+        android:id="@+id/widget_avatar_image"
+        android:layout_gravity="center"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@mipmap/man"
+        android:contentDescription="@string/avatar_content_description_man"
+        android:layout_marginStart="@dimen/smaller_horizontal_margin"/>
+
+    <TextView
+        android:id="@+id/widget_wins_tv"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="4.0"
+        android:textColor="@color/white"
+        android:layout_marginStart="@dimen/large_horizontal_margin"/>
+
+    <TextView
+        android:id="@+id/widget_loss_tv"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        tools:text="0.0"
+        android:textColor="@color/white"
+        android:layout_marginStart="28dp"/>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

@@ -9,8 +9,8 @@
             </stroke>
 
             <size
-                android:width="40dp"
-                android:height="40dp" />
+                android:width="35dp"
+                android:height="35dp" />
         </shape>
 
     </item>

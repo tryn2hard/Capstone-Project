@@ -1,24 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#272727</color>
-    <color name="colorPrimaryDark">#353535</color>
-
+    <color name="primary_background">#353535</color>
 
     <color name="buttonGreen0">#1b5e20</color>
     <color name="buttonGreen1">#2e7d32</color>
     <color name="buttonGreen2">#43a047</color>
     <color name="buttonGreen3">#4caf50</color>
 
-    <color name="buttonYellow1">#FBC02D</color>
-    <color name="buttonYellow2">#FFEB3B</color>
-
-    <color name="buttonRed1">#cb2424</color>
-    <color name="buttonRed2">#bf0000</color>
-    <color name="Red3">#f93131</color>
+    <color name="color_primary">#F44336</color>
+    <color name="colorPrimaryDark">#b71c1c</color>
+    <color name="tally_marks">#f93131</color>
 
     <color name="white">#FFFFFF</color>
     <color name="tally_start">#a5a5a5</color>
-
     <color name="text_primary">#f5f5f5</color>
 
 </resources>

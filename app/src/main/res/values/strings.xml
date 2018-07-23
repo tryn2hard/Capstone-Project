@@ -110,9 +110,10 @@
     <string name="reset_game_button">Reset Game</string>
     <string name="undo_throw_button">Undo throw</string>
     <string name="default_starting_score">0</string>
-    <string name="appwidget_text">EXAMPLE</string>
-    <string name="add_widget">Add widget</string>
-    <string name="date_count_format">%1$d @%2$s</string>
+    <string name="end_game_message">Game Over</string>
+    <string name="winning_player">Everybody Wins!</string>
+    <string name="play_again_button">Play again</string>
 
+    <string name="interstitial_ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>
 
 </resources>

@@ -3,7 +3,6 @@ package com.example.robot.pockettally;
 import android.app.Dialog;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
@@ -33,6 +32,9 @@ import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+
 
 public class DartsGameActivity extends AppCompatActivity
         implements SharedPreferences.OnSharedPreferenceChangeListener,
@@ -40,7 +42,7 @@ public class DartsGameActivity extends AppCompatActivity
 
 
     @BindView(R.id.end_game_button)
-    Button end_game_button;
+    Button reset_game_button;
     @BindView(R.id.undo_mark_button)
     Button undo_mark_button;
 
@@ -67,6 +69,8 @@ public class DartsGameActivity extends AppCompatActivity
 
     private static final String LOG_TAG = DartsGameActivity.class.getSimpleName();
 
+    private InterstitialAd mInterstitialAd;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +90,11 @@ public class DartsGameActivity extends AppCompatActivity
 
         // Get instance of default shared preferences
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // Instantiating the Interstitial ad
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(getResources().getString(R.string.interstitial_ad_unit_id));
+
 
         final LiveData<List<Player>> players = mPlayersDb.playerDao().loadAllPlayersLiveData();
         players.observe(this, new Observer<List<Player>>() {
@@ -120,6 +129,9 @@ public class DartsGameActivity extends AppCompatActivity
         // Get sharedPreferences
         setupSharedPreferences();
 
+        // Load ad
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+
         // Choose which layout the user will see based on the number of players in the game
         if (num_of_players == 2) {
             setContentView(R.layout.activity_darts_game);
@@ -140,7 +152,7 @@ public class DartsGameActivity extends AppCompatActivity
 
 
         // Reset current game
-        end_game_button.setOnClickListener(new View.OnClickListener() {
+        reset_game_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 resetGame();
@@ -272,6 +284,7 @@ public class DartsGameActivity extends AppCompatActivity
         deleteAllGameMarksDb();
 
 
+
     }
 
     /**
@@ -300,6 +313,7 @@ public class DartsGameActivity extends AppCompatActivity
             public void onClick(View view) {
                 resetGame();
                 dialog.dismiss();
+                mInterstitialAd.show();
             }
         });
 

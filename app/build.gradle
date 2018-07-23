@@ -49,4 +49,7 @@ dependencies {
     def lifecycle_version = "1.1.1"
     implementation "android.arch.lifecycle:extensions:$lifecycle_version"
 
+    // AdMob
+    implementation 'com.google.android.gms:play-services-ads:15.0.0'
+
 }

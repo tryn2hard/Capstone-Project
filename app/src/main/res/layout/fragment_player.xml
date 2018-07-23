@@ -26,8 +26,8 @@
         android:cursorVisible="false"
         android:textColor="@color/text_primary"
         android:textColorHint="@color/text_primary"
-        android:background="@color/colorPrimaryDark"
-        android:backgroundTint="@color/colorPrimaryDark" />
+        android:background="@color/primary_background"
+        android:backgroundTint="@color/primary_background" />
 
     <View
         android:id="@+id/divider2"
@@ -40,8 +40,8 @@
         android:layout_width="@dimen/marker_width"
         android:layout_height="@dimen/marker_height"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="@dimen/small_vertical_margin"
-        android:layout_marginTop="@dimen/small_vertical_margin"
+        android:layout_marginBottom="@dimen/smaller_vertical_margin"
+        android:layout_marginTop="@dimen/smaller_vertical_margin"
         android:background="@drawable/tally_no_marks"
         android:contentDescription="@string/tally_marker_20_content_decrip"/>
 
@@ -50,7 +50,7 @@
         android:layout_width="@dimen/marker_width"
         android:layout_height="@dimen/marker_height"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="@dimen/small_vertical_margin"
+        android:layout_marginBottom="@dimen/smaller_vertical_margin"
         android:background="@drawable/tally_no_marks"
         android:contentDescription="@string/tally_marker_19_content_decrip"/>
 
@@ -59,7 +59,7 @@
         android:layout_width="@dimen/marker_width"
         android:layout_height="@dimen/marker_height"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="@dimen/small_vertical_margin"
+        android:layout_marginBottom="@dimen/smaller_vertical_margin"
         android:background="@drawable/tally_no_marks"
         android:contentDescription="@string/tally_marker_18_content_decrip"/>
 
@@ -68,7 +68,7 @@
         android:layout_width="@dimen/marker_width"
         android:layout_height="@dimen/marker_height"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="@dimen/small_vertical_margin"
+        android:layout_marginBottom="@dimen/smaller_vertical_margin"
         android:background="@drawable/tally_no_marks"
         android:contentDescription="@string/tally_marker_17_content_decrip"/>
 
@@ -77,7 +77,7 @@
         android:layout_width="@dimen/marker_width"
         android:layout_height="@dimen/marker_height"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="@dimen/small_vertical_margin"
+        android:layout_marginBottom="@dimen/smaller_vertical_margin"
         android:background="@drawable/tally_no_marks"
         android:contentDescription="@string/tally_marker_16_content_decrip"/>
 
@@ -86,7 +86,7 @@
         android:layout_width="@dimen/marker_width"
         android:layout_height="@dimen/marker_height"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="@dimen/small_vertical_margin"
+        android:layout_marginBottom="@dimen/smaller_vertical_margin"
         android:background="@drawable/tally_no_marks"
         android:contentDescription="@string/tally_marker_15_content_decrip"/>
 
@@ -95,7 +95,7 @@
         android:layout_width="@dimen/marker_width"
         android:layout_height="@dimen/marker_height"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="@dimen/small_vertical_margin"
+        android:layout_marginBottom="@dimen/smaller_vertical_margin"
         android:background="@drawable/tally_no_marks"
         android:contentDescription="@string/tally_marker_bullseye_content_decrip"/>
 
