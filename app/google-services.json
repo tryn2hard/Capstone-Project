@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "429762659693",
+    "firebase_url": "https://pockettally-b80e1.firebaseio.com",
+    "project_id": "pockettally-b80e1",
+    "storage_bucket": "pockettally-b80e1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:429762659693:android:7be51ac5f234af5c",
+        "android_client_info": {
+          "package_name": "com.example.robot.pockettally"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "429762659693-fkji8ee1h95d3p417rht4at9h3dbleuo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.robot.pockettally",
+            "certificate_hash": "1ee174d8359d13534134e2fcbe1cff876b2ef1fc"
+          }
+        },
+        {
+          "client_id": "429762659693-iu3s8usif43i8jud6d647rm2ndagl19b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.robot.pockettally",
+            "certificate_hash": "0b8600093087028d41731c16780f99228d458f69"
+          }
+        },
+        {
+          "client_id": "429762659693-7lm6sl79u6okiir0upmfubfbrkrtaa17.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmMCwETLc3MF-k9tAoeb_iRtxMdpimyaw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "429762659693-7lm6sl79u6okiir0upmfubfbrkrtaa17.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
