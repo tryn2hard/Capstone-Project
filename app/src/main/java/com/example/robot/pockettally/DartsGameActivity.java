@@ -5,6 +5,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -34,6 +35,11 @@ import butterknife.ButterKnife;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 public class DartsGameActivity extends AppCompatActivity
@@ -59,6 +65,11 @@ public class DartsGameActivity extends AppCompatActivity
     private PlayerDatabase mPlayersDb;
     private GameMarkDatabase mGameMarkDb;
     private SharedPreferences sharedPreferences;
+
+    // Firebase
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mPlayerDatabaseReference;
+    private ChildEventListener mChildEventListener;
 
     private final List<Integer> fragment_containers = new ArrayList<Integer>() {{
         add(R.id.player_1_container);
@@ -94,6 +105,34 @@ public class DartsGameActivity extends AppCompatActivity
         // Instantiating the Interstitial ad
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId(getResources().getString(R.string.interstitial_ad_unit_id));
+
+        // Instantiating firebase database
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mPlayerDatabaseReference = mFirebaseDatabase.getReference().child("winners");
+
+        mChildEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Winner newWinner = dataSnapshot.getValue(Winner.class);
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        };
+        mPlayerDatabaseReference.addChildEventListener(mChildEventListener);
 
 
         final LiveData<List<Player>> players = mPlayersDb.playerDao().loadAllPlayersLiveData();
@@ -294,7 +333,7 @@ public class DartsGameActivity extends AppCompatActivity
      * @param tag string will be the generic user name to be displayed in the end of game message
      */
 
-    private void endGame(String tag) {
+    private void endGame(final String tag) {
         Log.i(LOG_TAG, "endGame called");
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.end_of_game_dialog);
@@ -311,6 +350,8 @@ public class DartsGameActivity extends AppCompatActivity
         play_again_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mPlayerDatabaseReference.push().setValue(new Winner(Players.get(getIdFromTag(tag)).getName(),
+                        Players.get(getIdFromTag(tag)).getAvatar()));
                 resetGame();
                 dialog.dismiss();
                 mInterstitialAd.show();

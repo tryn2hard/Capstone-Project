@@ -16,25 +16,9 @@
             android:id="@+id/widget_name_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/player_name_hint"
+            android:text="@string/last_game_winner"
             android:textColor="@color/text_primary"
             />
-
-        <TextView
-            android:id="@+id/widget_20_scoreboard_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Wins"
-            android:layout_marginStart="12dp"
-            android:textColor="@color/text_primary"/>
-
-        <TextView
-            android:id="@+id/widget_19_scoreboard_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Loss"
-            android:layout_marginStart="18dp"
-            android:textColor="@color/text_primary"/>
 
     </LinearLayout>
 
@@ -58,23 +42,15 @@
         android:layout_marginStart="@dimen/smaller_horizontal_margin"/>
 
     <TextView
-        android:id="@+id/widget_wins_tv"
+        android:id="@+id/widget_player_name_tv"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="4.0"
+        tools:text="Robert"
         android:textColor="@color/white"
         android:layout_marginStart="@dimen/large_horizontal_margin"/>
 
-    <TextView
-        android:id="@+id/widget_loss_tv"
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_height="wrap_content"
-        tools:text="0.0"
-        android:textColor="@color/white"
-        android:layout_marginStart="28dp"/>
+
 
     </LinearLayout>
 
