@@ -1,8 +1,10 @@
 package com.example.robot.pockettally;
 
 import android.app.Dialog;
+import android.appwidget.AppWidgetManager;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
@@ -69,7 +71,6 @@ public class DartsGameActivity extends AppCompatActivity
     // Firebase
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mPlayerDatabaseReference;
-    private ChildEventListener mChildEventListener;
 
     private final List<Integer> fragment_containers = new ArrayList<Integer>() {{
         add(R.id.player_1_container);
@@ -109,31 +110,6 @@ public class DartsGameActivity extends AppCompatActivity
         // Instantiating firebase database
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mPlayerDatabaseReference = mFirebaseDatabase.getReference().child("winners");
-
-        mChildEventListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Winner newWinner = dataSnapshot.getValue(Winner.class);
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        };
-        mPlayerDatabaseReference.addChildEventListener(mChildEventListener);
-
 
         final LiveData<List<Player>> players = mPlayersDb.playerDao().loadAllPlayersLiveData();
         players.observe(this, new Observer<List<Player>>() {
@@ -350,11 +326,13 @@ public class DartsGameActivity extends AppCompatActivity
         play_again_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPlayerDatabaseReference.push().setValue(new Winner(Players.get(getIdFromTag(tag)).getName(),
-                        Players.get(getIdFromTag(tag)).getAvatar()));
+                String winnerName = Players.get(getIdFromTag(tag)).getName();
+                int winnerAvatarId = Players.get(getIdFromTag(tag)).getAvatar();
+                mPlayerDatabaseReference.push().setValue(new Winner(winnerName, winnerAvatarId));
                 resetGame();
                 dialog.dismiss();
                 mInterstitialAd.show();
+                updateWidget();
             }
         });
 
@@ -867,6 +845,16 @@ public class DartsGameActivity extends AppCompatActivity
             }
         });
     }
+
+        /*
+    ***********************************************************************************************
+    Widget Update
+    ***********************************************************************************************
+    */
+        private void updateWidget(){
+            UpdateWidgetService.displayNewWinner(this);
+        }
+
 }
 
 
