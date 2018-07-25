@@ -467,9 +467,6 @@ public class DartsGameActivity extends AppCompatActivity
             startActivity(new Intent(this, GameSettingsActivity.class));
             return true;
         }
-        if (id == R.id.action_profile_settings) {
-            startActivity(new Intent(this, Login.class));
-        }
         return super.onOptionsItemSelected(item);
     }
 

@@ -10,6 +10,17 @@
         <!--Preference Theme-->
         <item name="preferenceTheme">@style/game_settings_frag_style</item>
 
+        <!--Transitions-->
+        <!-- enable window content transitions -->
+        <item name="android:windowActivityTransitions">true</item>
+
+        <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
+
+    </style>
+
+    <style name="WindowAnimationTransition">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
     </style>
 
     <!-- dart game activity action bar styles -->

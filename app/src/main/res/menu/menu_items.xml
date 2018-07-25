@@ -13,9 +13,5 @@
         android:id="@+id/action_game_settings"
         app:showAsAction="never"
         android:title="@string/menu_option_game_settings" />
-    <item
-        android:id="@+id/action_profile_settings"
-        app:showAsAction="never"
-        android:title="@string/menu_option_login" />
 
 </menu>
