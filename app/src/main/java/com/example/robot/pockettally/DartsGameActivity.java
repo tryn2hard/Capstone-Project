@@ -1,13 +1,11 @@
 package com.example.robot.pockettally;
 
 import android.app.Dialog;
-import android.appwidget.AppWidgetManager;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
+
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -22,7 +20,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amitshekhar.DebugDB;
+
 import com.example.robot.pockettally.database.GameMark;
 import com.example.robot.pockettally.database.GameMarkDatabase;
 import com.example.robot.pockettally.database.Player;
@@ -37,9 +35,6 @@ import butterknife.ButterKnife;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -88,8 +83,6 @@ public class DartsGameActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(LOG_TAG, "onCreate called");
         super.onCreate(savedInstanceState);
-
-        Log.i(LOG_TAG, DebugDB.getAddressLog());
 
         // Get instance of the Players database
         mPlayersDb = PlayerDatabase.getsInstance(getApplicationContext());
@@ -474,8 +467,9 @@ public class DartsGameActivity extends AppCompatActivity
             startActivity(new Intent(this, GameSettingsActivity.class));
             return true;
         }
-//        if (id == R.id.action_profile_settings) {
-//        }
+        if (id == R.id.action_profile_settings) {
+            startActivity(new Intent(this, Login.class));
+        }
         return super.onOptionsItemSelected(item);
     }
 

@@ -39,7 +39,7 @@
     <!--Menu selection strings-->
 
     <string name="menu_option_game_settings">Game Settings</string>
-    <string name="menu_option_profile">Profile</string>
+    <string name="menu_option_login">Login</string>
     <string name="menu_how_to_play">How to Play</string>
 
     <!--Menu titles-->
