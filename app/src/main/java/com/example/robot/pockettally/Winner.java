@@ -21,8 +21,10 @@ public class Winner {
     private String name;
     private int avatarId;
 
-    public Winner(String name, int avatarid){
+    public Winner(){}
+
+    public Winner(String name, int avatarId){
         this.name = name;
-        this.avatarId = avatarid;
+        this.avatarId = avatarId;
     }
 }

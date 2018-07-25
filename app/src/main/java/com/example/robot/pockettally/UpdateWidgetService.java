@@ -23,8 +23,8 @@ public class UpdateWidgetService extends IntentService {
 
     public static final String ACTION_DISPLAY_NEW_WINNER = "com.example.robot.pockettally.action.display_new_winner";
 
-    public UpdateWidgetService(String name) {
-        super(name);
+    public UpdateWidgetService() {
+        super("UpdateWidgetService");
     }
 
     public static void displayNewWinner(Context context){
@@ -40,7 +40,35 @@ public class UpdateWidgetService extends IntentService {
             if(ACTION_DISPLAY_NEW_WINNER.equals(action)){
                 mFirebaseDatabase = FirebaseDatabase.getInstance();
                 mPlayerDatabaseReference = mFirebaseDatabase.getReference().child("winners");
+                mChildEventListener = new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                        Winner currentWinner = dataSnapshot.getValue(Winner.class);
+                        handleActionDisplayNewWinner(currentWinner.getName(), currentWinner.getAvatarId());
+                    }
 
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                };
+
+                mPlayerDatabaseReference.addChildEventListener(mChildEventListener);
 
             }
         }
