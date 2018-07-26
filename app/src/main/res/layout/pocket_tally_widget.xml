@@ -29,15 +29,14 @@
         android:id="@+id/widget_bottom_row"
         android:layout_marginStart="@dimen/small_horizontal_margin"
         android:layout_marginEnd="@dimen/small_horizontal_margin"
-        android:layout_marginBottom="@dimen/small_vertical_margin"
-        android:layout_below="@id/widget_top_row">
+        android:layout_marginBottom="@dimen/small_vertical_margin">
 
     <ImageView
         android:id="@+id/widget_avatar_image"
         android:layout_gravity="center"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:src="@mipmap/man"
+        tools:src="@mipmap/man"
         android:contentDescription="@string/avatar_content_description_man"
         android:layout_marginStart="@dimen/smaller_horizontal_margin"/>
 

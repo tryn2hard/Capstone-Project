@@ -15,14 +15,18 @@
 
     <string-array name = "pref_game_mode_options">
         <item>@string/pref_standard_game_mode_label</item>
-        <item>@string/pref_cut_throat_game_mode_label</item>
         <item>@string/pref_no_points_game_mode_label</item>
     </string-array>
+        <!--Cut Throat mode to be added during a later revision
+        <item>@string/pref_cut_throat_game_mode_label</item>-->
+
 
     <string-array name = "pref_game_mode_values">
         <item>@string/pref_standard_game_mode_value</item>
-        <item>@string/pref_cut_throat_game_mode_value</item>
         <item>@string/pref_no_points_game_mode_value</item>
     </string-array>
+        <!--Cut Throat mode to be added during a later revision
+        <item>@string/pref_cut_throat_game_mode_value</item>-->
+
 
 </resources>
