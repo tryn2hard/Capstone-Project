@@ -38,19 +38,6 @@
             android:label="@string/game_settings_label"
             android:theme="@style/myPreferenceScreen" />
 
-        <receiver android:name=".Widget_Provider">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/pocket_tally_widget_info" />
-        </receiver>
-
-        <service android:name=".UpdateWidgetService" />
-
-        <activity android:name=".Login"></activity>
     </application>
 
 </manifest>

@@ -63,10 +63,6 @@ public class DartsGameActivity extends AppCompatActivity
     private GameMarkDatabase mGameMarkDb;
     private SharedPreferences sharedPreferences;
 
-    // Firebase
-    private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mPlayerDatabaseReference;
-
     private final List<Integer> fragment_containers = new ArrayList<Integer>() {{
         add(R.id.player_1_container);
         add(R.id.player_2_container);
@@ -99,10 +95,6 @@ public class DartsGameActivity extends AppCompatActivity
         // Instantiating the Interstitial ad
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId(getResources().getString(R.string.interstitial_ad_unit_id));
-
-        // Instantiating firebase database
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mPlayerDatabaseReference = mFirebaseDatabase.getReference().child("winners");
 
         final LiveData<List<Player>> players = mPlayersDb.playerDao().loadAllPlayersLiveData();
         players.observe(this, new Observer<List<Player>>() {
@@ -319,13 +311,10 @@ public class DartsGameActivity extends AppCompatActivity
         play_again_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String winnerName = Players.get(getIdFromTag(tag)).getName();
-                int winnerAvatarId = Players.get(getIdFromTag(tag)).getAvatar();
-                mPlayerDatabaseReference.push().setValue(new Winner(winnerName, winnerAvatarId));
                 resetGame();
                 dialog.dismiss();
                 mInterstitialAd.show();
-                updateWidget();
+
             }
         });
 
@@ -421,7 +410,6 @@ public class DartsGameActivity extends AppCompatActivity
 
         game_mode = sharedPreferences.getString(getResources()
                 .getString(R.string.pref_game_mode_key), getResources().getString(R.string.pref_game_mode_default));
-
 
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
 
@@ -836,15 +824,6 @@ public class DartsGameActivity extends AppCompatActivity
             }
         });
     }
-
-        /*
-    ***********************************************************************************************
-    Widget Update
-    ***********************************************************************************************
-    */
-        private void updateWidget(){
-            UpdateWidgetService.displayNewWinner(this);
-        }
 
 }
 
