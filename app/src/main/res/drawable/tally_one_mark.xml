@@ -1,31 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
-        <shape
-            android:shape="oval">
+        <shape android:shape="oval">
             <stroke
                 android:width="2dp"
                 android:color="@color/tally_start">
             </stroke>
-
             <size
                 android:width="35dp"
                 android:height="35dp" />
         </shape>
 
-    </item>
-    <item>
-        <rotate
-            android:fromDegrees="135"
-            android:pivotX="50%"
-            android:pivotY="50%"
-            android:toDegrees="135">
-            <shape android:shape="line">
-                <stroke
-                    android:width="2dp"
-                    android:color="@color/tally_marks" />
-            </shape>
-        </rotate>
     </item>
     <item>
         <rotate
@@ -37,6 +22,19 @@
                 <stroke
                     android:width="2dp"
                     android:color="@color/tally_start" />
+            </shape>
+        </rotate>
+    </item>
+    <item>
+        <rotate
+            android:fromDegrees="135"
+            android:pivotX="50%"
+            android:pivotY="50%"
+            android:toDegrees="135">
+            <shape android:shape="line">
+                <stroke
+                    android:width="2dp"
+                    android:color="@color/tally_marks" />
             </shape>
         </rotate>
     </item>
