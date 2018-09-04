@@ -117,7 +117,7 @@
     <string name="play_again_button">Play again</string>
 
     <!--string for admob-->
-    <string name="interstitial_ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="interstitial_ad_unit_id">ca-app-pub-5278592197789573/7728175695</string>
 
     <!--widget strings-->
     <string name="last_game_winner">Last Game Winner</string>
