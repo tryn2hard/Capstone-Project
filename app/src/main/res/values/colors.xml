@@ -15,4 +15,9 @@
     <color name="tally_start">#a5a5a5</color>
     <color name="text_primary">#f5f5f5</color>
 
+    <color name="buttonRed0">#B71C1C</color>
+    <color name="buttonRed1">#C62828</color>
+    <color name="buttonRed2">#D32F2F</color>
+    <color name="buttonRed3">#E53935</color>
+
 </resources>

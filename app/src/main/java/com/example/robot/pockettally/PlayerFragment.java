@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -157,6 +158,7 @@ public class PlayerFragment extends Fragment {
             name_et.setText(getTag());
         } else {
             name_et.setText(mName);
+            name_et.setGravity(Gravity.CENTER_HORIZONTAL);
         }
 
         for (int i = 0; i < mClosedOut.length; i++) {
@@ -251,68 +253,88 @@ public class PlayerFragment extends Fragment {
 
             });
 
-            current_Scoreboard_iv.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    final Dialog multiMarkDialog = new Dialog(getActivity());
-                    multiMarkDialog.setContentView(R.layout.multiple_marks_dialog);
-                    multiMarkDialog.findViewById(R.id.double_mark_button)
-                            .setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    if (mGameMode.equals(getResources().getString(R.string.pref_no_points_game_mode_value))) {
-                                        if (!current_Scoreboard.isClosedOut()) {
+            if (current_Scoreboard.getValue() != ScoreboardUtils.TALLY_MARK_BULLS_VALUE) {
+                current_Scoreboard_iv.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        final Dialog multiMarkDialog = new Dialog(getActivity());
+                        multiMarkDialog.setContentView(R.layout.multiple_marks_dialog);
+                        multiMarkDialog.findViewById(R.id.double_mark_button)
+                                .setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        if (mGameMode.equals(getResources().getString(R.string.pref_no_points_game_mode_value))) {
+                                            if (!current_Scoreboard.isClosedOut()) {
+
+                                                if (mVibe) {
+                                                    vibe.vibrate(VIBRATE_TIME);
+                                                }
+                                                // increment the count
+                                                current_Scoreboard.incrementCount(Scoreboard.DOUBLE_TALLY_MARK);
+
+                                                // notify the host activity that a mark has been made
+                                                mCallback.ScoreboardMarked(getTag(), current_Scoreboard.getValue(),
+                                                        Scoreboard.DOUBLE_TALLY_MARK);
+
+                                                // select the correct image for the tally mark
+                                                scoreboardImageSelector(current_Scoreboard, getResources().getBoolean(R.bool.pref_game_init_default));
+
+
+                                            }
+                                        } else if (mGameMode.equals(getResources().getString(R.string.pref_standard_game_mode_value))
+                                                && !current_Scoreboard.isClosedOutByAll()) {
 
                                             if (mVibe) {
                                                 vibe.vibrate(VIBRATE_TIME);
                                             }
+
                                             // increment the count
                                             current_Scoreboard.incrementCount(Scoreboard.DOUBLE_TALLY_MARK);
+
+                                            if (!current_Scoreboard.isClosedOut()) {
+                                                // select the proper image to display
+                                                scoreboardImageSelector(current_Scoreboard, getResources().getBoolean(R.bool.pref_game_init_default));
+
+                                            } else {
+                                                mTotalScore += current_Scoreboard.getValue() * Scoreboard.DOUBLE_TALLY_MARK;
+                                                game_score_tv.setText(String.valueOf(mTotalScore));
+                                                mCallback.TotalScoreHasChanged(mTag, mTotalScore);
+                                            }
 
                                             // notify the host activity that a mark has been made
                                             mCallback.ScoreboardMarked(getTag(), current_Scoreboard.getValue(),
                                                     Scoreboard.DOUBLE_TALLY_MARK);
-
-                                            // select the correct image for the tally mark
-                                            scoreboardImageSelector(current_Scoreboard, getResources().getBoolean(R.bool.pref_game_init_default));
-
-
                                         }
-                                    } else if (mGameMode.equals(getResources().getString(R.string.pref_standard_game_mode_value))
-                                            && !current_Scoreboard.isClosedOutByAll()) {
-
-                                        if (mVibe) {
-                                            vibe.vibrate(VIBRATE_TIME);
-                                        }
-
-                                        // increment the count
-                                        current_Scoreboard.incrementCount(Scoreboard.DOUBLE_TALLY_MARK);
-
-                                        if (!current_Scoreboard.isClosedOut()) {
-                                            // select the proper image to display
-                                            scoreboardImageSelector(current_Scoreboard, getResources().getBoolean(R.bool.pref_game_init_default));
-
-                                        } else {
-                                            mTotalScore += current_Scoreboard.getValue() * Scoreboard.DOUBLE_TALLY_MARK;
-                                            game_score_tv.setText(String.valueOf(mTotalScore));
-                                            mCallback.TotalScoreHasChanged(mTag, mTotalScore);
-                                        }
-
-                                        // notify the host activity that a mark has been made
-                                        mCallback.ScoreboardMarked(getTag(), current_Scoreboard.getValue(),
-                                                Scoreboard.DOUBLE_TALLY_MARK);
+                                        multiMarkDialog.dismiss();
                                     }
-                                    multiMarkDialog.dismiss();
-                                }
-                            });
+                                });
 
-                    multiMarkDialog.findViewById(R.id.triple_mark_button)
-                            .setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
+                        multiMarkDialog.findViewById(R.id.triple_mark_button)
+                                .setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
 
-                                    if (mGameMode.equals(getResources().getString(R.string.pref_no_points_game_mode_value))) {
-                                        if (!current_Scoreboard.isClosedOut()) {
+                                        if (mGameMode.equals(getResources().getString(R.string.pref_no_points_game_mode_value))) {
+                                            if (!current_Scoreboard.isClosedOut()) {
+
+                                                if (mVibe) {
+                                                    vibe.vibrate(VIBRATE_TIME);
+                                                }
+
+                                                // increment the count
+                                                current_Scoreboard.incrementCount(Scoreboard.TRIPLE_TALLY_MARK);
+
+                                                // notify the host activity that a mark has been made
+                                                mCallback.ScoreboardMarked(getTag(), current_Scoreboard.getValue(),
+                                                        Scoreboard.TRIPLE_TALLY_MARK);
+
+                                                // select the correct image for the tally mark
+                                                scoreboardImageSelector(current_Scoreboard, getResources().getBoolean(R.bool.pref_game_init_default));
+
+
+                                            }
+                                        } else if (mGameMode.equals(getResources().getString(R.string.pref_standard_game_mode_value))
+                                                && !current_Scoreboard.isClosedOutByAll()) {
 
                                             if (mVibe) {
                                                 vibe.vibrate(VIBRATE_TIME);
@@ -321,45 +343,27 @@ public class PlayerFragment extends Fragment {
                                             // increment the count
                                             current_Scoreboard.incrementCount(Scoreboard.TRIPLE_TALLY_MARK);
 
+                                            if (!current_Scoreboard.isClosedOut()) {
+                                                // select the proper image to display
+                                                scoreboardImageSelector(current_Scoreboard, getResources().getBoolean(R.bool.pref_game_init_default));
+                                            } else {
+                                                mTotalScore += current_Scoreboard.getValue() * Scoreboard.TRIPLE_TALLY_MARK;
+                                                game_score_tv.setText(String.valueOf(mTotalScore));
+                                                mCallback.TotalScoreHasChanged(mTag, mTotalScore);
+                                            }
+
                                             // notify the host activity that a mark has been made
                                             mCallback.ScoreboardMarked(getTag(), current_Scoreboard.getValue(),
                                                     Scoreboard.TRIPLE_TALLY_MARK);
-
-                                            // select the correct image for the tally mark
-                                            scoreboardImageSelector(current_Scoreboard, getResources().getBoolean(R.bool.pref_game_init_default));
-
-
                                         }
-                                    } else if (mGameMode.equals(getResources().getString(R.string.pref_standard_game_mode_value))
-                                            && !current_Scoreboard.isClosedOutByAll()) {
-
-                                        if (mVibe) {
-                                            vibe.vibrate(VIBRATE_TIME);
-                                        }
-
-                                        // increment the count
-                                        current_Scoreboard.incrementCount(Scoreboard.TRIPLE_TALLY_MARK);
-
-                                        if (!current_Scoreboard.isClosedOut()) {
-                                            // select the proper image to display
-                                            scoreboardImageSelector(current_Scoreboard, getResources().getBoolean(R.bool.pref_game_init_default));
-                                        } else {
-                                            mTotalScore += current_Scoreboard.getValue() * Scoreboard.TRIPLE_TALLY_MARK;
-                                            game_score_tv.setText(String.valueOf(mTotalScore));
-                                            mCallback.TotalScoreHasChanged(mTag, mTotalScore);
-                                        }
-
-                                        // notify the host activity that a mark has been made
-                                        mCallback.ScoreboardMarked(getTag(), current_Scoreboard.getValue(),
-                                                Scoreboard.TRIPLE_TALLY_MARK);
+                                        multiMarkDialog.dismiss();
                                     }
-                                    multiMarkDialog.dismiss();
-                                }
-                            });
-                    multiMarkDialog.show();
-                    return false;
-                }
-            });
+                                });
+                        multiMarkDialog.show();
+                        return false;
+                    }
+                });
+            }
         }
 
         if (mGameInit) {
@@ -564,6 +568,7 @@ public class PlayerFragment extends Fragment {
 
         if (name != null) {
             name_et.setText(name);
+            name_et.setGravity(Gravity.CENTER_HORIZONTAL);
         }
 
         if (avatar != 0) {
